@@ -18,6 +18,7 @@ library(kableExtra)
 library(table1)
 library(janitor)
 library(patchwork)
+library(gtsummary)
 
 options(
   ggplot2.continuous.colour = "viridis",
@@ -30,22 +31,141 @@ scale_fill_discrete = scale_fill_viridis_d
 options(scipen = 999)
 ```
 
-## R Markdown
+TO DO:
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+EDA:
+- outcome variables: 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+	whether the medications are safe for patients
+	
+	whether patients could easily adhere to medication schedules so that long term use is feasible.
+	
+	assess the correlation of PK with adherence measures and the occurrence of adverse events 
+	
+	demographic factors associated with product adherence and whether they differ by product used (Pill or gel) or regimen (three times a day or once a day)
+	
+- spaghetti plot of weeks —> linear or non-linear
 
-```{r cars}
-summary(cars)
+Mixed Model(s):
+- sequence/carry-over??
+
+Contrasts
+
+```{r}
+baseline <- read.csv("baseline.csv") %>%
+  dplyr::select(-X) %>%
+  mutate(carryover_period2 = period1,
+         carryover_period3 = period2)
+
+
+baseline_long <- baseline %>%
+  pivot_longer(cols = period1:period3,
+               names_to = "period",
+               values_to = "treatment") %>%
+  mutate(bloodVL_before = case_when(
+            period == "period1" ~ bviral0,
+            period == "period2" ~ bviral2,
+            period == "period3" ~ bviral4),
+         bloodVL_after = case_when(
+            period == "period1" ~ bviral1,
+            period == "period2" ~ bviral3,
+            period == "period3" ~ bviral5),
+         skinVL_before = case_when(
+            period == "period1" ~ sviral0,
+            period == "period2" ~ sviral2,
+            period == "period3" ~ sviral4),
+         skinVL_after = case_when(
+            period == "period1" ~ sviral1,
+            period == "period2" ~ sviral3,
+            period == "period3" ~ sviral5),
+         carryover = case_when(
+            period == "period1" ~ "0",
+            period == "period2" ~ carryover_period2,
+            period == "period3" ~ carryover_period3)) %>%
+  dplyr::select(-c(bviral0:carryover_period3)) %>%
+  pivot_longer(cols = c(bloodVL_before:skinVL_after),
+                          names_to = c(".value", "timepoint"),
+                          names_sep = "_") %>%
+  mutate(timepoint = ifelse(timepoint == "before", 0, 4))
+
+write.csv(baseline_long, "baseline_longformat.csv")
 ```
 
-## Including Plots
+```{r}
+ggplot(baseline_long) +
+  geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = period)) +
+  facet_wrap(~ treatment) +
+  theme_bw()
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+baseline %>%
+  dplyr::select(age:gender) %>%
+  tbl_summary(label = list(
+      age ~ "Age (years)",
+      race ~ "Race",
+      gender ~ "Female"))
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Preliminary Mixed Model - Issues with Period & Carryover (how to rewrite?)
+
+PK ~ Random Intercept (Subject) + Treatment*Timepoint + Carryover + Period
+
+```{r}
+library(nlme)
+
+fit2 <- lme(bloodVL ~ treatment * timepoint + carryover, method="ML",
+           data = baseline_long,
+          random=reStruct(~ 1 | ptid))
+
+summary(fit2)
+```
+
+
+```{r}
+endpoints <- read.csv("endpoints.csv") %>%
+  mutate(carryover_period2 = period1,
+         carryover_period3 = period2) 
+
+endpoints_long <- endpoints %>%
+  pivot_longer(cols = period1:period3,
+               names_to = "period",
+               values_to = "treatment") %>%
+  mutate(
+    AE_pillA_total = rowSums(select(., starts_with("AE_pillA")), na.rm = TRUE),
+    AE_gelB_total = rowSums(select(., starts_with("AE_gelB")), na.rm = TRUE),
+    AE_gelC_total = rowSums(select(., starts_with("AE_gelC")), na.rm = TRUE),
+    overall_safety = case_when(
+      treatment == "Pill A" ~ factor(ifelse(AE_pillA_total > 0, 1, 0)),
+      treatment == "Gel B" ~ factor(ifelse(AE_gelB_total > 0, 1, 0)),
+      treatment == "Gel C" ~ factor(ifelse(AE_gelC_total > 0, 1, 0))),
+    adhere_week1 = case_when(
+      treatment == "Pill A" ~ Adhere_pillA_week1,
+      treatment == "Gel B" ~ Adhere_gelB_week1,
+      treatment == "Gel C" ~ Adhere_gelC_week1),
+    adhere_week2 = case_when(
+      treatment == "Pill A" ~ Adhere_pillA_week2,
+      treatment == "Gel B" ~ Adhere_gelB_week2,
+      treatment == "Gel C" ~ Adhere_gelC_week2),
+    adhere_week3 = case_when(
+      treatment == "Pill A" ~ Adhere_pillA_week3,
+      treatment == "Gel B" ~ Adhere_gelB_week3,
+      treatment == "Gel C" ~ Adhere_gelC_week3),
+    adhere_week4 = case_when(
+      treatment == "Pill A" ~ Adhere_pillA_week4,
+      treatment == "Gel B" ~ Adhere_gelB_week4,
+      treatment == "Gel C" ~ Adhere_gelC_week4),
+    carryover = factor(case_when(
+      period == "period1" ~ "0",
+      period == "period2" ~ carryover_period2,
+      period == "period3" ~ carryover_period3))) %>%
+  dplyr::select(-c(AE_pillA_week1:carryover_period3), -c(AE_pillA_total:AE_gelC_total)) %>%
+  pivot_longer(cols = starts_with("adhere"),
+               names_to = "timepoint",
+               values_to = "adherence") %>%
+  mutate(timepoint = as.numeric(str_extract(timepoint, "\\d+")))
+
+
+write.csv(endpoints_long, "endpoints_longformat.csv")
+
+```

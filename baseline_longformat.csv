@@ -1,1081 +1,1081 @@
-"","ptid","age","race","gender","period","treatment","carryover","timepoint","bloodVL","skinVL"
-"1",1,34,"black",0,"period1","Pill A","0",0,133,219
-"2",1,34,"black",0,"period1","Pill A","0",4,0,0
-"3",1,34,"black",0,"period2","Gel B","Pill A",0,90,180
-"4",1,34,"black",0,"period2","Gel B","Pill A",4,0,0
-"5",1,34,"black",0,"period3","Gel C","Gel B",0,127,238
-"6",1,34,"black",0,"period3","Gel C","Gel B",4,10,43
-"7",2,33,"black",0,"period1","Pill A","0",0,115,167
-"8",2,33,"black",0,"period1","Pill A","0",4,0,0
-"9",2,33,"black",0,"period2","Gel C","Pill A",0,107,226
-"10",2,33,"black",0,"period2","Gel C","Pill A",4,36,58
-"11",2,33,"black",0,"period3","Gel B","Gel C",0,110,206
-"12",2,33,"black",0,"period3","Gel B","Gel C",4,23,54
-"13",3,29,"white",1,"period1","Gel B","0",0,127,181
-"14",3,29,"white",1,"period1","Gel B","0",4,0,2
-"15",3,29,"white",1,"period2","Gel C","Gel B",0,103,198
-"16",3,29,"white",1,"period2","Gel C","Gel B",4,15,39
-"17",3,29,"white",1,"period3","Pill A","Gel C",0,126,207
-"18",3,29,"white",1,"period3","Pill A","Gel C",4,15,32
-"19",4,32,"others",0,"period1","Gel B","0",0,113,200
-"20",4,32,"others",0,"period1","Gel B","0",4,0,0
-"21",4,32,"others",0,"period2","Pill A","Gel B",0,99,167
-"22",4,32,"others",0,"period2","Pill A","Gel B",4,0,0
-"23",4,32,"others",0,"period3","Gel C","Pill A",0,100,226
-"24",4,32,"others",0,"period3","Gel C","Pill A",4,0,26
-"25",5,29,"black",0,"period1","Gel C","0",0,129,167
-"26",5,29,"black",0,"period1","Gel C","0",4,17,78
-"27",5,29,"black",0,"period2","Pill A","Gel C",0,152,256
-"28",5,29,"black",0,"period2","Pill A","Gel C",4,0,5
-"29",5,29,"black",0,"period3","Gel B","Pill A",0,127,229
-"30",5,29,"black",0,"period3","Gel B","Pill A",4,0,0
-"31",6,38,"black",0,"period1","Gel C","0",0,133,185
-"32",6,38,"black",0,"period1","Gel C","0",4,0,29
-"33",6,38,"black",0,"period2","Gel B","Gel C",0,117,212
-"34",6,38,"black",0,"period2","Gel B","Gel C",4,8,2
-"35",6,38,"black",0,"period3","Pill A","Gel B",0,136,197
-"36",6,38,"black",0,"period3","Pill A","Gel B",4,0,0
-"37",7,32,"others",1,"period1","Gel C","0",0,140,200
-"38",7,32,"others",1,"period1","Gel C","0",4,14,92
-"39",7,32,"others",1,"period2","Pill A","Gel C",0,119,220
-"40",7,32,"others",1,"period2","Pill A","Gel C",4,0,0
-"41",7,32,"others",1,"period3","Gel B","Pill A",0,108,206
-"42",7,32,"others",1,"period3","Gel B","Pill A",4,0,31
-"43",8,30,"black",0,"period1","Pill A","0",0,115,161
-"44",8,30,"black",0,"period1","Pill A","0",4,0,0
-"45",8,30,"black",0,"period2","Gel B","Pill A",0,124,215
-"46",8,30,"black",0,"period2","Gel B","Pill A",4,0,10
-"47",8,30,"black",0,"period3","Gel C","Gel B",0,113,214
-"48",8,30,"black",0,"period3","Gel C","Gel B",4,0,44
-"49",9,38,"others",1,"period1","Pill A","0",0,145,215
-"50",9,38,"others",1,"period1","Pill A","0",4,0,0
-"51",9,38,"others",1,"period2","Gel C","Pill A",0,126,229
-"52",9,38,"others",1,"period2","Gel C","Pill A",4,0,37
-"53",9,38,"others",1,"period3","Gel B","Gel C",0,123,218
-"54",9,38,"others",1,"period3","Gel B","Gel C",4,0,0
-"55",10,29,"others",0,"period1","Gel C","0",0,154,212
-"56",10,29,"others",0,"period1","Gel C","0",4,0,49
-"57",10,29,"others",0,"period2","Pill A","Gel C",0,91,238
-"58",10,29,"others",0,"period2","Pill A","Gel C",4,0,0
-"59",10,29,"others",0,"period3","Gel B","Pill A",0,163,238
-"60",10,29,"others",0,"period3","Gel B","Pill A",4,0,0
-"61",11,32,"black",1,"period1","Gel C","0",0,123,247
-"62",11,32,"black",1,"period1","Gel C","0",4,0,30
-"63",11,32,"black",1,"period2","Gel B","Gel C",0,133,178
-"64",11,32,"black",1,"period2","Gel B","Gel C",4,31,47
-"65",11,32,"black",1,"period3","Pill A","Gel B",0,140,192
-"66",11,32,"black",1,"period3","Pill A","Gel B",4,0,0
-"67",12,23,"others",1,"period1","Gel B","0",0,113,189
-"68",12,23,"others",1,"period1","Gel B","0",4,14,43
-"69",12,23,"others",1,"period2","Gel C","Gel B",0,127,187
-"70",12,23,"others",1,"period2","Gel C","Gel B",4,61,122
-"71",12,23,"others",1,"period3","Pill A","Gel C",0,159,166
-"72",12,23,"others",1,"period3","Pill A","Gel C",4,0,32
-"73",13,44,"others",0,"period1","Gel B","0",0,104,198
-"74",13,44,"others",0,"period1","Gel B","0",4,25,35
-"75",13,44,"others",0,"period2","Pill A","Gel B",0,96,191
-"76",13,44,"others",0,"period2","Pill A","Gel B",4,0,0
-"77",13,44,"others",0,"period3","Gel C","Pill A",0,105,198
-"78",13,44,"others",0,"period3","Gel C","Pill A",4,0,0
-"79",14,21,"others",0,"period1","Gel C","0",0,133,202
-"80",14,21,"others",0,"period1","Gel C","0",4,39,100
-"81",14,21,"others",0,"period2","Pill A","Gel C",0,123,239
-"82",14,21,"others",0,"period2","Pill A","Gel C",4,0,8
-"83",14,21,"others",0,"period3","Gel B","Pill A",0,155,207
-"84",14,21,"others",0,"period3","Gel B","Pill A",4,15,3
-"85",15,44,"black",0,"period1","Gel B","0",0,123,205
-"86",15,44,"black",0,"period1","Gel B","0",4,0,0
-"87",15,44,"black",0,"period2","Gel C","Gel B",0,95,191
-"88",15,44,"black",0,"period2","Gel C","Gel B",4,35,81
-"89",15,44,"black",0,"period3","Pill A","Gel C",0,117,195
-"90",15,44,"black",0,"period3","Pill A","Gel C",4,0,0
-"91",16,21,"others",0,"period1","Gel C","0",0,125,184
-"92",16,21,"others",0,"period1","Gel C","0",4,36,63
-"93",16,21,"others",0,"period2","Gel B","Gel C",0,109,215
-"94",16,21,"others",0,"period2","Gel B","Gel C",4,50,80
-"95",16,21,"others",0,"period3","Pill A","Gel B",0,117,199
-"96",16,21,"others",0,"period3","Pill A","Gel B",4,5,0
-"97",17,24,"black",1,"period1","Pill A","0",0,165,239
-"98",17,24,"black",1,"period1","Pill A","0",4,0,0
-"99",17,24,"black",1,"period2","Gel C","Pill A",0,110,228
-"100",17,24,"black",1,"period2","Gel C","Pill A",4,24,17
-"101",17,24,"black",1,"period3","Gel B","Gel C",0,145,219
-"102",17,24,"black",1,"period3","Gel B","Gel C",4,33,36
-"103",18,30,"white",0,"period1","Pill A","0",0,128,248
-"104",18,30,"white",0,"period1","Pill A","0",4,14,0
-"105",18,30,"white",0,"period2","Gel B","Pill A",0,110,218
-"106",18,30,"white",0,"period2","Gel B","Pill A",4,0,48
-"107",18,30,"white",0,"period3","Gel C","Gel B",0,139,254
-"108",18,30,"white",0,"period3","Gel C","Gel B",4,0,35
-"109",19,30,"white",1,"period1","Gel B","0",0,108,160
-"110",19,30,"white",1,"period1","Gel B","0",4,0,26
-"111",19,30,"white",1,"period2","Pill A","Gel B",0,114,214
-"112",19,30,"white",1,"period2","Pill A","Gel B",4,0,0
-"113",19,30,"white",1,"period3","Gel C","Pill A",0,114,210
-"114",19,30,"white",1,"period3","Gel C","Pill A",4,6,67
-"115",20,32,"black",1,"period1","Gel B","0",0,144,238
-"116",20,32,"black",1,"period1","Gel B","0",4,17,56
-"117",20,32,"black",1,"period2","Pill A","Gel B",0,114,245
-"118",20,32,"black",1,"period2","Pill A","Gel B",4,0,0
-"119",20,32,"black",1,"period3","Gel C","Pill A",0,139,198
-"120",20,32,"black",1,"period3","Gel C","Pill A",4,1,104
-"121",21,29,"white",1,"period1","Pill A","0",0,148,213
-"122",21,29,"white",1,"period1","Pill A","0",4,0,0
-"123",21,29,"white",1,"period2","Gel C","Pill A",0,131,191
-"124",21,29,"white",1,"period2","Gel C","Pill A",4,2,42
-"125",21,29,"white",1,"period3","Gel B","Gel C",0,142,289
-"126",21,29,"white",1,"period3","Gel B","Gel C",4,12,24
-"127",22,34,"black",0,"period1","Gel C","0",0,116,195
-"128",22,34,"black",0,"period1","Gel C","0",4,5,3
-"129",22,34,"black",0,"period2","Pill A","Gel C",0,107,188
-"130",22,34,"black",0,"period2","Pill A","Gel C",4,0,0
-"131",22,34,"black",0,"period3","Gel B","Pill A",0,129,148
-"132",22,34,"black",0,"period3","Gel B","Pill A",4,0,29
-"133",23,43,"white",1,"period1","Pill A","0",0,115,206
-"134",23,43,"white",1,"period1","Pill A","0",4,0,0
-"135",23,43,"white",1,"period2","Gel B","Pill A",0,132,210
-"136",23,43,"white",1,"period2","Gel B","Pill A",4,0,18
-"137",23,43,"white",1,"period3","Gel C","Gel B",0,111,212
-"138",23,43,"white",1,"period3","Gel C","Gel B",4,0,24
-"139",24,21,"black",1,"period1","Gel C","0",0,134,213
-"140",24,21,"black",1,"period1","Gel C","0",4,41,120
-"141",24,21,"black",1,"period2","Gel B","Gel C",0,148,230
-"142",24,21,"black",1,"period2","Gel B","Gel C",4,4,103
-"143",24,21,"black",1,"period3","Pill A","Gel B",0,144,216
-"144",24,21,"black",1,"period3","Pill A","Gel B",4,29,20
-"145",25,40,"others",0,"period1","Gel B","0",0,129,190
-"146",25,40,"others",0,"period1","Gel B","0",4,0,0
-"147",25,40,"others",0,"period2","Gel C","Gel B",0,118,189
-"148",25,40,"others",0,"period2","Gel C","Gel B",4,4,23
-"149",25,40,"others",0,"period3","Pill A","Gel C",0,134,182
-"150",25,40,"others",0,"period3","Pill A","Gel C",4,0,0
-"151",26,44,"white",1,"period1","Gel C","0",0,118,187
-"152",26,44,"white",1,"period1","Gel C","0",4,42,118
-"153",26,44,"white",1,"period2","Pill A","Gel C",0,108,216
-"154",26,44,"white",1,"period2","Pill A","Gel C",4,18,15
-"155",26,44,"white",1,"period3","Gel B","Pill A",0,122,221
-"156",26,44,"white",1,"period3","Gel B","Pill A",4,0,5
-"157",27,33,"others",1,"period1","Gel B","0",0,121,234
-"158",27,33,"others",1,"period1","Gel B","0",4,0,17
-"159",27,33,"others",1,"period2","Pill A","Gel B",0,139,226
-"160",27,33,"others",1,"period2","Pill A","Gel B",4,0,0
-"161",27,33,"others",1,"period3","Gel C","Pill A",0,129,187
-"162",27,33,"others",1,"period3","Gel C","Pill A",4,0,44
-"163",28,42,"black",0,"period1","Pill A","0",0,112,181
-"164",28,42,"black",0,"period1","Pill A","0",4,0,0
-"165",28,42,"black",0,"period2","Gel C","Pill A",0,90,197
-"166",28,42,"black",0,"period2","Gel C","Pill A",4,0,0
-"167",28,42,"black",0,"period3","Gel B","Gel C",0,111,185
-"168",28,42,"black",0,"period3","Gel B","Gel C",4,0,0
-"169",29,29,"others",0,"period1","Gel C","0",0,117,219
-"170",29,29,"others",0,"period1","Gel C","0",4,5,23
-"171",29,29,"others",0,"period2","Gel B","Gel C",0,122,180
-"172",29,29,"others",0,"period2","Gel B","Gel C",4,0,53
-"173",29,29,"others",0,"period3","Pill A","Gel B",0,134,222
-"174",29,29,"others",0,"period3","Pill A","Gel B",4,0,0
-"175",30,22,"black",1,"period1","Pill A","0",0,85,231
-"176",30,22,"black",1,"period1","Pill A","0",4,0,0
-"177",30,22,"black",1,"period2","Gel B","Pill A",0,159,221
-"178",30,22,"black",1,"period2","Gel B","Pill A",4,0,46
-"179",30,22,"black",1,"period3","Gel C","Gel B",0,136,231
-"180",30,22,"black",1,"period3","Gel C","Gel B",4,19,85
-"181",31,30,"black",1,"period1","Gel B","0",0,124,197
-"182",31,30,"black",1,"period1","Gel B","0",4,5,30
-"183",31,30,"black",1,"period2","Gel C","Gel B",0,108,212
-"184",31,30,"black",1,"period2","Gel C","Gel B",4,4,83
-"185",31,30,"black",1,"period3","Pill A","Gel C",0,156,239
-"186",31,30,"black",1,"period3","Pill A","Gel C",4,0,0
-"187",32,21,"black",1,"period1","Gel B","0",0,181,215
-"188",32,21,"black",1,"period1","Gel B","0",4,14,21
-"189",32,21,"black",1,"period2","Pill A","Gel B",0,181,251
-"190",32,21,"black",1,"period2","Pill A","Gel B",4,0,0
-"191",32,21,"black",1,"period3","Gel C","Pill A",0,127,214
-"192",32,21,"black",1,"period3","Gel C","Pill A",4,31,16
-"193",33,25,"others",0,"period1","Pill A","0",0,125,191
-"194",33,25,"others",0,"period1","Pill A","0",4,0,0
-"195",33,25,"others",0,"period2","Gel C","Pill A",0,178,244
-"196",33,25,"others",0,"period2","Gel C","Pill A",4,19,91
-"197",33,25,"others",0,"period3","Gel B","Gel C",0,126,216
-"198",33,25,"others",0,"period3","Gel B","Gel C",4,0,85
-"199",34,42,"others",1,"period1","Gel B","0",0,131,215
-"200",34,42,"others",1,"period1","Gel B","0",4,0,0
-"201",34,42,"others",1,"period2","Gel C","Gel B",0,95,184
-"202",34,42,"others",1,"period2","Gel C","Gel B",4,0,28
-"203",34,42,"others",1,"period3","Pill A","Gel C",0,113,184
-"204",34,42,"others",1,"period3","Pill A","Gel C",4,0,0
-"205",35,27,"others",0,"period1","Gel C","0",0,108,244
-"206",35,27,"others",0,"period1","Gel C","0",4,6,54
-"207",35,27,"others",0,"period2","Gel B","Gel C",0,107,189
-"208",35,27,"others",0,"period2","Gel B","Gel C",4,2,0
-"209",35,27,"others",0,"period3","Pill A","Gel B",0,129,253
-"210",35,27,"others",0,"period3","Pill A","Gel B",4,0,0
-"211",36,25,"white",0,"period1","Pill A","0",0,149,177
-"212",36,25,"white",0,"period1","Pill A","0",4,0,3
-"213",36,25,"white",0,"period2","Gel B","Pill A",0,137,265
-"214",36,25,"white",0,"period2","Gel B","Pill A",4,14,87
-"215",36,25,"white",0,"period3","Gel C","Gel B",0,109,231
-"216",36,25,"white",0,"period3","Gel C","Gel B",4,2,33
-"217",37,25,"white",1,"period1","Gel C","0",0,163,224
-"218",37,25,"white",1,"period1","Gel C","0",4,40,20
-"219",37,25,"white",1,"period2","Pill A","Gel C",0,109,181
-"220",37,25,"white",1,"period2","Pill A","Gel C",4,0,0
-"221",37,25,"white",1,"period3","Gel B","Pill A",0,77,243
-"222",37,25,"white",1,"period3","Gel B","Pill A",4,9,0
-"223",38,21,"others",1,"period1","Gel B","0",0,162,249
-"224",38,21,"others",1,"period1","Gel B","0",4,0,16
-"225",38,21,"others",1,"period2","Gel C","Gel B",0,113,262
-"226",38,21,"others",1,"period2","Gel C","Gel B",4,40,94
-"227",38,21,"others",1,"period3","Pill A","Gel C",0,152,278
-"228",38,21,"others",1,"period3","Pill A","Gel C",4,11,8
-"229",39,20,"others",0,"period1","Gel B","0",0,111,170
-"230",39,20,"others",0,"period1","Gel B","0",4,10,91
-"231",39,20,"others",0,"period2","Pill A","Gel B",0,178,247
-"232",39,20,"others",0,"period2","Pill A","Gel B",4,0,0
-"233",39,20,"others",0,"period3","Gel C","Pill A",0,147,168
-"234",39,20,"others",0,"period3","Gel C","Pill A",4,0,104
-"235",40,38,"white",0,"period1","Pill A","0",0,129,226
-"236",40,38,"white",0,"period1","Pill A","0",4,0,0
-"237",40,38,"white",0,"period2","Gel B","Pill A",0,98,209
-"238",40,38,"white",0,"period2","Gel B","Pill A",4,0,26
-"239",40,38,"white",0,"period3","Gel C","Gel B",0,105,206
-"240",40,38,"white",0,"period3","Gel C","Gel B",4,12,3
-"241",41,32,"black",1,"period1","Gel C","0",0,123,214
-"242",41,32,"black",1,"period1","Gel C","0",4,38,87
-"243",41,32,"black",1,"period2","Pill A","Gel C",0,150,245
-"244",41,32,"black",1,"period2","Pill A","Gel C",4,0,24
-"245",41,32,"black",1,"period3","Gel B","Pill A",0,135,195
-"246",41,32,"black",1,"period3","Gel B","Pill A",4,6,71
-"247",42,35,"others",1,"period1","Gel C","0",0,124,233
-"248",42,35,"others",1,"period1","Gel C","0",4,7,75
-"249",42,35,"others",1,"period2","Gel B","Gel C",0,112,181
-"250",42,35,"others",1,"period2","Gel B","Gel C",4,0,38
-"251",42,35,"others",1,"period3","Pill A","Gel B",0,103,206
-"252",42,35,"others",1,"period3","Pill A","Gel B",4,0,0
-"253",43,39,"white",0,"period1","Pill A","0",0,131,180
-"254",43,39,"white",0,"period1","Pill A","0",4,0,0
-"255",43,39,"white",0,"period2","Gel C","Pill A",0,97,190
-"256",43,39,"white",0,"period2","Gel C","Pill A",4,3,2
-"257",43,39,"white",0,"period3","Gel B","Gel C",0,135,199
-"258",43,39,"white",0,"period3","Gel B","Gel C",4,0,0
-"259",44,42,"others",1,"period1","Gel B","0",0,115,200
-"260",44,42,"others",1,"period1","Gel B","0",4,0,0
-"261",44,42,"others",1,"period2","Pill A","Gel B",0,107,218
-"262",44,42,"others",1,"period2","Pill A","Gel B",4,7,11
-"263",44,42,"others",1,"period3","Gel C","Pill A",0,120,185
-"264",44,42,"others",1,"period3","Gel C","Pill A",4,34,87
-"265",45,29,"white",0,"period1","Pill A","0",0,117,202
-"266",45,29,"white",0,"period1","Pill A","0",4,0,0
-"267",45,29,"white",0,"period2","Gel C","Pill A",0,132,259
-"268",45,29,"white",0,"period2","Gel C","Pill A",4,0,3
-"269",45,29,"white",0,"period3","Gel B","Gel C",0,109,206
-"270",45,29,"white",0,"period3","Gel B","Gel C",4,26,62
-"271",46,28,"black",1,"period1","Pill A","0",0,78,198
-"272",46,28,"black",1,"period1","Pill A","0",4,0,0
-"273",46,28,"black",1,"period2","Gel B","Pill A",0,135,269
-"274",46,28,"black",1,"period2","Gel B","Pill A",4,0,76
-"275",46,28,"black",1,"period3","Gel C","Gel B",0,118,228
-"276",46,28,"black",1,"period3","Gel C","Gel B",4,11,49
-"277",47,39,"white",1,"period1","Gel C","0",0,125,233
-"278",47,39,"white",1,"period1","Gel C","0",4,0,37
-"279",47,39,"white",1,"period2","Pill A","Gel C",0,126,211
-"280",47,39,"white",1,"period2","Pill A","Gel C",4,0,0
-"281",47,39,"white",1,"period3","Gel B","Pill A",0,109,189
-"282",47,39,"white",1,"period3","Gel B","Pill A",4,0,14
-"283",48,43,"black",0,"period1","Gel C","0",0,106,198
-"284",48,43,"black",0,"period1","Gel C","0",4,0,6
-"285",48,43,"black",0,"period2","Pill A","Gel C",0,107,189
-"286",48,43,"black",0,"period2","Pill A","Gel C",4,0,0
-"287",48,43,"black",0,"period3","Gel B","Pill A",0,105,151
-"288",48,43,"black",0,"period3","Gel B","Pill A",4,0,4
-"289",49,40,"white",1,"period1","Gel C","0",0,126,194
-"290",49,40,"white",1,"period1","Gel C","0",4,0,0
-"291",49,40,"white",1,"period2","Gel B","Gel C",0,132,217
-"292",49,40,"white",1,"period2","Gel B","Gel C",4,0,20
-"293",49,40,"white",1,"period3","Pill A","Gel B",0,132,191
-"294",49,40,"white",1,"period3","Pill A","Gel B",4,0,0
-"295",50,19,"black",1,"period1","Gel B","0",0,101,277
-"296",50,19,"black",1,"period1","Gel B","0",4,22,136
-"297",50,19,"black",1,"period2","Gel C","Gel B",0,141,234
-"298",50,19,"black",1,"period2","Gel C","Gel B",4,61,143
-"299",50,19,"black",1,"period3","Pill A","Gel C",0,108,233
-"300",50,19,"black",1,"period3","Pill A","Gel C",4,13,0
-"301",51,34,"others",0,"period1","Gel C","0",0,112,189
-"302",51,34,"others",0,"period1","Gel C","0",4,19,0
-"303",51,34,"others",0,"period2","Gel B","Gel C",0,122,212
-"304",51,34,"others",0,"period2","Gel B","Gel C",4,0,0
-"305",51,34,"others",0,"period3","Pill A","Gel B",0,132,218
-"306",51,34,"others",0,"period3","Pill A","Gel B",4,0,0
-"307",52,19,"black",0,"period1","Pill A","0",0,149,210
-"308",52,19,"black",0,"period1","Pill A","0",4,0,0
-"309",52,19,"black",0,"period2","Gel C","Pill A",0,139,241
-"310",52,19,"black",0,"period2","Gel C","Pill A",4,36,63
-"311",52,19,"black",0,"period3","Gel B","Gel C",0,164,236
-"312",52,19,"black",0,"period3","Gel B","Gel C",4,50,25
-"313",53,40,"others",0,"period1","Gel B","0",0,90,184
-"314",53,40,"others",0,"period1","Gel B","0",4,20,79
-"315",53,40,"others",0,"period2","Pill A","Gel B",0,109,201
-"316",53,40,"others",0,"period2","Pill A","Gel B",4,0,0
-"317",53,40,"others",0,"period3","Gel C","Pill A",0,107,144
-"318",53,40,"others",0,"period3","Gel C","Pill A",4,0,8
-"319",54,43,"others",0,"period1","Gel B","0",0,104,197
-"320",54,43,"others",0,"period1","Gel B","0",4,27,47
-"321",54,43,"others",0,"period2","Gel C","Gel B",0,129,178
-"322",54,43,"others",0,"period2","Gel C","Gel B",4,0,0
-"323",54,43,"others",0,"period3","Pill A","Gel C",0,81,160
-"324",54,43,"others",0,"period3","Pill A","Gel C",4,0,0
-"325",55,33,"others",0,"period1","Pill A","0",0,134,213
-"326",55,33,"others",0,"period1","Pill A","0",4,0,0
-"327",55,33,"others",0,"period2","Gel B","Pill A",0,110,217
-"328",55,33,"others",0,"period2","Gel B","Pill A",4,0,0
-"329",55,33,"others",0,"period3","Gel C","Gel B",0,128,166
-"330",55,33,"others",0,"period3","Gel C","Gel B",4,17,0
-"331",56,30,"others",1,"period1","Gel C","0",0,120,230
-"332",56,30,"others",1,"period1","Gel C","0",4,4,65
-"333",56,30,"others",1,"period2","Pill A","Gel C",0,162,244
-"334",56,30,"others",1,"period2","Pill A","Gel C",4,0,0
-"335",56,30,"others",1,"period3","Gel B","Pill A",0,113,238
-"336",56,30,"others",1,"period3","Gel B","Pill A",4,0,13
-"337",57,32,"white",0,"period1","Pill A","0",0,152,178
-"338",57,32,"white",0,"period1","Pill A","0",4,0,0
-"339",57,32,"white",0,"period2","Gel B","Pill A",0,100,151
-"340",57,32,"white",0,"period2","Gel B","Pill A",4,0,0
-"341",57,32,"white",0,"period3","Gel C","Gel B",0,127,213
-"342",57,32,"white",0,"period3","Gel C","Gel B",4,24,14
-"343",58,27,"white",0,"period1","Pill A","0",0,103,192
-"344",58,27,"white",0,"period1","Pill A","0",4,0,0
-"345",58,27,"white",0,"period2","Gel C","Pill A",0,136,216
-"346",58,27,"white",0,"period2","Gel C","Pill A",4,9,77
-"347",58,27,"white",0,"period3","Gel B","Gel C",0,116,203
-"348",58,27,"white",0,"period3","Gel B","Gel C",4,18,28
-"349",59,24,"black",1,"period1","Gel B","0",0,92,275
-"350",59,24,"black",1,"period1","Gel B","0",4,28,30
-"351",59,24,"black",1,"period2","Pill A","Gel B",0,111,245
-"352",59,24,"black",1,"period2","Pill A","Gel B",4,0,0
-"353",59,24,"black",1,"period3","Gel C","Pill A",0,124,233
-"354",59,24,"black",1,"period3","Gel C","Pill A",4,39,124
-"355",60,27,"white",1,"period1","Gel C","0",0,120,188
-"356",60,27,"white",1,"period1","Gel C","0",4,23,54
-"357",60,27,"white",1,"period2","Gel B","Gel C",0,153,251
-"358",60,27,"white",1,"period2","Gel B","Gel C",4,10,34
-"359",60,27,"white",1,"period3","Pill A","Gel B",0,121,237
-"360",60,27,"white",1,"period3","Pill A","Gel B",4,0,11
-"361",61,42,"white",0,"period1","Gel B","0",0,115,188
-"362",61,42,"white",0,"period1","Gel B","0",4,0,0
-"363",61,42,"white",0,"period2","Gel C","Gel B",0,122,185
-"364",61,42,"white",0,"period2","Gel C","Gel B",4,0,9
-"365",61,42,"white",0,"period3","Pill A","Gel C",0,114,206
-"366",61,42,"white",0,"period3","Pill A","Gel C",4,5,0
-"367",62,42,"black",1,"period1","Pill A","0",0,129,187
-"368",62,42,"black",1,"period1","Pill A","0",4,0,0
-"369",62,42,"black",1,"period2","Gel B","Pill A",0,126,229
-"370",62,42,"black",1,"period2","Gel B","Pill A",4,0,20
-"371",62,42,"black",1,"period3","Gel C","Gel B",0,109,193
-"372",62,42,"black",1,"period3","Gel C","Gel B",4,0,14
-"373",63,36,"white",1,"period1","Gel B","0",0,106,197
-"374",63,36,"white",1,"period1","Gel B","0",4,0,28
-"375",63,36,"white",1,"period2","Gel C","Gel B",0,123,178
-"376",63,36,"white",1,"period2","Gel C","Gel B",4,0,63
-"377",63,36,"white",1,"period3","Pill A","Gel C",0,102,215
-"378",63,36,"white",1,"period3","Pill A","Gel C",4,0,0
-"379",64,29,"black",0,"period1","Pill A","0",0,120,162
-"380",64,29,"black",0,"period1","Pill A","0",4,0,0
-"381",64,29,"black",0,"period2","Gel C","Pill A",0,106,224
-"382",64,29,"black",0,"period2","Gel C","Pill A",4,43,133
-"383",64,29,"black",0,"period3","Gel B","Gel C",0,139,196
-"384",64,29,"black",0,"period3","Gel B","Gel C",4,19,30
-"385",65,25,"black",0,"period1","Gel C","0",0,146,171
-"386",65,25,"black",0,"period1","Gel C","0",4,14,34
-"387",65,25,"black",0,"period2","Gel B","Gel C",0,131,249
-"388",65,25,"black",0,"period2","Gel B","Gel C",4,9,82
-"389",65,25,"black",0,"period3","Pill A","Gel B",0,124,235
-"390",65,25,"black",0,"period3","Pill A","Gel B",4,0,0
-"391",66,33,"black",0,"period1","Gel C","0",0,108,231
-"392",66,33,"black",0,"period1","Gel C","0",4,0,7
-"393",66,33,"black",0,"period2","Pill A","Gel C",0,115,171
-"394",66,33,"black",0,"period2","Pill A","Gel C",4,0,0
-"395",66,33,"black",0,"period3","Gel B","Pill A",0,107,145
-"396",66,33,"black",0,"period3","Gel B","Pill A",4,4,0
-"397",67,27,"black",1,"period1","Gel B","0",0,116,224
-"398",67,27,"black",1,"period1","Gel B","0",4,29,65
-"399",67,27,"black",1,"period2","Pill A","Gel B",0,165,229
-"400",67,27,"black",1,"period2","Pill A","Gel B",4,0,0
-"401",67,27,"black",1,"period3","Gel C","Pill A",0,136,233
-"402",67,27,"black",1,"period3","Gel C","Pill A",4,0,64
-"403",68,25,"black",0,"period1","Gel B","0",0,135,167
-"404",68,25,"black",0,"period1","Gel B","0",4,12,48
-"405",68,25,"black",0,"period2","Gel C","Gel B",0,130,214
-"406",68,25,"black",0,"period2","Gel C","Gel B",4,11,88
-"407",68,25,"black",0,"period3","Pill A","Gel C",0,103,254
-"408",68,25,"black",0,"period3","Pill A","Gel C",4,0,0
-"409",69,33,"others",0,"period1","Gel B","0",0,110,191
-"410",69,33,"others",0,"period1","Gel B","0",4,0,18
-"411",69,33,"others",0,"period2","Pill A","Gel B",0,144,201
-"412",69,33,"others",0,"period2","Pill A","Gel B",4,0,71
-"413",69,33,"others",0,"period3","Gel C","Pill A",0,120,151
-"414",69,33,"others",0,"period3","Gel C","Pill A",4,0,38
-"415",70,22,"black",0,"period1","Pill A","0",0,129,204
-"416",70,22,"black",0,"period1","Pill A","0",4,24,0
-"417",70,22,"black",0,"period2","Gel B","Pill A",0,140,234
-"418",70,22,"black",0,"period2","Gel B","Pill A",4,37,0
-"419",70,22,"black",0,"period3","Gel C","Gel B",0,104,282
-"420",70,22,"black",0,"period3","Gel C","Gel B",4,10,39
-"421",71,38,"white",0,"period1","Gel C","0",0,122,192
-"422",71,38,"white",0,"period1","Gel C","0",4,0,26
-"423",71,38,"white",0,"period2","Pill A","Gel C",0,118,190
-"424",71,38,"white",0,"period2","Pill A","Gel C",4,0,0
-"425",71,38,"white",0,"period3","Gel B","Pill A",0,125,195
-"426",71,38,"white",0,"period3","Gel B","Pill A",4,0,6
-"427",72,42,"white",1,"period1","Pill A","0",0,140,203
-"428",72,42,"white",1,"period1","Pill A","0",4,14,15
-"429",72,42,"white",1,"period2","Gel C","Pill A",0,120,200
-"430",72,42,"white",1,"period2","Gel C","Pill A",4,0,16
-"431",72,42,"white",1,"period3","Gel B","Gel C",0,130,192
-"432",72,42,"white",1,"period3","Gel B","Gel C",4,37,74
-"433",73,35,"others",1,"period1","Gel C","0",0,95,184
-"434",73,35,"others",1,"period1","Gel C","0",4,0,33
-"435",73,35,"others",1,"period2","Gel B","Gel C",0,91,226
-"436",73,35,"others",1,"period2","Gel B","Gel C",4,0,0
-"437",73,35,"others",1,"period3","Pill A","Gel B",0,111,197
-"438",73,35,"others",1,"period3","Pill A","Gel B",4,0,0
-"439",74,26,"black",0,"period1","Gel C","0",0,119,212
-"440",74,26,"black",0,"period1","Gel C","0",4,0,3
-"441",74,26,"black",0,"period2","Gel B","Gel C",0,151,147
-"442",74,26,"black",0,"period2","Gel B","Gel C",4,4,0
-"443",74,26,"black",0,"period3","Pill A","Gel B",0,148,220
-"444",74,26,"black",0,"period3","Pill A","Gel B",4,0,0
-"445",75,35,"white",1,"period1","Gel C","0",0,137,244
-"446",75,35,"white",1,"period1","Gel C","0",4,0,41
-"447",75,35,"white",1,"period2","Pill A","Gel C",0,147,231
-"448",75,35,"white",1,"period2","Pill A","Gel C",4,0,0
-"449",75,35,"white",1,"period3","Gel B","Pill A",0,124,212
-"450",75,35,"white",1,"period3","Gel B","Pill A",4,0,2
-"451",76,27,"black",0,"period1","Gel B","0",0,130,196
-"452",76,27,"black",0,"period1","Gel B","0",4,0,39
-"453",76,27,"black",0,"period2","Pill A","Gel B",0,136,201
-"454",76,27,"black",0,"period2","Pill A","Gel B",4,0,0
-"455",76,27,"black",0,"period3","Gel C","Pill A",0,114,228
-"456",76,27,"black",0,"period3","Gel C","Pill A",4,4,37
-"457",77,18,"black",0,"period1","Pill A","0",0,139,221
-"458",77,18,"black",0,"period1","Pill A","0",4,6,2
-"459",77,18,"black",0,"period2","Gel C","Pill A",0,101,223
-"460",77,18,"black",0,"period2","Gel C","Pill A",4,12,20
-"461",77,18,"black",0,"period3","Gel B","Gel C",0,152,202
-"462",77,18,"black",0,"period3","Gel B","Gel C",4,19,45
-"463",78,25,"black",0,"period1","Gel B","0",0,146,184
-"464",78,25,"black",0,"period1","Gel B","0",4,0,61
-"465",78,25,"black",0,"period2","Gel C","Gel B",0,118,212
-"466",78,25,"black",0,"period2","Gel C","Gel B",4,0,46
-"467",78,25,"black",0,"period3","Pill A","Gel C",0,127,220
-"468",78,25,"black",0,"period3","Pill A","Gel C",4,0,0
-"469",79,21,"white",1,"period1","Pill A","0",0,143,208
-"470",79,21,"white",1,"period1","Pill A","0",4,0,0
-"471",79,21,"white",1,"period2","Gel B","Pill A",0,140,181
-"472",79,21,"white",1,"period2","Gel B","Pill A",4,57,43
-"473",79,21,"white",1,"period3","Gel C","Gel B",0,135,242
-"474",79,21,"white",1,"period3","Gel C","Gel B",4,0,34
-"475",80,23,"black",1,"period1","Gel C","0",0,133,235
-"476",80,23,"black",1,"period1","Gel C","0",4,5,109
-"477",80,23,"black",1,"period2","Pill A","Gel C",0,163,236
-"478",80,23,"black",1,"period2","Pill A","Gel C",4,0,0
-"479",80,23,"black",1,"period3","Gel B","Pill A",0,116,216
-"480",80,23,"black",1,"period3","Gel B","Pill A",4,17,106
-"481",81,40,"black",1,"period1","Pill A","0",0,143,183
-"482",81,40,"black",1,"period1","Pill A","0",4,0,0
-"483",81,40,"black",1,"period2","Gel C","Pill A",0,107,190
-"484",81,40,"black",1,"period2","Gel C","Pill A",4,38,86
-"485",81,40,"black",1,"period3","Gel B","Gel C",0,121,204
-"486",81,40,"black",1,"period3","Gel B","Gel C",4,5,0
-"487",82,37,"others",0,"period1","Gel C","0",0,126,204
-"488",82,37,"others",0,"period1","Gel C","0",4,0,4
-"489",82,37,"others",0,"period2","Gel B","Gel C",0,116,228
-"490",82,37,"others",0,"period2","Gel B","Gel C",4,6,10
-"491",82,37,"others",0,"period3","Pill A","Gel B",0,110,234
-"492",82,37,"others",0,"period3","Pill A","Gel B",4,0,0
-"493",83,38,"black",1,"period1","Gel B","0",0,107,204
-"494",83,38,"black",1,"period1","Gel B","0",4,23,57
-"495",83,38,"black",1,"period2","Pill A","Gel B",0,109,195
-"496",83,38,"black",1,"period2","Pill A","Gel B",4,10,6
-"497",83,38,"black",1,"period3","Gel C","Pill A",0,137,202
-"498",83,38,"black",1,"period3","Gel C","Pill A",4,31,98
-"499",84,28,"others",1,"period1","Gel C","0",0,122,217
-"500",84,28,"others",1,"period1","Gel C","0",4,1,9
-"501",84,28,"others",1,"period2","Gel B","Gel C",0,129,231
-"502",84,28,"others",1,"period2","Gel B","Gel C",4,15,74
-"503",84,28,"others",1,"period3","Pill A","Gel B",0,129,254
-"504",84,28,"others",1,"period3","Pill A","Gel B",4,0,7
-"505",85,41,"white",0,"period1","Gel C","0",0,134,163
-"506",85,41,"white",0,"period1","Gel C","0",4,0,0
-"507",85,41,"white",0,"period2","Pill A","Gel C",0,120,189
-"508",85,41,"white",0,"period2","Pill A","Gel C",4,0,0
-"509",85,41,"white",0,"period3","Gel B","Pill A",0,104,221
-"510",85,41,"white",0,"period3","Gel B","Pill A",4,0,19
-"511",86,28,"white",0,"period1","Pill A","0",0,121,204
-"512",86,28,"white",0,"period1","Pill A","0",4,0,0
-"513",86,28,"white",0,"period2","Gel C","Pill A",0,119,192
-"514",86,28,"white",0,"period2","Gel C","Pill A",4,20,50
-"515",86,28,"white",0,"period3","Gel B","Gel C",0,94,212
-"516",86,28,"white",0,"period3","Gel B","Gel C",4,13,9
-"517",87,33,"black",0,"period1","Gel B","0",0,113,240
-"518",87,33,"black",0,"period1","Gel B","0",4,0,51
-"519",87,33,"black",0,"period2","Pill A","Gel B",0,124,229
-"520",87,33,"black",0,"period2","Pill A","Gel B",4,0,0
-"521",87,33,"black",0,"period3","Gel C","Pill A",0,93,183
-"522",87,33,"black",0,"period3","Gel C","Pill A",4,9,0
-"523",88,23,"others",1,"period1","Gel B","0",0,154,240
-"524",88,23,"others",1,"period1","Gel B","0",4,13,112
-"525",88,23,"others",1,"period2","Gel C","Gel B",0,87,257
-"526",88,23,"others",1,"period2","Gel C","Gel B",4,34,50
-"527",88,23,"others",1,"period3","Pill A","Gel C",0,148,219
-"528",88,23,"others",1,"period3","Pill A","Gel C",4,0,0
-"529",89,21,"white",0,"period1","Pill A","0",0,101,252
-"530",89,21,"white",0,"period1","Pill A","0",4,12,0
-"531",89,21,"white",0,"period2","Gel B","Pill A",0,111,224
-"532",89,21,"white",0,"period2","Gel B","Pill A",4,38,51
-"533",89,21,"white",0,"period3","Gel C","Gel B",0,152,216
-"534",89,21,"white",0,"period3","Gel C","Gel B",4,50,81
-"535",90,20,"others",1,"period1","Gel B","0",0,145,195
-"536",90,20,"others",1,"period1","Gel B","0",4,68,77
-"537",90,20,"others",1,"period2","Gel C","Gel B",0,143,213
-"538",90,20,"others",1,"period2","Gel C","Gel B",4,0,58
-"539",90,20,"others",1,"period3","Pill A","Gel C",0,116,245
-"540",90,20,"others",1,"period3","Pill A","Gel C",4,0,35
-"541",91,44,"others",0,"period1","Pill A","0",0,113,185
-"542",91,44,"others",0,"period1","Pill A","0",4,0,0
-"543",91,44,"others",0,"period2","Gel B","Pill A",0,113,191
-"544",91,44,"others",0,"period2","Gel B","Pill A",4,20,55
-"545",91,44,"others",0,"period3","Gel C","Gel B",0,96,181
-"546",91,44,"others",0,"period3","Gel C","Gel B",4,23,44
-"547",92,36,"white",1,"period1","Gel C","0",0,140,231
-"548",92,36,"white",1,"period1","Gel C","0",4,0,34
-"549",92,36,"white",1,"period2","Pill A","Gel C",0,109,186
-"550",92,36,"white",1,"period2","Pill A","Gel C",4,0,0
-"551",92,36,"white",1,"period3","Gel B","Pill A",0,119,224
-"552",92,36,"white",1,"period3","Gel B","Pill A",4,0,11
-"553",93,27,"white",1,"period1","Gel B","0",0,81,210
-"554",93,27,"white",1,"period1","Gel B","0",4,0,23
-"555",93,27,"white",1,"period2","Pill A","Gel B",0,131,212
-"556",93,27,"white",1,"period2","Pill A","Gel B",4,0,0
-"557",93,27,"white",1,"period3","Gel C","Pill A",0,127,244
-"558",93,27,"white",1,"period3","Gel C","Pill A",4,10,47
-"559",94,21,"white",0,"period1","Gel C","0",0,137,280
-"560",94,21,"white",0,"period1","Gel C","0",4,0,0
-"561",94,21,"white",0,"period2","Gel B","Gel C",0,146,233
-"562",94,21,"white",0,"period2","Gel B","Gel C",4,53,66
-"563",94,21,"white",0,"period3","Pill A","Gel B",0,137,219
-"564",94,21,"white",0,"period3","Pill A","Gel B",4,0,0
-"565",95,33,"others",0,"period1","Pill A","0",0,132,171
-"566",95,33,"others",0,"period1","Pill A","0",4,0,0
-"567",95,33,"others",0,"period2","Gel B","Pill A",0,92,187
-"568",95,33,"others",0,"period2","Gel B","Pill A",4,8,0
-"569",95,33,"others",0,"period3","Gel C","Gel B",0,141,199
-"570",95,33,"others",0,"period3","Gel C","Gel B",4,16,2
-"571",96,24,"others",1,"period1","Pill A","0",0,137,229
-"572",96,24,"others",1,"period1","Pill A","0",4,1,48
-"573",96,24,"others",1,"period2","Gel C","Pill A",0,120,259
-"574",96,24,"others",1,"period2","Gel C","Pill A",4,20,136
-"575",96,24,"others",1,"period3","Gel B","Gel C",0,123,245
-"576",96,24,"others",1,"period3","Gel B","Gel C",4,44,73
-"577",97,24,"others",0,"period1","Gel C","0",0,145,245
-"578",97,24,"others",0,"period1","Gel C","0",4,22,66
-"579",97,24,"others",0,"period2","Pill A","Gel C",0,114,187
-"580",97,24,"others",0,"period2","Pill A","Gel C",4,14,0
-"581",97,24,"others",0,"period3","Gel B","Pill A",0,111,185
-"582",97,24,"others",0,"period3","Gel B","Pill A",4,0,54
-"583",98,38,"others",0,"period1","Pill A","0",0,108,161
-"584",98,38,"others",0,"period1","Pill A","0",4,0,0
-"585",98,38,"others",0,"period2","Gel C","Pill A",0,108,196
-"586",98,38,"others",0,"period2","Gel C","Pill A",4,20,65
-"587",98,38,"others",0,"period3","Gel B","Gel C",0,108,205
-"588",98,38,"others",0,"period3","Gel B","Gel C",4,0,0
-"589",99,38,"others",1,"period1","Gel B","0",0,124,189
-"590",99,38,"others",1,"period1","Gel B","0",4,0,48
-"591",99,38,"others",1,"period2","Pill A","Gel B",0,152,229
-"592",99,38,"others",1,"period2","Pill A","Gel B",4,0,0
-"593",99,38,"others",1,"period3","Gel C","Pill A",0,117,238
-"594",99,38,"others",1,"period3","Gel C","Pill A",4,0,37
-"595",100,25,"black",0,"period1","Pill A","0",0,100,210
-"596",100,25,"black",0,"period1","Pill A","0",4,0,0
-"597",100,25,"black",0,"period2","Gel C","Pill A",0,130,223
-"598",100,25,"black",0,"period2","Gel C","Pill A",4,0,71
-"599",100,25,"black",0,"period3","Gel B","Gel C",0,89,246
-"600",100,25,"black",0,"period3","Gel B","Gel C",4,30,74
-"601",101,32,"others",0,"period1","Gel B","0",0,130,217
-"602",101,32,"others",0,"period1","Gel B","0",4,0,0
-"603",101,32,"others",0,"period2","Gel C","Gel B",0,121,217
-"604",101,32,"others",0,"period2","Gel C","Gel B",4,38,65
-"605",101,32,"others",0,"period3","Pill A","Gel C",0,119,203
-"606",101,32,"others",0,"period3","Pill A","Gel C",4,0,0
-"607",102,34,"others",1,"period1","Pill A","0",0,126,234
-"608",102,34,"others",1,"period1","Pill A","0",4,0,0
-"609",102,34,"others",1,"period2","Gel B","Pill A",0,123,227
-"610",102,34,"others",1,"period2","Gel B","Pill A",4,0,48
-"611",102,34,"others",1,"period3","Gel C","Gel B",0,116,194
-"612",102,34,"others",1,"period3","Gel C","Gel B",4,7,9
-"613",103,35,"white",1,"period1","Gel C","0",0,132,226
-"614",103,35,"white",1,"period1","Gel C","0",4,0,15
-"615",103,35,"white",1,"period2","Gel B","Gel C",0,137,219
-"616",103,35,"white",1,"period2","Gel B","Gel C",4,0,28
-"617",103,35,"white",1,"period3","Pill A","Gel B",0,102,215
-"618",103,35,"white",1,"period3","Pill A","Gel B",4,16,36
-"619",104,42,"black",0,"period1","Gel B","0",0,108,205
-"620",104,42,"black",0,"period1","Gel B","0",4,0,0
-"621",104,42,"black",0,"period2","Gel C","Gel B",0,120,172
-"622",104,42,"black",0,"period2","Gel C","Gel B",4,0,7
-"623",104,42,"black",0,"period3","Pill A","Gel C",0,90,162
-"624",104,42,"black",0,"period3","Pill A","Gel C",4,0,0
-"625",105,33,"white",1,"period1","Gel C","0",0,157,253
-"626",105,33,"white",1,"period1","Gel C","0",4,0,54
-"627",105,33,"white",1,"period2","Gel B","Gel C",0,143,211
-"628",105,33,"white",1,"period2","Gel B","Gel C",4,0,23
-"629",105,33,"white",1,"period3","Pill A","Gel B",0,155,223
-"630",105,33,"white",1,"period3","Pill A","Gel B",4,0,0
-"631",106,42,"black",1,"period1","Pill A","0",0,106,200
-"632",106,42,"black",1,"period1","Pill A","0",4,0,0
-"633",106,42,"black",1,"period2","Gel B","Pill A",0,84,214
-"634",106,42,"black",1,"period2","Gel B","Pill A",4,0,7
-"635",106,42,"black",1,"period3","Gel C","Gel B",0,118,174
-"636",106,42,"black",1,"period3","Gel C","Gel B",4,4,15
-"637",107,30,"white",0,"period1","Gel B","0",0,114,190
-"638",107,30,"white",0,"period1","Gel B","0",4,0,50
-"639",107,30,"white",0,"period2","Pill A","Gel B",0,106,180
-"640",107,30,"white",0,"period2","Pill A","Gel B",4,0,0
-"641",107,30,"white",0,"period3","Gel C","Pill A",0,109,216
-"642",107,30,"white",0,"period3","Gel C","Pill A",4,60,20
-"643",108,41,"white",1,"period1","Gel C","0",0,117,210
-"644",108,41,"white",1,"period1","Gel C","0",4,45,93
-"645",108,41,"white",1,"period2","Pill A","Gel C",0,91,204
-"646",108,41,"white",1,"period2","Pill A","Gel C",4,0,0
-"647",108,41,"white",1,"period3","Gel B","Pill A",0,103,201
-"648",108,41,"white",1,"period3","Gel B","Pill A",4,0,19
-"649",109,43,"white",0,"period1","Gel B","0",0,117,187
-"650",109,43,"white",0,"period1","Gel B","0",4,72,129
-"651",109,43,"white",0,"period2","Gel C","Gel B",0,114,208
-"652",109,43,"white",0,"period2","Gel C","Gel B",4,0,0
-"653",109,43,"white",0,"period3","Pill A","Gel C",0,120,190
-"654",109,43,"white",0,"period3","Pill A","Gel C",4,0,0
-"655",110,20,"black",0,"period1","Gel C","0",0,172,275
-"656",110,20,"black",0,"period1","Gel C","0",4,44,45
-"657",110,20,"black",0,"period2","Gel B","Gel C",0,158,211
-"658",110,20,"black",0,"period2","Gel B","Gel C",4,9,38
-"659",110,20,"black",0,"period3","Pill A","Gel B",0,121,142
-"660",110,20,"black",0,"period3","Pill A","Gel B",4,0,0
-"661",111,39,"black",0,"period1","Pill A","0",0,108,216
-"662",111,39,"black",0,"period1","Pill A","0",4,0,0
-"663",111,39,"black",0,"period2","Gel B","Pill A",0,117,201
-"664",111,39,"black",0,"period2","Gel B","Pill A",4,0,3
-"665",111,39,"black",0,"period3","Gel C","Gel B",0,120,192
-"666",111,39,"black",0,"period3","Gel C","Gel B",4,0,0
-"667",112,40,"black",0,"period1","Gel B","0",0,95,198
-"668",112,40,"black",0,"period1","Gel B","0",4,0,35
-"669",112,40,"black",0,"period2","Pill A","Gel B",0,129,185
-"670",112,40,"black",0,"period2","Pill A","Gel B",4,0,0
-"671",112,40,"black",0,"period3","Gel C","Pill A",0,121,191
-"672",112,40,"black",0,"period3","Gel C","Pill A",4,15,34
-"673",113,35,"black",0,"period1","Pill A","0",0,134,215
-"674",113,35,"black",0,"period1","Pill A","0",4,0,0
-"675",113,35,"black",0,"period2","Gel C","Pill A",0,135,217
-"676",113,35,"black",0,"period2","Gel C","Pill A",4,21,13
-"677",113,35,"black",0,"period3","Gel B","Gel C",0,141,226
-"678",113,35,"black",0,"period3","Gel B","Gel C",4,0,20
-"679",114,28,"others",0,"period1","Gel B","0",0,139,179
-"680",114,28,"others",0,"period1","Gel B","0",4,24,5
-"681",114,28,"others",0,"period2","Gel C","Gel B",0,138,202
-"682",114,28,"others",0,"period2","Gel C","Gel B",4,0,31
-"683",114,28,"others",0,"period3","Pill A","Gel C",0,133,158
-"684",114,28,"others",0,"period3","Pill A","Gel C",4,0,0
-"685",115,42,"black",0,"period1","Pill A","0",0,102,195
-"686",115,42,"black",0,"period1","Pill A","0",4,13,6
-"687",115,42,"black",0,"period2","Gel B","Pill A",0,109,187
-"688",115,42,"black",0,"period2","Gel B","Pill A",4,0,0
-"689",115,42,"black",0,"period3","Gel C","Gel B",0,117,165
-"690",115,42,"black",0,"period3","Gel C","Gel B",4,0,18
-"691",116,24,"others",1,"period1","Gel B","0",0,136,230
-"692",116,24,"others",1,"period1","Gel B","0",4,4,106
-"693",116,24,"others",1,"period2","Pill A","Gel B",0,112,255
-"694",116,24,"others",1,"period2","Pill A","Gel B",4,21,0
-"695",116,24,"others",1,"period3","Gel C","Pill A",0,125,243
-"696",116,24,"others",1,"period3","Gel C","Pill A",4,62,88
-"697",117,42,"white",1,"period1","Pill A","0",0,87,203
-"698",117,42,"white",1,"period1","Pill A","0",4,0,0
-"699",117,42,"white",1,"period2","Gel C","Pill A",0,113,198
-"700",117,42,"white",1,"period2","Gel C","Pill A",4,2,17
-"701",117,42,"white",1,"period3","Gel B","Gel C",0,122,212
-"702",117,42,"white",1,"period3","Gel B","Gel C",4,47,73
-"703",118,25,"white",0,"period1","Gel C","0",0,132,177
-"704",118,25,"white",0,"period1","Gel C","0",4,45,42
-"705",118,25,"white",0,"period2","Pill A","Gel C",0,150,203
-"706",118,25,"white",0,"period2","Pill A","Gel C",4,0,0
-"707",118,25,"white",0,"period3","Gel B","Pill A",0,154,159
-"708",118,25,"white",0,"period3","Gel B","Pill A",4,0,54
-"709",119,36,"white",0,"period1","Gel C","0",0,102,151
-"710",119,36,"white",0,"period1","Gel C","0",4,1,29
-"711",119,36,"white",0,"period2","Gel B","Gel C",0,116,218
-"712",119,36,"white",0,"period2","Gel B","Gel C",4,21,76
-"713",119,36,"white",0,"period3","Pill A","Gel B",0,120,182
-"714",119,36,"white",0,"period3","Pill A","Gel B",4,0,0
-"715",120,41,"white",1,"period1","Gel C","0",0,105,179
-"716",120,41,"white",1,"period1","Gel C","0",4,0,25
-"717",120,41,"white",1,"period2","Pill A","Gel C",0,112,193
-"718",120,41,"white",1,"period2","Pill A","Gel C",4,0,0
-"719",120,41,"white",1,"period3","Gel B","Pill A",0,109,198
-"720",120,41,"white",1,"period3","Gel B","Pill A",4,0,0
-"721",121,26,"black",1,"period1","Gel B","0",0,134,230
-"722",121,26,"black",1,"period1","Gel B","0",4,0,0
-"723",121,26,"black",1,"period2","Gel C","Gel B",0,130,241
-"724",121,26,"black",1,"period2","Gel C","Gel B",4,2,21
-"725",121,26,"black",1,"period3","Pill A","Gel C",0,121,201
-"726",121,26,"black",1,"period3","Pill A","Gel C",4,0,2
-"727",122,40,"white",1,"period1","Gel C","0",0,119,201
-"728",122,40,"white",1,"period1","Gel C","0",4,2,17
-"729",122,40,"white",1,"period2","Gel B","Gel C",0,116,194
-"730",122,40,"white",1,"period2","Gel B","Gel C",4,0,5
-"731",122,40,"white",1,"period3","Pill A","Gel B",0,129,215
-"732",122,40,"white",1,"period3","Pill A","Gel B",4,0,0
-"733",123,38,"others",0,"period1","Pill A","0",0,86,187
-"734",123,38,"others",0,"period1","Pill A","0",4,0,0
-"735",123,38,"others",0,"period2","Gel C","Pill A",0,142,159
-"736",123,38,"others",0,"period2","Gel C","Pill A",4,0,15
-"737",123,38,"others",0,"period3","Gel B","Gel C",0,139,195
-"738",123,38,"others",0,"period3","Gel B","Gel C",4,98,111
-"739",124,40,"others",0,"period1","Gel C","0",0,118,198
-"740",124,40,"others",0,"period1","Gel C","0",4,0,0
-"741",124,40,"others",0,"period2","Pill A","Gel C",0,120,180
-"742",124,40,"others",0,"period2","Pill A","Gel C",4,0,0
-"743",124,40,"others",0,"period3","Gel B","Pill A",0,101,165
-"744",124,40,"others",0,"period3","Gel B","Pill A",4,0,2
-"745",125,22,"black",1,"period1","Gel B","0",0,159,154
-"746",125,22,"black",1,"period1","Gel B","0",4,15,0
-"747",125,22,"black",1,"period2","Pill A","Gel B",0,137,184
-"748",125,22,"black",1,"period2","Pill A","Gel B",4,0,0
-"749",125,22,"black",1,"period3","Gel C","Pill A",0,135,204
-"750",125,22,"black",1,"period3","Gel C","Pill A",4,0,110
-"751",126,44,"others",0,"period1","Pill A","0",0,110,186
-"752",126,44,"others",0,"period1","Pill A","0",4,0,0
-"753",126,44,"others",0,"period2","Gel B","Pill A",0,97,157
-"754",126,44,"others",0,"period2","Gel B","Pill A",4,0,0
-"755",126,44,"others",0,"period3","Gel C","Gel B",0,117,172
-"756",126,44,"others",0,"period3","Gel C","Gel B",4,0,4
-"757",127,42,"black",1,"period1","Pill A","0",0,102,199
-"758",127,42,"black",1,"period1","Pill A","0",4,0,0
-"759",127,42,"black",1,"period2","Gel B","Pill A",0,109,212
-"760",127,42,"black",1,"period2","Gel B","Pill A",4,0,13
-"761",127,42,"black",1,"period3","Gel C","Gel B",0,105,181
-"762",127,42,"black",1,"period3","Gel C","Gel B",4,0,13
-"763",128,43,"black",1,"period1","Gel B","0",0,110,183
-"764",128,43,"black",1,"period1","Gel B","0",4,0,11
-"765",128,43,"black",1,"period2","Gel C","Gel B",0,98,181
-"766",128,43,"black",1,"period2","Gel C","Gel B",4,0,4
-"767",128,43,"black",1,"period3","Pill A","Gel C",0,130,206
-"768",128,43,"black",1,"period3","Pill A","Gel C",4,0,0
-"769",129,27,"white",0,"period1","Gel B","0",0,124,228
-"770",129,27,"white",0,"period1","Gel B","0",4,38,41
-"771",129,27,"white",0,"period2","Gel C","Gel B",0,132,204
-"772",129,27,"white",0,"period2","Gel C","Gel B",4,5,48
-"773",129,27,"white",0,"period3","Pill A","Gel C",0,117,216
-"774",129,27,"white",0,"period3","Pill A","Gel C",4,0,0
-"775",130,25,"others",0,"period1","Gel C","0",0,121,221
-"776",130,25,"others",0,"period1","Gel C","0",4,21,68
-"777",130,25,"others",0,"period2","Pill A","Gel C",0,96,192
-"778",130,25,"others",0,"period2","Pill A","Gel C",4,0,0
-"779",130,25,"others",0,"period3","Gel B","Pill A",0,145,169
-"780",130,25,"others",0,"period3","Gel B","Pill A",4,24,121
-"781",131,37,"white",0,"period1","Gel B","0",0,109,191
-"782",131,37,"white",0,"period1","Gel B","0",4,0,0
-"783",131,37,"white",0,"period2","Pill A","Gel B",0,90,196
-"784",131,37,"white",0,"period2","Pill A","Gel B",4,0,0
-"785",131,37,"white",0,"period3","Gel C","Pill A",0,150,241
-"786",131,37,"white",0,"period3","Gel C","Pill A",4,10,30
-"787",132,42,"others",0,"period1","Gel C","0",0,116,177
-"788",132,42,"others",0,"period1","Gel C","0",4,0,0
-"789",132,42,"others",0,"period2","Gel B","Gel C",0,93,184
-"790",132,42,"others",0,"period2","Gel B","Gel C",4,0,0
-"791",132,42,"others",0,"period3","Pill A","Gel B",0,91,200
-"792",132,42,"others",0,"period3","Pill A","Gel B",4,0,0
-"793",133,30,"white",1,"period1","Pill A","0",0,119,207
-"794",133,30,"white",1,"period1","Pill A","0",4,0,0
-"795",133,30,"white",1,"period2","Gel C","Pill A",0,123,248
-"796",133,30,"white",1,"period2","Gel C","Pill A",4,32,46
-"797",133,30,"white",1,"period3","Gel B","Gel C",0,129,217
-"798",133,30,"white",1,"period3","Gel B","Gel C",4,8,83
-"799",134,25,"black",0,"period1","Gel C","0",0,128,234
-"800",134,25,"black",0,"period1","Gel C","0",4,0,119
-"801",134,25,"black",0,"period2","Pill A","Gel C",0,138,249
-"802",134,25,"black",0,"period2","Pill A","Gel C",4,0,40
-"803",134,25,"black",0,"period3","Gel B","Pill A",0,94,253
-"804",134,25,"black",0,"period3","Gel B","Pill A",4,5,77
-"805",135,35,"black",1,"period1","Pill A","0",0,141,203
-"806",135,35,"black",1,"period1","Pill A","0",4,0,0
-"807",135,35,"black",1,"period2","Gel B","Pill A",0,97,199
-"808",135,35,"black",1,"period2","Gel B","Pill A",4,0,22
-"809",135,35,"black",1,"period3","Gel C","Gel B",0,123,188
-"810",135,35,"black",1,"period3","Gel C","Gel B",4,0,36
-"811",136,44,"white",1,"period1","Gel C","0",0,129,198
-"812",136,44,"white",1,"period1","Gel C","0",4,30,79
-"813",136,44,"white",1,"period2","Gel B","Gel C",0,109,220
-"814",136,44,"white",1,"period2","Gel B","Gel C",4,0,3
-"815",136,44,"white",1,"period3","Pill A","Gel B",0,129,186
-"816",136,44,"white",1,"period3","Pill A","Gel B",4,0,0
-"817",137,32,"white",0,"period1","Gel B","0",0,118,209
-"818",137,32,"white",0,"period1","Gel B","0",4,6,50
-"819",137,32,"white",0,"period2","Gel C","Gel B",0,95,215
-"820",137,32,"white",0,"period2","Gel C","Gel B",4,0,21
-"821",137,32,"white",0,"period3","Pill A","Gel C",0,112,212
-"822",137,32,"white",0,"period3","Pill A","Gel C",4,0,0
-"823",138,22,"white",1,"period1","Gel B","0",0,114,266
-"824",138,22,"white",1,"period1","Gel B","0",4,93,103
-"825",138,22,"white",1,"period2","Pill A","Gel B",0,118,187
-"826",138,22,"white",1,"period2","Pill A","Gel B",4,8,0
-"827",138,22,"white",1,"period3","Gel C","Pill A",0,156,245
-"828",138,22,"white",1,"period3","Gel C","Pill A",4,44,42
-"829",139,21,"others",0,"period1","Pill A","0",0,101,192
-"830",139,21,"others",0,"period1","Pill A","0",4,9,0
-"831",139,21,"others",0,"period2","Gel C","Pill A",0,150,183
-"832",139,21,"others",0,"period2","Gel C","Pill A",4,53,53
-"833",139,21,"others",0,"period3","Gel B","Gel C",0,136,255
-"834",139,21,"others",0,"period3","Gel B","Gel C",4,37,0
-"835",140,31,"white",0,"period1","Gel B","0",0,124,243
-"836",140,31,"white",0,"period1","Gel B","0",4,15,0
-"837",140,31,"white",0,"period2","Pill A","Gel B",0,99,220
-"838",140,31,"white",0,"period2","Pill A","Gel B",4,0,0
-"839",140,31,"white",0,"period3","Gel C","Pill A",0,149,164
-"840",140,31,"white",0,"period3","Gel C","Pill A",4,12,33
-"841",141,23,"others",0,"period1","Pill A","0",0,73,282
-"842",141,23,"others",0,"period1","Pill A","0",4,0,0
-"843",141,23,"others",0,"period2","Gel C","Pill A",0,124,183
-"844",141,23,"others",0,"period2","Gel C","Pill A",4,62,78
-"845",141,23,"others",0,"period3","Gel B","Gel C",0,122,184
-"846",141,23,"others",0,"period3","Gel B","Gel C",4,67,24
-"847",142,41,"black",0,"period1","Pill A","0",0,117,188
-"848",142,41,"black",0,"period1","Pill A","0",4,0,0
-"849",142,41,"black",0,"period2","Gel B","Pill A",0,112,192
-"850",142,41,"black",0,"period2","Gel B","Pill A",4,0,0
-"851",142,41,"black",0,"period3","Gel C","Gel B",0,116,182
-"852",142,41,"black",0,"period3","Gel C","Gel B",4,0,0
-"853",143,21,"white",0,"period1","Gel C","0",0,155,196
-"854",143,21,"white",0,"period1","Gel C","0",4,4,83
-"855",143,21,"white",0,"period2","Pill A","Gel C",0,139,227
-"856",143,21,"white",0,"period2","Pill A","Gel C",4,0,0
-"857",143,21,"white",0,"period3","Gel B","Pill A",0,142,231
-"858",143,21,"white",0,"period3","Gel B","Pill A",4,0,90
-"859",144,39,"others",1,"period1","Gel B","0",0,117,201
-"860",144,39,"others",1,"period1","Gel B","0",4,39,83
-"861",144,39,"others",1,"period2","Gel C","Gel B",0,148,226
-"862",144,39,"others",1,"period2","Gel C","Gel B",4,47,127
-"863",144,39,"others",1,"period3","Pill A","Gel C",0,121,233
-"864",144,39,"others",1,"period3","Pill A","Gel C",4,0,0
-"865",145,41,"white",1,"period1","Gel C","0",0,115,213
-"866",145,41,"white",1,"period1","Gel C","0",4,4,0
-"867",145,41,"white",1,"period2","Gel B","Gel C",0,120,181
-"868",145,41,"white",1,"period2","Gel B","Gel C",4,0,8
-"869",145,41,"white",1,"period3","Pill A","Gel B",0,127,187
-"870",145,41,"white",1,"period3","Pill A","Gel B",4,0,0
-"871",146,35,"others",1,"period1","Gel B","0",0,120,193
-"872",146,35,"others",1,"period1","Gel B","0",4,0,0
-"873",146,35,"others",1,"period2","Gel C","Gel B",0,122,163
-"874",146,35,"others",1,"period2","Gel C","Gel B",4,0,55
-"875",146,35,"others",1,"period3","Pill A","Gel C",0,123,172
-"876",146,35,"others",1,"period3","Pill A","Gel C",4,26,67
-"877",147,36,"others",0,"period1","Pill A","0",0,113,188
-"878",147,36,"others",0,"period1","Pill A","0",4,0,0
-"879",147,36,"others",0,"period2","Gel B","Pill A",0,141,189
-"880",147,36,"others",0,"period2","Gel B","Pill A",4,0,18
-"881",147,36,"others",0,"period3","Gel C","Gel B",0,109,238
-"882",147,36,"others",0,"period3","Gel C","Gel B",4,0,20
-"883",148,38,"white",0,"period1","Gel B","0",0,114,183
-"884",148,38,"white",0,"period1","Gel B","0",4,31,56
-"885",148,38,"white",0,"period2","Pill A","Gel B",0,126,198
-"886",148,38,"white",0,"period2","Pill A","Gel B",4,0,0
-"887",148,38,"white",0,"period3","Gel C","Pill A",0,129,200
-"888",148,38,"white",0,"period3","Gel C","Pill A",4,40,91
-"889",149,34,"white",0,"period1","Gel C","0",0,116,160
-"890",149,34,"white",0,"period1","Gel C","0",4,0,25
-"891",149,34,"white",0,"period2","Pill A","Gel C",0,129,199
-"892",149,34,"white",0,"period2","Pill A","Gel C",4,0,0
-"893",149,34,"white",0,"period3","Gel B","Pill A",0,100,222
-"894",149,34,"white",0,"period3","Gel B","Pill A",4,0,7
-"895",150,29,"white",1,"period1","Pill A","0",0,154,225
-"896",150,29,"white",1,"period1","Pill A","0",4,0,0
-"897",150,29,"white",1,"period2","Gel C","Pill A",0,140,225
-"898",150,29,"white",1,"period2","Gel C","Pill A",4,0,35
-"899",150,29,"white",1,"period3","Gel B","Gel C",0,138,193
-"900",150,29,"white",1,"period3","Gel B","Gel C",4,33,120
-"901",151,23,"black",1,"period1","Gel C","0",0,172,239
-"902",151,23,"black",1,"period1","Gel C","0",4,14,56
-"903",151,23,"black",1,"period2","Gel B","Gel C",0,171,225
-"904",151,23,"black",1,"period2","Gel B","Gel C",4,7,74
-"905",151,23,"black",1,"period3","Pill A","Gel B",0,107,213
-"906",151,23,"black",1,"period3","Pill A","Gel B",4,0,21
-"907",152,40,"others",1,"period1","Gel C","0",0,117,192
-"908",152,40,"others",1,"period1","Gel C","0",4,0,44
-"909",152,40,"others",1,"period2","Gel B","Gel C",0,112,186
-"910",152,40,"others",1,"period2","Gel B","Gel C",4,0,14
-"911",152,40,"others",1,"period3","Pill A","Gel B",0,114,209
-"912",152,40,"others",1,"period3","Pill A","Gel B",4,0,0
-"913",153,33,"others",1,"period1","Pill A","0",0,150,194
-"914",153,33,"others",1,"period1","Pill A","0",4,0,0
-"915",153,33,"others",1,"period2","Gel C","Pill A",0,106,198
-"916",153,33,"others",1,"period2","Gel C","Pill A",4,0,11
-"917",153,33,"others",1,"period3","Gel B","Gel C",0,142,224
-"918",153,33,"others",1,"period3","Gel B","Gel C",4,0,16
-"919",154,43,"others",1,"period1","Pill A","0",0,135,181
-"920",154,43,"others",1,"period1","Pill A","0",4,0,31
-"921",154,43,"others",1,"period2","Gel B","Pill A",0,126,221
-"922",154,43,"others",1,"period2","Gel B","Pill A",4,80,138
-"923",154,43,"others",1,"period3","Gel C","Gel B",0,113,197
-"924",154,43,"others",1,"period3","Gel C","Gel B",4,0,0
-"925",155,32,"others",0,"period1","Gel B","0",0,127,221
-"926",155,32,"others",0,"period1","Gel B","0",4,6,0
-"927",155,32,"others",0,"period2","Gel C","Gel B",0,117,191
-"928",155,32,"others",0,"period2","Gel C","Gel B",4,2,20
-"929",155,32,"others",0,"period3","Pill A","Gel C",0,112,220
-"930",155,32,"others",0,"period3","Pill A","Gel C",4,18,24
-"931",156,21,"black",0,"period1","Gel B","0",0,110,243
-"932",156,21,"black",0,"period1","Gel B","0",4,13,63
-"933",156,21,"black",0,"period2","Pill A","Gel B",0,182,191
-"934",156,21,"black",0,"period2","Pill A","Gel B",4,27,0
-"935",156,21,"black",0,"period3","Gel C","Pill A",0,126,215
-"936",156,21,"black",0,"period3","Gel C","Pill A",4,74,128
-"937",157,29,"others",0,"period1","Pill A","0",0,91,181
-"938",157,29,"others",0,"period1","Pill A","0",4,0,0
-"939",157,29,"others",0,"period2","Gel B","Pill A",0,110,191
-"940",157,29,"others",0,"period2","Gel B","Pill A",4,12,64
-"941",157,29,"others",0,"period3","Gel C","Gel B",0,124,194
-"942",157,29,"others",0,"period3","Gel C","Gel B",4,0,8
-"943",158,26,"black",0,"period1","Gel C","0",0,125,198
-"944",158,26,"black",0,"period1","Gel C","0",4,0,21
-"945",158,26,"black",0,"period2","Pill A","Gel C",0,60,260
-"946",158,26,"black",0,"period2","Pill A","Gel C",4,0,0
-"947",158,26,"black",0,"period3","Gel B","Pill A",0,113,193
-"948",158,26,"black",0,"period3","Gel B","Pill A",4,4,55
-"949",159,35,"black",1,"period1","Pill A","0",0,114,195
-"950",159,35,"black",1,"period1","Pill A","0",4,0,0
-"951",159,35,"black",1,"period2","Gel C","Pill A",0,135,216
-"952",159,35,"black",1,"period2","Gel C","Pill A",4,0,0
-"953",159,35,"black",1,"period3","Gel B","Gel C",0,109,201
-"954",159,35,"black",1,"period3","Gel B","Gel C",4,2,36
-"955",160,34,"others",1,"period1","Gel C","0",0,142,212
-"956",160,34,"others",1,"period1","Gel C","0",4,29,31
-"957",160,34,"others",1,"period2","Pill A","Gel C",0,108,226
-"958",160,34,"others",1,"period2","Pill A","Gel C",4,0,0
-"959",160,34,"others",1,"period3","Gel B","Pill A",0,119,201
-"960",160,34,"others",1,"period3","Gel B","Pill A",4,0,13
-"961",161,31,"others",1,"period1","Gel C","0",0,131,193
-"962",161,31,"others",1,"period1","Gel C","0",4,13,34
-"963",161,31,"others",1,"period2","Gel B","Gel C",0,112,237
-"964",161,31,"others",1,"period2","Gel B","Gel C",4,0,18
-"965",161,31,"others",1,"period3","Pill A","Gel B",0,127,198
-"966",161,31,"others",1,"period3","Pill A","Gel B",4,0,0
-"967",162,40,"black",1,"period1","Gel B","0",0,122,205
-"968",162,40,"black",1,"period1","Gel B","0",4,0,3
-"969",162,40,"black",1,"period2","Pill A","Gel B",0,134,188
-"970",162,40,"black",1,"period2","Pill A","Gel B",4,0,0
-"971",162,40,"black",1,"period3","Gel C","Pill A",0,111,216
-"972",162,40,"black",1,"period3","Gel C","Pill A",4,24,33
-"973",163,35,"black",0,"period1","Gel B","0",0,132,209
-"974",163,35,"black",0,"period1","Gel B","0",4,0,0
-"975",163,35,"black",0,"period2","Gel C","Gel B",0,91,192
-"976",163,35,"black",0,"period2","Gel C","Gel B",4,7,0
-"977",163,35,"black",0,"period3","Pill A","Gel C",0,106,181
-"978",163,35,"black",0,"period3","Pill A","Gel C",4,0,0
-"979",164,36,"others",0,"period1","Gel C","0",0,120,223
-"980",164,36,"others",0,"period1","Gel C","0",4,0,29
-"981",164,36,"others",0,"period2","Pill A","Gel C",0,122,166
-"982",164,36,"others",0,"period2","Pill A","Gel C",4,0,0
-"983",164,36,"others",0,"period3","Gel B","Pill A",0,129,191
-"984",164,36,"others",0,"period3","Gel B","Pill A",4,5,0
-"985",165,45,"black",0,"period1","Gel B","0",0,105,200
-"986",165,45,"black",0,"period1","Gel B","0",4,6,43
-"987",165,45,"black",0,"period2","Gel C","Gel B",0,104,190
-"988",165,45,"black",0,"period2","Gel C","Gel B",4,0,0
-"989",165,45,"black",0,"period3","Pill A","Gel C",0,105,165
-"990",165,45,"black",0,"period3","Pill A","Gel C",4,0,0
-"991",166,19,"others",1,"period1","Pill A","0",0,136,272
-"992",166,19,"others",1,"period1","Pill A","0",4,0,0
-"993",166,19,"others",1,"period2","Gel B","Pill A",0,138,220
-"994",166,19,"others",1,"period2","Gel B","Pill A",4,64,100
-"995",166,19,"others",1,"period3","Gel C","Gel B",0,141,270
-"996",166,19,"others",1,"period3","Gel C","Gel B",4,66,155
-"997",167,22,"others",1,"period1","Gel B","0",0,132,240
-"998",167,22,"others",1,"period1","Gel B","0",4,0,70
-"999",167,22,"others",1,"period2","Pill A","Gel B",0,160,273
-"1000",167,22,"others",1,"period2","Pill A","Gel B",4,0,0
-"1001",167,22,"others",1,"period3","Gel C","Pill A",0,171,172
-"1002",167,22,"others",1,"period3","Gel C","Pill A",4,26,6
-"1003",168,29,"black",0,"period1","Pill A","0",0,121,189
-"1004",168,29,"black",0,"period1","Pill A","0",4,0,0
-"1005",168,29,"black",0,"period2","Gel C","Pill A",0,140,182
-"1006",168,29,"black",0,"period2","Gel C","Pill A",4,0,36
-"1007",168,29,"black",0,"period3","Gel B","Gel C",0,115,202
-"1008",168,29,"black",0,"period3","Gel B","Gel C",4,22,133
-"1009",169,24,"black",0,"period1","Gel B","0",0,158,252
-"1010",169,24,"black",0,"period1","Gel B","0",4,0,42
-"1011",169,24,"black",0,"period2","Pill A","Gel B",0,140,307
-"1012",169,24,"black",0,"period2","Pill A","Gel B",4,0,0
-"1013",169,24,"black",0,"period3","Gel C","Pill A",0,112,225
-"1014",169,24,"black",0,"period3","Gel C","Pill A",4,55,116
-"1015",170,39,"black",0,"period1","Pill A","0",0,96,202
-"1016",170,39,"black",0,"period1","Pill A","0",4,0,0
-"1017",170,39,"black",0,"period2","Gel C","Pill A",0,125,181
-"1018",170,39,"black",0,"period2","Gel C","Pill A",4,0,0
-"1019",170,39,"black",0,"period3","Gel B","Gel C",0,123,186
-"1020",170,39,"black",0,"period3","Gel B","Gel C",4,0,1
-"1021",171,22,"others",0,"period1","Gel C","0",0,118,208
-"1022",171,22,"others",0,"period1","Gel C","0",4,41,108
-"1023",171,22,"others",0,"period2","Gel B","Gel C",0,161,239
-"1024",171,22,"others",0,"period2","Gel B","Gel C",4,27,24
-"1025",171,22,"others",0,"period3","Pill A","Gel B",0,149,202
-"1026",171,22,"others",0,"period3","Pill A","Gel B",4,0,0
-"1027",172,33,"others",0,"period1","Gel C","0",0,119,204
-"1028",172,33,"others",0,"period1","Gel C","0",4,2,19
-"1029",172,33,"others",0,"period2","Pill A","Gel C",0,118,204
-"1030",172,33,"others",0,"period2","Pill A","Gel C",4,0,0
-"1031",172,33,"others",0,"period3","Gel B","Pill A",0,130,203
-"1032",172,33,"others",0,"period3","Gel B","Pill A",4,8,12
-"1033",173,43,"others",1,"period1","Gel B","0",0,115,193
-"1034",173,43,"others",1,"period1","Gel B","0",4,0,0
-"1035",173,43,"others",1,"period2","Gel C","Gel B",0,125,199
-"1036",173,43,"others",1,"period2","Gel C","Gel B",4,0,28
-"1037",173,43,"others",1,"period3","Pill A","Gel C",0,125,205
-"1038",173,43,"others",1,"period3","Pill A","Gel C",4,0,0
-"1039",174,40,"others",1,"period1","Pill A","0",0,116,210
-"1040",174,40,"others",1,"period1","Pill A","0",4,0,0
-"1041",174,40,"others",1,"period2","Gel B","Pill A",0,129,214
-"1042",174,40,"others",1,"period2","Gel B","Pill A",4,0,0
-"1043",174,40,"others",1,"period3","Gel C","Gel B",0,104,189
-"1044",174,40,"others",1,"period3","Gel C","Gel B",4,12,13
-"1045",175,24,"white",0,"period1","Gel B","0",0,79,225
-"1046",175,24,"white",0,"period1","Gel B","0",4,11,49
-"1047",175,24,"white",0,"period2","Gel C","Gel B",0,149,182
-"1048",175,24,"white",0,"period2","Gel C","Gel B",4,79,32
-"1049",175,24,"white",0,"period3","Pill A","Gel C",0,146,230
-"1050",175,24,"white",0,"period3","Pill A","Gel C",4,32,0
-"1051",176,36,"others",1,"period1","Gel B","0",0,123,230
-"1052",176,36,"others",1,"period1","Gel B","0",4,14,19
-"1053",176,36,"others",1,"period2","Pill A","Gel B",0,147,238
-"1054",176,36,"others",1,"period2","Pill A","Gel B",4,0,0
-"1055",176,36,"others",1,"period3","Gel C","Pill A",0,139,218
-"1056",176,36,"others",1,"period3","Gel C","Pill A",4,1,61
-"1057",177,26,"black",0,"period1","Gel C","0",0,124,188
-"1058",177,26,"black",0,"period1","Gel C","0",4,38,72
-"1059",177,26,"black",0,"period2","Gel B","Gel C",0,138,205
-"1060",177,26,"black",0,"period2","Gel B","Gel C",4,35,93
-"1061",177,26,"black",0,"period3","Pill A","Gel B",0,103,221
-"1062",177,26,"black",0,"period3","Pill A","Gel B",4,0,0
-"1063",178,19,"white",1,"period1","Pill A","0",0,129,282
-"1064",178,19,"white",1,"period1","Pill A","0",4,22,58
-"1065",178,19,"white",1,"period2","Gel B","Pill A",0,146,303
-"1066",178,19,"white",1,"period2","Gel B","Pill A",4,60,184
-"1067",178,19,"white",1,"period3","Gel C","Gel B",0,116,300
-"1068",178,19,"white",1,"period3","Gel C","Gel B",4,44,98
-"1069",179,22,"black",0,"period1","Gel C","0",0,137,204
-"1070",179,22,"black",0,"period1","Gel C","0",4,10,14
-"1071",179,22,"black",0,"period2","Gel B","Gel C",0,91,188
-"1072",179,22,"black",0,"period2","Gel B","Gel C",4,19,54
-"1073",179,22,"black",0,"period3","Pill A","Gel B",0,141,294
-"1074",179,22,"black",0,"period3","Pill A","Gel B",4,0,0
-"1075",180,26,"black",0,"period1","Pill A","0",0,139,223
-"1076",180,26,"black",0,"period1","Pill A","0",4,0,0
-"1077",180,26,"black",0,"period2","Gel C","Pill A",0,68,200
-"1078",180,26,"black",0,"period2","Gel C","Pill A",4,0,103
-"1079",180,26,"black",0,"period3","Gel B","Gel C",0,164,236
-"1080",180,26,"black",0,"period3","Gel B","Gel C",4,13,14
+"","ptid","age","race","gender","sequence_ind","period","treatment","carryover","bloodVL_change","skinVL_change","timepoint","bloodVL","skinVL"
+"1",1,34,"black",0,0,"period1","Pill A","0",133,219,0,133,219
+"2",1,34,"black",0,0,"period1","Pill A","0",133,219,4,0,0
+"3",1,34,"black",0,0,"period2","Gel B","Pill A",90,180,0,90,180
+"4",1,34,"black",0,0,"period2","Gel B","Pill A",90,180,4,0,0
+"5",1,34,"black",0,0,"period3","Gel C","Gel B",117,195,0,127,238
+"6",1,34,"black",0,0,"period3","Gel C","Gel B",117,195,4,10,43
+"7",2,33,"black",0,1,"period1","Pill A","0",115,167,0,115,167
+"8",2,33,"black",0,1,"period1","Pill A","0",115,167,4,0,0
+"9",2,33,"black",0,1,"period2","Gel C","Pill A",71,168,0,107,226
+"10",2,33,"black",0,1,"period2","Gel C","Pill A",71,168,4,36,58
+"11",2,33,"black",0,1,"period3","Gel B","Gel C",87,152,0,110,206
+"12",2,33,"black",0,1,"period3","Gel B","Gel C",87,152,4,23,54
+"13",3,29,"white",1,2,"period1","Gel B","0",127,179,0,127,181
+"14",3,29,"white",1,2,"period1","Gel B","0",127,179,4,0,2
+"15",3,29,"white",1,2,"period2","Gel C","Gel B",88,159,0,103,198
+"16",3,29,"white",1,2,"period2","Gel C","Gel B",88,159,4,15,39
+"17",3,29,"white",1,2,"period3","Pill A","Gel C",111,175,0,126,207
+"18",3,29,"white",1,2,"period3","Pill A","Gel C",111,175,4,15,32
+"19",4,32,"others",0,0,"period1","Gel B","0",113,200,0,113,200
+"20",4,32,"others",0,0,"period1","Gel B","0",113,200,4,0,0
+"21",4,32,"others",0,0,"period2","Pill A","Gel B",99,167,0,99,167
+"22",4,32,"others",0,0,"period2","Pill A","Gel B",99,167,4,0,0
+"23",4,32,"others",0,0,"period3","Gel C","Pill A",100,200,0,100,226
+"24",4,32,"others",0,0,"period3","Gel C","Pill A",100,200,4,0,26
+"25",5,29,"black",0,1,"period1","Gel C","0",112,89,0,129,167
+"26",5,29,"black",0,1,"period1","Gel C","0",112,89,4,17,78
+"27",5,29,"black",0,1,"period2","Pill A","Gel C",152,251,0,152,256
+"28",5,29,"black",0,1,"period2","Pill A","Gel C",152,251,4,0,5
+"29",5,29,"black",0,1,"period3","Gel B","Pill A",127,229,0,127,229
+"30",5,29,"black",0,1,"period3","Gel B","Pill A",127,229,4,0,0
+"31",6,38,"black",0,2,"period1","Gel C","0",133,156,0,133,185
+"32",6,38,"black",0,2,"period1","Gel C","0",133,156,4,0,29
+"33",6,38,"black",0,2,"period2","Gel B","Gel C",109,210,0,117,212
+"34",6,38,"black",0,2,"period2","Gel B","Gel C",109,210,4,8,2
+"35",6,38,"black",0,2,"period3","Pill A","Gel B",136,197,0,136,197
+"36",6,38,"black",0,2,"period3","Pill A","Gel B",136,197,4,0,0
+"37",7,32,"others",1,1,"period1","Gel C","0",126,108,0,140,200
+"38",7,32,"others",1,1,"period1","Gel C","0",126,108,4,14,92
+"39",7,32,"others",1,1,"period2","Pill A","Gel C",119,220,0,119,220
+"40",7,32,"others",1,1,"period2","Pill A","Gel C",119,220,4,0,0
+"41",7,32,"others",1,1,"period3","Gel B","Pill A",108,175,0,108,206
+"42",7,32,"others",1,1,"period3","Gel B","Pill A",108,175,4,0,31
+"43",8,30,"black",0,0,"period1","Pill A","0",115,161,0,115,161
+"44",8,30,"black",0,0,"period1","Pill A","0",115,161,4,0,0
+"45",8,30,"black",0,0,"period2","Gel B","Pill A",124,205,0,124,215
+"46",8,30,"black",0,0,"period2","Gel B","Pill A",124,205,4,0,10
+"47",8,30,"black",0,0,"period3","Gel C","Gel B",113,170,0,113,214
+"48",8,30,"black",0,0,"period3","Gel C","Gel B",113,170,4,0,44
+"49",9,38,"others",1,1,"period1","Pill A","0",145,215,0,145,215
+"50",9,38,"others",1,1,"period1","Pill A","0",145,215,4,0,0
+"51",9,38,"others",1,1,"period2","Gel C","Pill A",126,192,0,126,229
+"52",9,38,"others",1,1,"period2","Gel C","Pill A",126,192,4,0,37
+"53",9,38,"others",1,1,"period3","Gel B","Gel C",123,218,0,123,218
+"54",9,38,"others",1,1,"period3","Gel B","Gel C",123,218,4,0,0
+"55",10,29,"others",0,1,"period1","Gel C","0",154,163,0,154,212
+"56",10,29,"others",0,1,"period1","Gel C","0",154,163,4,0,49
+"57",10,29,"others",0,1,"period2","Pill A","Gel C",91,238,0,91,238
+"58",10,29,"others",0,1,"period2","Pill A","Gel C",91,238,4,0,0
+"59",10,29,"others",0,1,"period3","Gel B","Pill A",163,238,0,163,238
+"60",10,29,"others",0,1,"period3","Gel B","Pill A",163,238,4,0,0
+"61",11,32,"black",1,2,"period1","Gel C","0",123,217,0,123,247
+"62",11,32,"black",1,2,"period1","Gel C","0",123,217,4,0,30
+"63",11,32,"black",1,2,"period2","Gel B","Gel C",102,131,0,133,178
+"64",11,32,"black",1,2,"period2","Gel B","Gel C",102,131,4,31,47
+"65",11,32,"black",1,2,"period3","Pill A","Gel B",140,192,0,140,192
+"66",11,32,"black",1,2,"period3","Pill A","Gel B",140,192,4,0,0
+"67",12,23,"others",1,2,"period1","Gel B","0",99,146,0,113,189
+"68",12,23,"others",1,2,"period1","Gel B","0",99,146,4,14,43
+"69",12,23,"others",1,2,"period2","Gel C","Gel B",66,65,0,127,187
+"70",12,23,"others",1,2,"period2","Gel C","Gel B",66,65,4,61,122
+"71",12,23,"others",1,2,"period3","Pill A","Gel C",159,134,0,159,166
+"72",12,23,"others",1,2,"period3","Pill A","Gel C",159,134,4,0,32
+"73",13,44,"others",0,0,"period1","Gel B","0",79,163,0,104,198
+"74",13,44,"others",0,0,"period1","Gel B","0",79,163,4,25,35
+"75",13,44,"others",0,0,"period2","Pill A","Gel B",96,191,0,96,191
+"76",13,44,"others",0,0,"period2","Pill A","Gel B",96,191,4,0,0
+"77",13,44,"others",0,0,"period3","Gel C","Pill A",105,198,0,105,198
+"78",13,44,"others",0,0,"period3","Gel C","Pill A",105,198,4,0,0
+"79",14,21,"others",0,1,"period1","Gel C","0",94,102,0,133,202
+"80",14,21,"others",0,1,"period1","Gel C","0",94,102,4,39,100
+"81",14,21,"others",0,1,"period2","Pill A","Gel C",123,231,0,123,239
+"82",14,21,"others",0,1,"period2","Pill A","Gel C",123,231,4,0,8
+"83",14,21,"others",0,1,"period3","Gel B","Pill A",140,204,0,155,207
+"84",14,21,"others",0,1,"period3","Gel B","Pill A",140,204,4,15,3
+"85",15,44,"black",0,2,"period1","Gel B","0",123,205,0,123,205
+"86",15,44,"black",0,2,"period1","Gel B","0",123,205,4,0,0
+"87",15,44,"black",0,2,"period2","Gel C","Gel B",60,110,0,95,191
+"88",15,44,"black",0,2,"period2","Gel C","Gel B",60,110,4,35,81
+"89",15,44,"black",0,2,"period3","Pill A","Gel C",117,195,0,117,195
+"90",15,44,"black",0,2,"period3","Pill A","Gel C",117,195,4,0,0
+"91",16,21,"others",0,2,"period1","Gel C","0",89,121,0,125,184
+"92",16,21,"others",0,2,"period1","Gel C","0",89,121,4,36,63
+"93",16,21,"others",0,2,"period2","Gel B","Gel C",59,135,0,109,215
+"94",16,21,"others",0,2,"period2","Gel B","Gel C",59,135,4,50,80
+"95",16,21,"others",0,2,"period3","Pill A","Gel B",112,199,0,117,199
+"96",16,21,"others",0,2,"period3","Pill A","Gel B",112,199,4,5,0
+"97",17,24,"black",1,1,"period1","Pill A","0",165,239,0,165,239
+"98",17,24,"black",1,1,"period1","Pill A","0",165,239,4,0,0
+"99",17,24,"black",1,1,"period2","Gel C","Pill A",86,211,0,110,228
+"100",17,24,"black",1,1,"period2","Gel C","Pill A",86,211,4,24,17
+"101",17,24,"black",1,1,"period3","Gel B","Gel C",112,183,0,145,219
+"102",17,24,"black",1,1,"period3","Gel B","Gel C",112,183,4,33,36
+"103",18,30,"white",0,0,"period1","Pill A","0",114,248,0,128,248
+"104",18,30,"white",0,0,"period1","Pill A","0",114,248,4,14,0
+"105",18,30,"white",0,0,"period2","Gel B","Pill A",110,170,0,110,218
+"106",18,30,"white",0,0,"period2","Gel B","Pill A",110,170,4,0,48
+"107",18,30,"white",0,0,"period3","Gel C","Gel B",139,219,0,139,254
+"108",18,30,"white",0,0,"period3","Gel C","Gel B",139,219,4,0,35
+"109",19,30,"white",1,0,"period1","Gel B","0",108,134,0,108,160
+"110",19,30,"white",1,0,"period1","Gel B","0",108,134,4,0,26
+"111",19,30,"white",1,0,"period2","Pill A","Gel B",114,214,0,114,214
+"112",19,30,"white",1,0,"period2","Pill A","Gel B",114,214,4,0,0
+"113",19,30,"white",1,0,"period3","Gel C","Pill A",108,143,0,114,210
+"114",19,30,"white",1,0,"period3","Gel C","Pill A",108,143,4,6,67
+"115",20,32,"black",1,0,"period1","Gel B","0",127,182,0,144,238
+"116",20,32,"black",1,0,"period1","Gel B","0",127,182,4,17,56
+"117",20,32,"black",1,0,"period2","Pill A","Gel B",114,245,0,114,245
+"118",20,32,"black",1,0,"period2","Pill A","Gel B",114,245,4,0,0
+"119",20,32,"black",1,0,"period3","Gel C","Pill A",138,94,0,139,198
+"120",20,32,"black",1,0,"period3","Gel C","Pill A",138,94,4,1,104
+"121",21,29,"white",1,1,"period1","Pill A","0",148,213,0,148,213
+"122",21,29,"white",1,1,"period1","Pill A","0",148,213,4,0,0
+"123",21,29,"white",1,1,"period2","Gel C","Pill A",129,149,0,131,191
+"124",21,29,"white",1,1,"period2","Gel C","Pill A",129,149,4,2,42
+"125",21,29,"white",1,1,"period3","Gel B","Gel C",130,265,0,142,289
+"126",21,29,"white",1,1,"period3","Gel B","Gel C",130,265,4,12,24
+"127",22,34,"black",0,1,"period1","Gel C","0",111,192,0,116,195
+"128",22,34,"black",0,1,"period1","Gel C","0",111,192,4,5,3
+"129",22,34,"black",0,1,"period2","Pill A","Gel C",107,188,0,107,188
+"130",22,34,"black",0,1,"period2","Pill A","Gel C",107,188,4,0,0
+"131",22,34,"black",0,1,"period3","Gel B","Pill A",129,119,0,129,148
+"132",22,34,"black",0,1,"period3","Gel B","Pill A",129,119,4,0,29
+"133",23,43,"white",1,0,"period1","Pill A","0",115,206,0,115,206
+"134",23,43,"white",1,0,"period1","Pill A","0",115,206,4,0,0
+"135",23,43,"white",1,0,"period2","Gel B","Pill A",132,192,0,132,210
+"136",23,43,"white",1,0,"period2","Gel B","Pill A",132,192,4,0,18
+"137",23,43,"white",1,0,"period3","Gel C","Gel B",111,188,0,111,212
+"138",23,43,"white",1,0,"period3","Gel C","Gel B",111,188,4,0,24
+"139",24,21,"black",1,2,"period1","Gel C","0",93,93,0,134,213
+"140",24,21,"black",1,2,"period1","Gel C","0",93,93,4,41,120
+"141",24,21,"black",1,2,"period2","Gel B","Gel C",144,127,0,148,230
+"142",24,21,"black",1,2,"period2","Gel B","Gel C",144,127,4,4,103
+"143",24,21,"black",1,2,"period3","Pill A","Gel B",115,196,0,144,216
+"144",24,21,"black",1,2,"period3","Pill A","Gel B",115,196,4,29,20
+"145",25,40,"others",0,2,"period1","Gel B","0",129,190,0,129,190
+"146",25,40,"others",0,2,"period1","Gel B","0",129,190,4,0,0
+"147",25,40,"others",0,2,"period2","Gel C","Gel B",114,166,0,118,189
+"148",25,40,"others",0,2,"period2","Gel C","Gel B",114,166,4,4,23
+"149",25,40,"others",0,2,"period3","Pill A","Gel C",134,182,0,134,182
+"150",25,40,"others",0,2,"period3","Pill A","Gel C",134,182,4,0,0
+"151",26,44,"white",1,1,"period1","Gel C","0",76,69,0,118,187
+"152",26,44,"white",1,1,"period1","Gel C","0",76,69,4,42,118
+"153",26,44,"white",1,1,"period2","Pill A","Gel C",90,201,0,108,216
+"154",26,44,"white",1,1,"period2","Pill A","Gel C",90,201,4,18,15
+"155",26,44,"white",1,1,"period3","Gel B","Pill A",122,216,0,122,221
+"156",26,44,"white",1,1,"period3","Gel B","Pill A",122,216,4,0,5
+"157",27,33,"others",1,0,"period1","Gel B","0",121,217,0,121,234
+"158",27,33,"others",1,0,"period1","Gel B","0",121,217,4,0,17
+"159",27,33,"others",1,0,"period2","Pill A","Gel B",139,226,0,139,226
+"160",27,33,"others",1,0,"period2","Pill A","Gel B",139,226,4,0,0
+"161",27,33,"others",1,0,"period3","Gel C","Pill A",129,143,0,129,187
+"162",27,33,"others",1,0,"period3","Gel C","Pill A",129,143,4,0,44
+"163",28,42,"black",0,1,"period1","Pill A","0",112,181,0,112,181
+"164",28,42,"black",0,1,"period1","Pill A","0",112,181,4,0,0
+"165",28,42,"black",0,1,"period2","Gel C","Pill A",90,197,0,90,197
+"166",28,42,"black",0,1,"period2","Gel C","Pill A",90,197,4,0,0
+"167",28,42,"black",0,1,"period3","Gel B","Gel C",111,185,0,111,185
+"168",28,42,"black",0,1,"period3","Gel B","Gel C",111,185,4,0,0
+"169",29,29,"others",0,2,"period1","Gel C","0",112,196,0,117,219
+"170",29,29,"others",0,2,"period1","Gel C","0",112,196,4,5,23
+"171",29,29,"others",0,2,"period2","Gel B","Gel C",122,127,0,122,180
+"172",29,29,"others",0,2,"period2","Gel B","Gel C",122,127,4,0,53
+"173",29,29,"others",0,2,"period3","Pill A","Gel B",134,222,0,134,222
+"174",29,29,"others",0,2,"period3","Pill A","Gel B",134,222,4,0,0
+"175",30,22,"black",1,0,"period1","Pill A","0",85,231,0,85,231
+"176",30,22,"black",1,0,"period1","Pill A","0",85,231,4,0,0
+"177",30,22,"black",1,0,"period2","Gel B","Pill A",159,175,0,159,221
+"178",30,22,"black",1,0,"period2","Gel B","Pill A",159,175,4,0,46
+"179",30,22,"black",1,0,"period3","Gel C","Gel B",117,146,0,136,231
+"180",30,22,"black",1,0,"period3","Gel C","Gel B",117,146,4,19,85
+"181",31,30,"black",1,2,"period1","Gel B","0",119,167,0,124,197
+"182",31,30,"black",1,2,"period1","Gel B","0",119,167,4,5,30
+"183",31,30,"black",1,2,"period2","Gel C","Gel B",104,129,0,108,212
+"184",31,30,"black",1,2,"period2","Gel C","Gel B",104,129,4,4,83
+"185",31,30,"black",1,2,"period3","Pill A","Gel C",156,239,0,156,239
+"186",31,30,"black",1,2,"period3","Pill A","Gel C",156,239,4,0,0
+"187",32,21,"black",1,0,"period1","Gel B","0",167,194,0,181,215
+"188",32,21,"black",1,0,"period1","Gel B","0",167,194,4,14,21
+"189",32,21,"black",1,0,"period2","Pill A","Gel B",181,251,0,181,251
+"190",32,21,"black",1,0,"period2","Pill A","Gel B",181,251,4,0,0
+"191",32,21,"black",1,0,"period3","Gel C","Pill A",96,198,0,127,214
+"192",32,21,"black",1,0,"period3","Gel C","Pill A",96,198,4,31,16
+"193",33,25,"others",0,1,"period1","Pill A","0",125,191,0,125,191
+"194",33,25,"others",0,1,"period1","Pill A","0",125,191,4,0,0
+"195",33,25,"others",0,1,"period2","Gel C","Pill A",159,153,0,178,244
+"196",33,25,"others",0,1,"period2","Gel C","Pill A",159,153,4,19,91
+"197",33,25,"others",0,1,"period3","Gel B","Gel C",126,131,0,126,216
+"198",33,25,"others",0,1,"period3","Gel B","Gel C",126,131,4,0,85
+"199",34,42,"others",1,2,"period1","Gel B","0",131,215,0,131,215
+"200",34,42,"others",1,2,"period1","Gel B","0",131,215,4,0,0
+"201",34,42,"others",1,2,"period2","Gel C","Gel B",95,156,0,95,184
+"202",34,42,"others",1,2,"period2","Gel C","Gel B",95,156,4,0,28
+"203",34,42,"others",1,2,"period3","Pill A","Gel C",113,184,0,113,184
+"204",34,42,"others",1,2,"period3","Pill A","Gel C",113,184,4,0,0
+"205",35,27,"others",0,2,"period1","Gel C","0",102,190,0,108,244
+"206",35,27,"others",0,2,"period1","Gel C","0",102,190,4,6,54
+"207",35,27,"others",0,2,"period2","Gel B","Gel C",105,189,0,107,189
+"208",35,27,"others",0,2,"period2","Gel B","Gel C",105,189,4,2,0
+"209",35,27,"others",0,2,"period3","Pill A","Gel B",129,253,0,129,253
+"210",35,27,"others",0,2,"period3","Pill A","Gel B",129,253,4,0,0
+"211",36,25,"white",0,0,"period1","Pill A","0",149,174,0,149,177
+"212",36,25,"white",0,0,"period1","Pill A","0",149,174,4,0,3
+"213",36,25,"white",0,0,"period2","Gel B","Pill A",123,178,0,137,265
+"214",36,25,"white",0,0,"period2","Gel B","Pill A",123,178,4,14,87
+"215",36,25,"white",0,0,"period3","Gel C","Gel B",107,198,0,109,231
+"216",36,25,"white",0,0,"period3","Gel C","Gel B",107,198,4,2,33
+"217",37,25,"white",1,1,"period1","Gel C","0",123,204,0,163,224
+"218",37,25,"white",1,1,"period1","Gel C","0",123,204,4,40,20
+"219",37,25,"white",1,1,"period2","Pill A","Gel C",109,181,0,109,181
+"220",37,25,"white",1,1,"period2","Pill A","Gel C",109,181,4,0,0
+"221",37,25,"white",1,1,"period3","Gel B","Pill A",68,243,0,77,243
+"222",37,25,"white",1,1,"period3","Gel B","Pill A",68,243,4,9,0
+"223",38,21,"others",1,2,"period1","Gel B","0",162,233,0,162,249
+"224",38,21,"others",1,2,"period1","Gel B","0",162,233,4,0,16
+"225",38,21,"others",1,2,"period2","Gel C","Gel B",73,168,0,113,262
+"226",38,21,"others",1,2,"period2","Gel C","Gel B",73,168,4,40,94
+"227",38,21,"others",1,2,"period3","Pill A","Gel C",141,270,0,152,278
+"228",38,21,"others",1,2,"period3","Pill A","Gel C",141,270,4,11,8
+"229",39,20,"others",0,0,"period1","Gel B","0",101,79,0,111,170
+"230",39,20,"others",0,0,"period1","Gel B","0",101,79,4,10,91
+"231",39,20,"others",0,0,"period2","Pill A","Gel B",178,247,0,178,247
+"232",39,20,"others",0,0,"period2","Pill A","Gel B",178,247,4,0,0
+"233",39,20,"others",0,0,"period3","Gel C","Pill A",147,64,0,147,168
+"234",39,20,"others",0,0,"period3","Gel C","Pill A",147,64,4,0,104
+"235",40,38,"white",0,0,"period1","Pill A","0",129,226,0,129,226
+"236",40,38,"white",0,0,"period1","Pill A","0",129,226,4,0,0
+"237",40,38,"white",0,0,"period2","Gel B","Pill A",98,183,0,98,209
+"238",40,38,"white",0,0,"period2","Gel B","Pill A",98,183,4,0,26
+"239",40,38,"white",0,0,"period3","Gel C","Gel B",93,203,0,105,206
+"240",40,38,"white",0,0,"period3","Gel C","Gel B",93,203,4,12,3
+"241",41,32,"black",1,1,"period1","Gel C","0",85,127,0,123,214
+"242",41,32,"black",1,1,"period1","Gel C","0",85,127,4,38,87
+"243",41,32,"black",1,1,"period2","Pill A","Gel C",150,221,0,150,245
+"244",41,32,"black",1,1,"period2","Pill A","Gel C",150,221,4,0,24
+"245",41,32,"black",1,1,"period3","Gel B","Pill A",129,124,0,135,195
+"246",41,32,"black",1,1,"period3","Gel B","Pill A",129,124,4,6,71
+"247",42,35,"others",1,2,"period1","Gel C","0",117,158,0,124,233
+"248",42,35,"others",1,2,"period1","Gel C","0",117,158,4,7,75
+"249",42,35,"others",1,2,"period2","Gel B","Gel C",112,143,0,112,181
+"250",42,35,"others",1,2,"period2","Gel B","Gel C",112,143,4,0,38
+"251",42,35,"others",1,2,"period3","Pill A","Gel B",103,206,0,103,206
+"252",42,35,"others",1,2,"period3","Pill A","Gel B",103,206,4,0,0
+"253",43,39,"white",0,1,"period1","Pill A","0",131,180,0,131,180
+"254",43,39,"white",0,1,"period1","Pill A","0",131,180,4,0,0
+"255",43,39,"white",0,1,"period2","Gel C","Pill A",94,188,0,97,190
+"256",43,39,"white",0,1,"period2","Gel C","Pill A",94,188,4,3,2
+"257",43,39,"white",0,1,"period3","Gel B","Gel C",135,199,0,135,199
+"258",43,39,"white",0,1,"period3","Gel B","Gel C",135,199,4,0,0
+"259",44,42,"others",1,0,"period1","Gel B","0",115,200,0,115,200
+"260",44,42,"others",1,0,"period1","Gel B","0",115,200,4,0,0
+"261",44,42,"others",1,0,"period2","Pill A","Gel B",100,207,0,107,218
+"262",44,42,"others",1,0,"period2","Pill A","Gel B",100,207,4,7,11
+"263",44,42,"others",1,0,"period3","Gel C","Pill A",86,98,0,120,185
+"264",44,42,"others",1,0,"period3","Gel C","Pill A",86,98,4,34,87
+"265",45,29,"white",0,1,"period1","Pill A","0",117,202,0,117,202
+"266",45,29,"white",0,1,"period1","Pill A","0",117,202,4,0,0
+"267",45,29,"white",0,1,"period2","Gel C","Pill A",132,256,0,132,259
+"268",45,29,"white",0,1,"period2","Gel C","Pill A",132,256,4,0,3
+"269",45,29,"white",0,1,"period3","Gel B","Gel C",83,144,0,109,206
+"270",45,29,"white",0,1,"period3","Gel B","Gel C",83,144,4,26,62
+"271",46,28,"black",1,0,"period1","Pill A","0",78,198,0,78,198
+"272",46,28,"black",1,0,"period1","Pill A","0",78,198,4,0,0
+"273",46,28,"black",1,0,"period2","Gel B","Pill A",135,193,0,135,269
+"274",46,28,"black",1,0,"period2","Gel B","Pill A",135,193,4,0,76
+"275",46,28,"black",1,0,"period3","Gel C","Gel B",107,179,0,118,228
+"276",46,28,"black",1,0,"period3","Gel C","Gel B",107,179,4,11,49
+"277",47,39,"white",1,1,"period1","Gel C","0",125,196,0,125,233
+"278",47,39,"white",1,1,"period1","Gel C","0",125,196,4,0,37
+"279",47,39,"white",1,1,"period2","Pill A","Gel C",126,211,0,126,211
+"280",47,39,"white",1,1,"period2","Pill A","Gel C",126,211,4,0,0
+"281",47,39,"white",1,1,"period3","Gel B","Pill A",109,175,0,109,189
+"282",47,39,"white",1,1,"period3","Gel B","Pill A",109,175,4,0,14
+"283",48,43,"black",0,1,"period1","Gel C","0",106,192,0,106,198
+"284",48,43,"black",0,1,"period1","Gel C","0",106,192,4,0,6
+"285",48,43,"black",0,1,"period2","Pill A","Gel C",107,189,0,107,189
+"286",48,43,"black",0,1,"period2","Pill A","Gel C",107,189,4,0,0
+"287",48,43,"black",0,1,"period3","Gel B","Pill A",105,147,0,105,151
+"288",48,43,"black",0,1,"period3","Gel B","Pill A",105,147,4,0,4
+"289",49,40,"white",1,2,"period1","Gel C","0",126,194,0,126,194
+"290",49,40,"white",1,2,"period1","Gel C","0",126,194,4,0,0
+"291",49,40,"white",1,2,"period2","Gel B","Gel C",132,197,0,132,217
+"292",49,40,"white",1,2,"period2","Gel B","Gel C",132,197,4,0,20
+"293",49,40,"white",1,2,"period3","Pill A","Gel B",132,191,0,132,191
+"294",49,40,"white",1,2,"period3","Pill A","Gel B",132,191,4,0,0
+"295",50,19,"black",1,2,"period1","Gel B","0",79,141,0,101,277
+"296",50,19,"black",1,2,"period1","Gel B","0",79,141,4,22,136
+"297",50,19,"black",1,2,"period2","Gel C","Gel B",80,91,0,141,234
+"298",50,19,"black",1,2,"period2","Gel C","Gel B",80,91,4,61,143
+"299",50,19,"black",1,2,"period3","Pill A","Gel C",95,233,0,108,233
+"300",50,19,"black",1,2,"period3","Pill A","Gel C",95,233,4,13,0
+"301",51,34,"others",0,2,"period1","Gel C","0",93,189,0,112,189
+"302",51,34,"others",0,2,"period1","Gel C","0",93,189,4,19,0
+"303",51,34,"others",0,2,"period2","Gel B","Gel C",122,212,0,122,212
+"304",51,34,"others",0,2,"period2","Gel B","Gel C",122,212,4,0,0
+"305",51,34,"others",0,2,"period3","Pill A","Gel B",132,218,0,132,218
+"306",51,34,"others",0,2,"period3","Pill A","Gel B",132,218,4,0,0
+"307",52,19,"black",0,1,"period1","Pill A","0",149,210,0,149,210
+"308",52,19,"black",0,1,"period1","Pill A","0",149,210,4,0,0
+"309",52,19,"black",0,1,"period2","Gel C","Pill A",103,178,0,139,241
+"310",52,19,"black",0,1,"period2","Gel C","Pill A",103,178,4,36,63
+"311",52,19,"black",0,1,"period3","Gel B","Gel C",114,211,0,164,236
+"312",52,19,"black",0,1,"period3","Gel B","Gel C",114,211,4,50,25
+"313",53,40,"others",0,0,"period1","Gel B","0",70,105,0,90,184
+"314",53,40,"others",0,0,"period1","Gel B","0",70,105,4,20,79
+"315",53,40,"others",0,0,"period2","Pill A","Gel B",109,201,0,109,201
+"316",53,40,"others",0,0,"period2","Pill A","Gel B",109,201,4,0,0
+"317",53,40,"others",0,0,"period3","Gel C","Pill A",107,136,0,107,144
+"318",53,40,"others",0,0,"period3","Gel C","Pill A",107,136,4,0,8
+"319",54,43,"others",0,2,"period1","Gel B","0",77,150,0,104,197
+"320",54,43,"others",0,2,"period1","Gel B","0",77,150,4,27,47
+"321",54,43,"others",0,2,"period2","Gel C","Gel B",129,178,0,129,178
+"322",54,43,"others",0,2,"period2","Gel C","Gel B",129,178,4,0,0
+"323",54,43,"others",0,2,"period3","Pill A","Gel C",81,160,0,81,160
+"324",54,43,"others",0,2,"period3","Pill A","Gel C",81,160,4,0,0
+"325",55,33,"others",0,0,"period1","Pill A","0",134,213,0,134,213
+"326",55,33,"others",0,0,"period1","Pill A","0",134,213,4,0,0
+"327",55,33,"others",0,0,"period2","Gel B","Pill A",110,217,0,110,217
+"328",55,33,"others",0,0,"period2","Gel B","Pill A",110,217,4,0,0
+"329",55,33,"others",0,0,"period3","Gel C","Gel B",111,166,0,128,166
+"330",55,33,"others",0,0,"period3","Gel C","Gel B",111,166,4,17,0
+"331",56,30,"others",1,1,"period1","Gel C","0",116,165,0,120,230
+"332",56,30,"others",1,1,"period1","Gel C","0",116,165,4,4,65
+"333",56,30,"others",1,1,"period2","Pill A","Gel C",162,244,0,162,244
+"334",56,30,"others",1,1,"period2","Pill A","Gel C",162,244,4,0,0
+"335",56,30,"others",1,1,"period3","Gel B","Pill A",113,225,0,113,238
+"336",56,30,"others",1,1,"period3","Gel B","Pill A",113,225,4,0,13
+"337",57,32,"white",0,0,"period1","Pill A","0",152,178,0,152,178
+"338",57,32,"white",0,0,"period1","Pill A","0",152,178,4,0,0
+"339",57,32,"white",0,0,"period2","Gel B","Pill A",100,151,0,100,151
+"340",57,32,"white",0,0,"period2","Gel B","Pill A",100,151,4,0,0
+"341",57,32,"white",0,0,"period3","Gel C","Gel B",103,199,0,127,213
+"342",57,32,"white",0,0,"period3","Gel C","Gel B",103,199,4,24,14
+"343",58,27,"white",0,1,"period1","Pill A","0",103,192,0,103,192
+"344",58,27,"white",0,1,"period1","Pill A","0",103,192,4,0,0
+"345",58,27,"white",0,1,"period2","Gel C","Pill A",127,139,0,136,216
+"346",58,27,"white",0,1,"period2","Gel C","Pill A",127,139,4,9,77
+"347",58,27,"white",0,1,"period3","Gel B","Gel C",98,175,0,116,203
+"348",58,27,"white",0,1,"period3","Gel B","Gel C",98,175,4,18,28
+"349",59,24,"black",1,0,"period1","Gel B","0",64,245,0,92,275
+"350",59,24,"black",1,0,"period1","Gel B","0",64,245,4,28,30
+"351",59,24,"black",1,0,"period2","Pill A","Gel B",111,245,0,111,245
+"352",59,24,"black",1,0,"period2","Pill A","Gel B",111,245,4,0,0
+"353",59,24,"black",1,0,"period3","Gel C","Pill A",85,109,0,124,233
+"354",59,24,"black",1,0,"period3","Gel C","Pill A",85,109,4,39,124
+"355",60,27,"white",1,2,"period1","Gel C","0",97,134,0,120,188
+"356",60,27,"white",1,2,"period1","Gel C","0",97,134,4,23,54
+"357",60,27,"white",1,2,"period2","Gel B","Gel C",143,217,0,153,251
+"358",60,27,"white",1,2,"period2","Gel B","Gel C",143,217,4,10,34
+"359",60,27,"white",1,2,"period3","Pill A","Gel B",121,226,0,121,237
+"360",60,27,"white",1,2,"period3","Pill A","Gel B",121,226,4,0,11
+"361",61,42,"white",0,2,"period1","Gel B","0",115,188,0,115,188
+"362",61,42,"white",0,2,"period1","Gel B","0",115,188,4,0,0
+"363",61,42,"white",0,2,"period2","Gel C","Gel B",122,176,0,122,185
+"364",61,42,"white",0,2,"period2","Gel C","Gel B",122,176,4,0,9
+"365",61,42,"white",0,2,"period3","Pill A","Gel C",109,206,0,114,206
+"366",61,42,"white",0,2,"period3","Pill A","Gel C",109,206,4,5,0
+"367",62,42,"black",1,0,"period1","Pill A","0",129,187,0,129,187
+"368",62,42,"black",1,0,"period1","Pill A","0",129,187,4,0,0
+"369",62,42,"black",1,0,"period2","Gel B","Pill A",126,209,0,126,229
+"370",62,42,"black",1,0,"period2","Gel B","Pill A",126,209,4,0,20
+"371",62,42,"black",1,0,"period3","Gel C","Gel B",109,179,0,109,193
+"372",62,42,"black",1,0,"period3","Gel C","Gel B",109,179,4,0,14
+"373",63,36,"white",1,2,"period1","Gel B","0",106,169,0,106,197
+"374",63,36,"white",1,2,"period1","Gel B","0",106,169,4,0,28
+"375",63,36,"white",1,2,"period2","Gel C","Gel B",123,115,0,123,178
+"376",63,36,"white",1,2,"period2","Gel C","Gel B",123,115,4,0,63
+"377",63,36,"white",1,2,"period3","Pill A","Gel C",102,215,0,102,215
+"378",63,36,"white",1,2,"period3","Pill A","Gel C",102,215,4,0,0
+"379",64,29,"black",0,1,"period1","Pill A","0",120,162,0,120,162
+"380",64,29,"black",0,1,"period1","Pill A","0",120,162,4,0,0
+"381",64,29,"black",0,1,"period2","Gel C","Pill A",63,91,0,106,224
+"382",64,29,"black",0,1,"period2","Gel C","Pill A",63,91,4,43,133
+"383",64,29,"black",0,1,"period3","Gel B","Gel C",120,166,0,139,196
+"384",64,29,"black",0,1,"period3","Gel B","Gel C",120,166,4,19,30
+"385",65,25,"black",0,2,"period1","Gel C","0",132,137,0,146,171
+"386",65,25,"black",0,2,"period1","Gel C","0",132,137,4,14,34
+"387",65,25,"black",0,2,"period2","Gel B","Gel C",122,167,0,131,249
+"388",65,25,"black",0,2,"period2","Gel B","Gel C",122,167,4,9,82
+"389",65,25,"black",0,2,"period3","Pill A","Gel B",124,235,0,124,235
+"390",65,25,"black",0,2,"period3","Pill A","Gel B",124,235,4,0,0
+"391",66,33,"black",0,1,"period1","Gel C","0",108,224,0,108,231
+"392",66,33,"black",0,1,"period1","Gel C","0",108,224,4,0,7
+"393",66,33,"black",0,1,"period2","Pill A","Gel C",115,171,0,115,171
+"394",66,33,"black",0,1,"period2","Pill A","Gel C",115,171,4,0,0
+"395",66,33,"black",0,1,"period3","Gel B","Pill A",103,145,0,107,145
+"396",66,33,"black",0,1,"period3","Gel B","Pill A",103,145,4,4,0
+"397",67,27,"black",1,0,"period1","Gel B","0",87,159,0,116,224
+"398",67,27,"black",1,0,"period1","Gel B","0",87,159,4,29,65
+"399",67,27,"black",1,0,"period2","Pill A","Gel B",165,229,0,165,229
+"400",67,27,"black",1,0,"period2","Pill A","Gel B",165,229,4,0,0
+"401",67,27,"black",1,0,"period3","Gel C","Pill A",136,169,0,136,233
+"402",67,27,"black",1,0,"period3","Gel C","Pill A",136,169,4,0,64
+"403",68,25,"black",0,2,"period1","Gel B","0",123,119,0,135,167
+"404",68,25,"black",0,2,"period1","Gel B","0",123,119,4,12,48
+"405",68,25,"black",0,2,"period2","Gel C","Gel B",119,126,0,130,214
+"406",68,25,"black",0,2,"period2","Gel C","Gel B",119,126,4,11,88
+"407",68,25,"black",0,2,"period3","Pill A","Gel C",103,254,0,103,254
+"408",68,25,"black",0,2,"period3","Pill A","Gel C",103,254,4,0,0
+"409",69,33,"others",0,0,"period1","Gel B","0",110,173,0,110,191
+"410",69,33,"others",0,0,"period1","Gel B","0",110,173,4,0,18
+"411",69,33,"others",0,0,"period2","Pill A","Gel B",144,130,0,144,201
+"412",69,33,"others",0,0,"period2","Pill A","Gel B",144,130,4,0,71
+"413",69,33,"others",0,0,"period3","Gel C","Pill A",120,113,0,120,151
+"414",69,33,"others",0,0,"period3","Gel C","Pill A",120,113,4,0,38
+"415",70,22,"black",0,0,"period1","Pill A","0",105,204,0,129,204
+"416",70,22,"black",0,0,"period1","Pill A","0",105,204,4,24,0
+"417",70,22,"black",0,0,"period2","Gel B","Pill A",103,234,0,140,234
+"418",70,22,"black",0,0,"period2","Gel B","Pill A",103,234,4,37,0
+"419",70,22,"black",0,0,"period3","Gel C","Gel B",94,243,0,104,282
+"420",70,22,"black",0,0,"period3","Gel C","Gel B",94,243,4,10,39
+"421",71,38,"white",0,1,"period1","Gel C","0",122,166,0,122,192
+"422",71,38,"white",0,1,"period1","Gel C","0",122,166,4,0,26
+"423",71,38,"white",0,1,"period2","Pill A","Gel C",118,190,0,118,190
+"424",71,38,"white",0,1,"period2","Pill A","Gel C",118,190,4,0,0
+"425",71,38,"white",0,1,"period3","Gel B","Pill A",125,189,0,125,195
+"426",71,38,"white",0,1,"period3","Gel B","Pill A",125,189,4,0,6
+"427",72,42,"white",1,1,"period1","Pill A","0",126,188,0,140,203
+"428",72,42,"white",1,1,"period1","Pill A","0",126,188,4,14,15
+"429",72,42,"white",1,1,"period2","Gel C","Pill A",120,184,0,120,200
+"430",72,42,"white",1,1,"period2","Gel C","Pill A",120,184,4,0,16
+"431",72,42,"white",1,1,"period3","Gel B","Gel C",93,118,0,130,192
+"432",72,42,"white",1,1,"period3","Gel B","Gel C",93,118,4,37,74
+"433",73,35,"others",1,2,"period1","Gel C","0",95,151,0,95,184
+"434",73,35,"others",1,2,"period1","Gel C","0",95,151,4,0,33
+"435",73,35,"others",1,2,"period2","Gel B","Gel C",91,226,0,91,226
+"436",73,35,"others",1,2,"period2","Gel B","Gel C",91,226,4,0,0
+"437",73,35,"others",1,2,"period3","Pill A","Gel B",111,197,0,111,197
+"438",73,35,"others",1,2,"period3","Pill A","Gel B",111,197,4,0,0
+"439",74,26,"black",0,2,"period1","Gel C","0",119,209,0,119,212
+"440",74,26,"black",0,2,"period1","Gel C","0",119,209,4,0,3
+"441",74,26,"black",0,2,"period2","Gel B","Gel C",147,147,0,151,147
+"442",74,26,"black",0,2,"period2","Gel B","Gel C",147,147,4,4,0
+"443",74,26,"black",0,2,"period3","Pill A","Gel B",148,220,0,148,220
+"444",74,26,"black",0,2,"period3","Pill A","Gel B",148,220,4,0,0
+"445",75,35,"white",1,1,"period1","Gel C","0",137,203,0,137,244
+"446",75,35,"white",1,1,"period1","Gel C","0",137,203,4,0,41
+"447",75,35,"white",1,1,"period2","Pill A","Gel C",147,231,0,147,231
+"448",75,35,"white",1,1,"period2","Pill A","Gel C",147,231,4,0,0
+"449",75,35,"white",1,1,"period3","Gel B","Pill A",124,210,0,124,212
+"450",75,35,"white",1,1,"period3","Gel B","Pill A",124,210,4,0,2
+"451",76,27,"black",0,0,"period1","Gel B","0",130,157,0,130,196
+"452",76,27,"black",0,0,"period1","Gel B","0",130,157,4,0,39
+"453",76,27,"black",0,0,"period2","Pill A","Gel B",136,201,0,136,201
+"454",76,27,"black",0,0,"period2","Pill A","Gel B",136,201,4,0,0
+"455",76,27,"black",0,0,"period3","Gel C","Pill A",110,191,0,114,228
+"456",76,27,"black",0,0,"period3","Gel C","Pill A",110,191,4,4,37
+"457",77,18,"black",0,1,"period1","Pill A","0",133,219,0,139,221
+"458",77,18,"black",0,1,"period1","Pill A","0",133,219,4,6,2
+"459",77,18,"black",0,1,"period2","Gel C","Pill A",89,203,0,101,223
+"460",77,18,"black",0,1,"period2","Gel C","Pill A",89,203,4,12,20
+"461",77,18,"black",0,1,"period3","Gel B","Gel C",133,157,0,152,202
+"462",77,18,"black",0,1,"period3","Gel B","Gel C",133,157,4,19,45
+"463",78,25,"black",0,2,"period1","Gel B","0",146,123,0,146,184
+"464",78,25,"black",0,2,"period1","Gel B","0",146,123,4,0,61
+"465",78,25,"black",0,2,"period2","Gel C","Gel B",118,166,0,118,212
+"466",78,25,"black",0,2,"period2","Gel C","Gel B",118,166,4,0,46
+"467",78,25,"black",0,2,"period3","Pill A","Gel C",127,220,0,127,220
+"468",78,25,"black",0,2,"period3","Pill A","Gel C",127,220,4,0,0
+"469",79,21,"white",1,0,"period1","Pill A","0",143,208,0,143,208
+"470",79,21,"white",1,0,"period1","Pill A","0",143,208,4,0,0
+"471",79,21,"white",1,0,"period2","Gel B","Pill A",83,138,0,140,181
+"472",79,21,"white",1,0,"period2","Gel B","Pill A",83,138,4,57,43
+"473",79,21,"white",1,0,"period3","Gel C","Gel B",135,208,0,135,242
+"474",79,21,"white",1,0,"period3","Gel C","Gel B",135,208,4,0,34
+"475",80,23,"black",1,1,"period1","Gel C","0",128,126,0,133,235
+"476",80,23,"black",1,1,"period1","Gel C","0",128,126,4,5,109
+"477",80,23,"black",1,1,"period2","Pill A","Gel C",163,236,0,163,236
+"478",80,23,"black",1,1,"period2","Pill A","Gel C",163,236,4,0,0
+"479",80,23,"black",1,1,"period3","Gel B","Pill A",99,110,0,116,216
+"480",80,23,"black",1,1,"period3","Gel B","Pill A",99,110,4,17,106
+"481",81,40,"black",1,1,"period1","Pill A","0",143,183,0,143,183
+"482",81,40,"black",1,1,"period1","Pill A","0",143,183,4,0,0
+"483",81,40,"black",1,1,"period2","Gel C","Pill A",69,104,0,107,190
+"484",81,40,"black",1,1,"period2","Gel C","Pill A",69,104,4,38,86
+"485",81,40,"black",1,1,"period3","Gel B","Gel C",116,204,0,121,204
+"486",81,40,"black",1,1,"period3","Gel B","Gel C",116,204,4,5,0
+"487",82,37,"others",0,2,"period1","Gel C","0",126,200,0,126,204
+"488",82,37,"others",0,2,"period1","Gel C","0",126,200,4,0,4
+"489",82,37,"others",0,2,"period2","Gel B","Gel C",110,218,0,116,228
+"490",82,37,"others",0,2,"period2","Gel B","Gel C",110,218,4,6,10
+"491",82,37,"others",0,2,"period3","Pill A","Gel B",110,234,0,110,234
+"492",82,37,"others",0,2,"period3","Pill A","Gel B",110,234,4,0,0
+"493",83,38,"black",1,0,"period1","Gel B","0",84,147,0,107,204
+"494",83,38,"black",1,0,"period1","Gel B","0",84,147,4,23,57
+"495",83,38,"black",1,0,"period2","Pill A","Gel B",99,189,0,109,195
+"496",83,38,"black",1,0,"period2","Pill A","Gel B",99,189,4,10,6
+"497",83,38,"black",1,0,"period3","Gel C","Pill A",106,104,0,137,202
+"498",83,38,"black",1,0,"period3","Gel C","Pill A",106,104,4,31,98
+"499",84,28,"others",1,2,"period1","Gel C","0",121,208,0,122,217
+"500",84,28,"others",1,2,"period1","Gel C","0",121,208,4,1,9
+"501",84,28,"others",1,2,"period2","Gel B","Gel C",114,157,0,129,231
+"502",84,28,"others",1,2,"period2","Gel B","Gel C",114,157,4,15,74
+"503",84,28,"others",1,2,"period3","Pill A","Gel B",129,247,0,129,254
+"504",84,28,"others",1,2,"period3","Pill A","Gel B",129,247,4,0,7
+"505",85,41,"white",0,1,"period1","Gel C","0",134,163,0,134,163
+"506",85,41,"white",0,1,"period1","Gel C","0",134,163,4,0,0
+"507",85,41,"white",0,1,"period2","Pill A","Gel C",120,189,0,120,189
+"508",85,41,"white",0,1,"period2","Pill A","Gel C",120,189,4,0,0
+"509",85,41,"white",0,1,"period3","Gel B","Pill A",104,202,0,104,221
+"510",85,41,"white",0,1,"period3","Gel B","Pill A",104,202,4,0,19
+"511",86,28,"white",0,1,"period1","Pill A","0",121,204,0,121,204
+"512",86,28,"white",0,1,"period1","Pill A","0",121,204,4,0,0
+"513",86,28,"white",0,1,"period2","Gel C","Pill A",99,142,0,119,192
+"514",86,28,"white",0,1,"period2","Gel C","Pill A",99,142,4,20,50
+"515",86,28,"white",0,1,"period3","Gel B","Gel C",81,203,0,94,212
+"516",86,28,"white",0,1,"period3","Gel B","Gel C",81,203,4,13,9
+"517",87,33,"black",0,0,"period1","Gel B","0",113,189,0,113,240
+"518",87,33,"black",0,0,"period1","Gel B","0",113,189,4,0,51
+"519",87,33,"black",0,0,"period2","Pill A","Gel B",124,229,0,124,229
+"520",87,33,"black",0,0,"period2","Pill A","Gel B",124,229,4,0,0
+"521",87,33,"black",0,0,"period3","Gel C","Pill A",84,183,0,93,183
+"522",87,33,"black",0,0,"period3","Gel C","Pill A",84,183,4,9,0
+"523",88,23,"others",1,2,"period1","Gel B","0",141,128,0,154,240
+"524",88,23,"others",1,2,"period1","Gel B","0",141,128,4,13,112
+"525",88,23,"others",1,2,"period2","Gel C","Gel B",53,207,0,87,257
+"526",88,23,"others",1,2,"period2","Gel C","Gel B",53,207,4,34,50
+"527",88,23,"others",1,2,"period3","Pill A","Gel C",148,219,0,148,219
+"528",88,23,"others",1,2,"period3","Pill A","Gel C",148,219,4,0,0
+"529",89,21,"white",0,0,"period1","Pill A","0",89,252,0,101,252
+"530",89,21,"white",0,0,"period1","Pill A","0",89,252,4,12,0
+"531",89,21,"white",0,0,"period2","Gel B","Pill A",73,173,0,111,224
+"532",89,21,"white",0,0,"period2","Gel B","Pill A",73,173,4,38,51
+"533",89,21,"white",0,0,"period3","Gel C","Gel B",102,135,0,152,216
+"534",89,21,"white",0,0,"period3","Gel C","Gel B",102,135,4,50,81
+"535",90,20,"others",1,2,"period1","Gel B","0",77,118,0,145,195
+"536",90,20,"others",1,2,"period1","Gel B","0",77,118,4,68,77
+"537",90,20,"others",1,2,"period2","Gel C","Gel B",143,155,0,143,213
+"538",90,20,"others",1,2,"period2","Gel C","Gel B",143,155,4,0,58
+"539",90,20,"others",1,2,"period3","Pill A","Gel C",116,210,0,116,245
+"540",90,20,"others",1,2,"period3","Pill A","Gel C",116,210,4,0,35
+"541",91,44,"others",0,0,"period1","Pill A","0",113,185,0,113,185
+"542",91,44,"others",0,0,"period1","Pill A","0",113,185,4,0,0
+"543",91,44,"others",0,0,"period2","Gel B","Pill A",93,136,0,113,191
+"544",91,44,"others",0,0,"period2","Gel B","Pill A",93,136,4,20,55
+"545",91,44,"others",0,0,"period3","Gel C","Gel B",73,137,0,96,181
+"546",91,44,"others",0,0,"period3","Gel C","Gel B",73,137,4,23,44
+"547",92,36,"white",1,1,"period1","Gel C","0",140,197,0,140,231
+"548",92,36,"white",1,1,"period1","Gel C","0",140,197,4,0,34
+"549",92,36,"white",1,1,"period2","Pill A","Gel C",109,186,0,109,186
+"550",92,36,"white",1,1,"period2","Pill A","Gel C",109,186,4,0,0
+"551",92,36,"white",1,1,"period3","Gel B","Pill A",119,213,0,119,224
+"552",92,36,"white",1,1,"period3","Gel B","Pill A",119,213,4,0,11
+"553",93,27,"white",1,0,"period1","Gel B","0",81,187,0,81,210
+"554",93,27,"white",1,0,"period1","Gel B","0",81,187,4,0,23
+"555",93,27,"white",1,0,"period2","Pill A","Gel B",131,212,0,131,212
+"556",93,27,"white",1,0,"period2","Pill A","Gel B",131,212,4,0,0
+"557",93,27,"white",1,0,"period3","Gel C","Pill A",117,197,0,127,244
+"558",93,27,"white",1,0,"period3","Gel C","Pill A",117,197,4,10,47
+"559",94,21,"white",0,2,"period1","Gel C","0",137,280,0,137,280
+"560",94,21,"white",0,2,"period1","Gel C","0",137,280,4,0,0
+"561",94,21,"white",0,2,"period2","Gel B","Gel C",93,167,0,146,233
+"562",94,21,"white",0,2,"period2","Gel B","Gel C",93,167,4,53,66
+"563",94,21,"white",0,2,"period3","Pill A","Gel B",137,219,0,137,219
+"564",94,21,"white",0,2,"period3","Pill A","Gel B",137,219,4,0,0
+"565",95,33,"others",0,0,"period1","Pill A","0",132,171,0,132,171
+"566",95,33,"others",0,0,"period1","Pill A","0",132,171,4,0,0
+"567",95,33,"others",0,0,"period2","Gel B","Pill A",84,187,0,92,187
+"568",95,33,"others",0,0,"period2","Gel B","Pill A",84,187,4,8,0
+"569",95,33,"others",0,0,"period3","Gel C","Gel B",125,197,0,141,199
+"570",95,33,"others",0,0,"period3","Gel C","Gel B",125,197,4,16,2
+"571",96,24,"others",1,1,"period1","Pill A","0",136,181,0,137,229
+"572",96,24,"others",1,1,"period1","Pill A","0",136,181,4,1,48
+"573",96,24,"others",1,1,"period2","Gel C","Pill A",100,123,0,120,259
+"574",96,24,"others",1,1,"period2","Gel C","Pill A",100,123,4,20,136
+"575",96,24,"others",1,1,"period3","Gel B","Gel C",79,172,0,123,245
+"576",96,24,"others",1,1,"period3","Gel B","Gel C",79,172,4,44,73
+"577",97,24,"others",0,1,"period1","Gel C","0",123,179,0,145,245
+"578",97,24,"others",0,1,"period1","Gel C","0",123,179,4,22,66
+"579",97,24,"others",0,1,"period2","Pill A","Gel C",100,187,0,114,187
+"580",97,24,"others",0,1,"period2","Pill A","Gel C",100,187,4,14,0
+"581",97,24,"others",0,1,"period3","Gel B","Pill A",111,131,0,111,185
+"582",97,24,"others",0,1,"period3","Gel B","Pill A",111,131,4,0,54
+"583",98,38,"others",0,1,"period1","Pill A","0",108,161,0,108,161
+"584",98,38,"others",0,1,"period1","Pill A","0",108,161,4,0,0
+"585",98,38,"others",0,1,"period2","Gel C","Pill A",88,131,0,108,196
+"586",98,38,"others",0,1,"period2","Gel C","Pill A",88,131,4,20,65
+"587",98,38,"others",0,1,"period3","Gel B","Gel C",108,205,0,108,205
+"588",98,38,"others",0,1,"period3","Gel B","Gel C",108,205,4,0,0
+"589",99,38,"others",1,0,"period1","Gel B","0",124,141,0,124,189
+"590",99,38,"others",1,0,"period1","Gel B","0",124,141,4,0,48
+"591",99,38,"others",1,0,"period2","Pill A","Gel B",152,229,0,152,229
+"592",99,38,"others",1,0,"period2","Pill A","Gel B",152,229,4,0,0
+"593",99,38,"others",1,0,"period3","Gel C","Pill A",117,201,0,117,238
+"594",99,38,"others",1,0,"period3","Gel C","Pill A",117,201,4,0,37
+"595",100,25,"black",0,1,"period1","Pill A","0",100,210,0,100,210
+"596",100,25,"black",0,1,"period1","Pill A","0",100,210,4,0,0
+"597",100,25,"black",0,1,"period2","Gel C","Pill A",130,152,0,130,223
+"598",100,25,"black",0,1,"period2","Gel C","Pill A",130,152,4,0,71
+"599",100,25,"black",0,1,"period3","Gel B","Gel C",59,172,0,89,246
+"600",100,25,"black",0,1,"period3","Gel B","Gel C",59,172,4,30,74
+"601",101,32,"others",0,2,"period1","Gel B","0",130,217,0,130,217
+"602",101,32,"others",0,2,"period1","Gel B","0",130,217,4,0,0
+"603",101,32,"others",0,2,"period2","Gel C","Gel B",83,152,0,121,217
+"604",101,32,"others",0,2,"period2","Gel C","Gel B",83,152,4,38,65
+"605",101,32,"others",0,2,"period3","Pill A","Gel C",119,203,0,119,203
+"606",101,32,"others",0,2,"period3","Pill A","Gel C",119,203,4,0,0
+"607",102,34,"others",1,0,"period1","Pill A","0",126,234,0,126,234
+"608",102,34,"others",1,0,"period1","Pill A","0",126,234,4,0,0
+"609",102,34,"others",1,0,"period2","Gel B","Pill A",123,179,0,123,227
+"610",102,34,"others",1,0,"period2","Gel B","Pill A",123,179,4,0,48
+"611",102,34,"others",1,0,"period3","Gel C","Gel B",109,185,0,116,194
+"612",102,34,"others",1,0,"period3","Gel C","Gel B",109,185,4,7,9
+"613",103,35,"white",1,2,"period1","Gel C","0",132,211,0,132,226
+"614",103,35,"white",1,2,"period1","Gel C","0",132,211,4,0,15
+"615",103,35,"white",1,2,"period2","Gel B","Gel C",137,191,0,137,219
+"616",103,35,"white",1,2,"period2","Gel B","Gel C",137,191,4,0,28
+"617",103,35,"white",1,2,"period3","Pill A","Gel B",86,179,0,102,215
+"618",103,35,"white",1,2,"period3","Pill A","Gel B",86,179,4,16,36
+"619",104,42,"black",0,2,"period1","Gel B","0",108,205,0,108,205
+"620",104,42,"black",0,2,"period1","Gel B","0",108,205,4,0,0
+"621",104,42,"black",0,2,"period2","Gel C","Gel B",120,165,0,120,172
+"622",104,42,"black",0,2,"period2","Gel C","Gel B",120,165,4,0,7
+"623",104,42,"black",0,2,"period3","Pill A","Gel C",90,162,0,90,162
+"624",104,42,"black",0,2,"period3","Pill A","Gel C",90,162,4,0,0
+"625",105,33,"white",1,2,"period1","Gel C","0",157,199,0,157,253
+"626",105,33,"white",1,2,"period1","Gel C","0",157,199,4,0,54
+"627",105,33,"white",1,2,"period2","Gel B","Gel C",143,188,0,143,211
+"628",105,33,"white",1,2,"period2","Gel B","Gel C",143,188,4,0,23
+"629",105,33,"white",1,2,"period3","Pill A","Gel B",155,223,0,155,223
+"630",105,33,"white",1,2,"period3","Pill A","Gel B",155,223,4,0,0
+"631",106,42,"black",1,0,"period1","Pill A","0",106,200,0,106,200
+"632",106,42,"black",1,0,"period1","Pill A","0",106,200,4,0,0
+"633",106,42,"black",1,0,"period2","Gel B","Pill A",84,207,0,84,214
+"634",106,42,"black",1,0,"period2","Gel B","Pill A",84,207,4,0,7
+"635",106,42,"black",1,0,"period3","Gel C","Gel B",114,159,0,118,174
+"636",106,42,"black",1,0,"period3","Gel C","Gel B",114,159,4,4,15
+"637",107,30,"white",0,0,"period1","Gel B","0",114,140,0,114,190
+"638",107,30,"white",0,0,"period1","Gel B","0",114,140,4,0,50
+"639",107,30,"white",0,0,"period2","Pill A","Gel B",106,180,0,106,180
+"640",107,30,"white",0,0,"period2","Pill A","Gel B",106,180,4,0,0
+"641",107,30,"white",0,0,"period3","Gel C","Pill A",49,196,0,109,216
+"642",107,30,"white",0,0,"period3","Gel C","Pill A",49,196,4,60,20
+"643",108,41,"white",1,1,"period1","Gel C","0",72,117,0,117,210
+"644",108,41,"white",1,1,"period1","Gel C","0",72,117,4,45,93
+"645",108,41,"white",1,1,"period2","Pill A","Gel C",91,204,0,91,204
+"646",108,41,"white",1,1,"period2","Pill A","Gel C",91,204,4,0,0
+"647",108,41,"white",1,1,"period3","Gel B","Pill A",103,182,0,103,201
+"648",108,41,"white",1,1,"period3","Gel B","Pill A",103,182,4,0,19
+"649",109,43,"white",0,2,"period1","Gel B","0",45,58,0,117,187
+"650",109,43,"white",0,2,"period1","Gel B","0",45,58,4,72,129
+"651",109,43,"white",0,2,"period2","Gel C","Gel B",114,208,0,114,208
+"652",109,43,"white",0,2,"period2","Gel C","Gel B",114,208,4,0,0
+"653",109,43,"white",0,2,"period3","Pill A","Gel C",120,190,0,120,190
+"654",109,43,"white",0,2,"period3","Pill A","Gel C",120,190,4,0,0
+"655",110,20,"black",0,2,"period1","Gel C","0",128,230,0,172,275
+"656",110,20,"black",0,2,"period1","Gel C","0",128,230,4,44,45
+"657",110,20,"black",0,2,"period2","Gel B","Gel C",149,173,0,158,211
+"658",110,20,"black",0,2,"period2","Gel B","Gel C",149,173,4,9,38
+"659",110,20,"black",0,2,"period3","Pill A","Gel B",121,142,0,121,142
+"660",110,20,"black",0,2,"period3","Pill A","Gel B",121,142,4,0,0
+"661",111,39,"black",0,0,"period1","Pill A","0",108,216,0,108,216
+"662",111,39,"black",0,0,"period1","Pill A","0",108,216,4,0,0
+"663",111,39,"black",0,0,"period2","Gel B","Pill A",117,198,0,117,201
+"664",111,39,"black",0,0,"period2","Gel B","Pill A",117,198,4,0,3
+"665",111,39,"black",0,0,"period3","Gel C","Gel B",120,192,0,120,192
+"666",111,39,"black",0,0,"period3","Gel C","Gel B",120,192,4,0,0
+"667",112,40,"black",0,0,"period1","Gel B","0",95,163,0,95,198
+"668",112,40,"black",0,0,"period1","Gel B","0",95,163,4,0,35
+"669",112,40,"black",0,0,"period2","Pill A","Gel B",129,185,0,129,185
+"670",112,40,"black",0,0,"period2","Pill A","Gel B",129,185,4,0,0
+"671",112,40,"black",0,0,"period3","Gel C","Pill A",106,157,0,121,191
+"672",112,40,"black",0,0,"period3","Gel C","Pill A",106,157,4,15,34
+"673",113,35,"black",0,1,"period1","Pill A","0",134,215,0,134,215
+"674",113,35,"black",0,1,"period1","Pill A","0",134,215,4,0,0
+"675",113,35,"black",0,1,"period2","Gel C","Pill A",114,204,0,135,217
+"676",113,35,"black",0,1,"period2","Gel C","Pill A",114,204,4,21,13
+"677",113,35,"black",0,1,"period3","Gel B","Gel C",141,206,0,141,226
+"678",113,35,"black",0,1,"period3","Gel B","Gel C",141,206,4,0,20
+"679",114,28,"others",0,2,"period1","Gel B","0",115,174,0,139,179
+"680",114,28,"others",0,2,"period1","Gel B","0",115,174,4,24,5
+"681",114,28,"others",0,2,"period2","Gel C","Gel B",138,171,0,138,202
+"682",114,28,"others",0,2,"period2","Gel C","Gel B",138,171,4,0,31
+"683",114,28,"others",0,2,"period3","Pill A","Gel C",133,158,0,133,158
+"684",114,28,"others",0,2,"period3","Pill A","Gel C",133,158,4,0,0
+"685",115,42,"black",0,0,"period1","Pill A","0",89,189,0,102,195
+"686",115,42,"black",0,0,"period1","Pill A","0",89,189,4,13,6
+"687",115,42,"black",0,0,"period2","Gel B","Pill A",109,187,0,109,187
+"688",115,42,"black",0,0,"period2","Gel B","Pill A",109,187,4,0,0
+"689",115,42,"black",0,0,"period3","Gel C","Gel B",117,147,0,117,165
+"690",115,42,"black",0,0,"period3","Gel C","Gel B",117,147,4,0,18
+"691",116,24,"others",1,0,"period1","Gel B","0",132,124,0,136,230
+"692",116,24,"others",1,0,"period1","Gel B","0",132,124,4,4,106
+"693",116,24,"others",1,0,"period2","Pill A","Gel B",91,255,0,112,255
+"694",116,24,"others",1,0,"period2","Pill A","Gel B",91,255,4,21,0
+"695",116,24,"others",1,0,"period3","Gel C","Pill A",63,155,0,125,243
+"696",116,24,"others",1,0,"period3","Gel C","Pill A",63,155,4,62,88
+"697",117,42,"white",1,1,"period1","Pill A","0",87,203,0,87,203
+"698",117,42,"white",1,1,"period1","Pill A","0",87,203,4,0,0
+"699",117,42,"white",1,1,"period2","Gel C","Pill A",111,181,0,113,198
+"700",117,42,"white",1,1,"period2","Gel C","Pill A",111,181,4,2,17
+"701",117,42,"white",1,1,"period3","Gel B","Gel C",75,139,0,122,212
+"702",117,42,"white",1,1,"period3","Gel B","Gel C",75,139,4,47,73
+"703",118,25,"white",0,1,"period1","Gel C","0",87,135,0,132,177
+"704",118,25,"white",0,1,"period1","Gel C","0",87,135,4,45,42
+"705",118,25,"white",0,1,"period2","Pill A","Gel C",150,203,0,150,203
+"706",118,25,"white",0,1,"period2","Pill A","Gel C",150,203,4,0,0
+"707",118,25,"white",0,1,"period3","Gel B","Pill A",154,105,0,154,159
+"708",118,25,"white",0,1,"period3","Gel B","Pill A",154,105,4,0,54
+"709",119,36,"white",0,2,"period1","Gel C","0",101,122,0,102,151
+"710",119,36,"white",0,2,"period1","Gel C","0",101,122,4,1,29
+"711",119,36,"white",0,2,"period2","Gel B","Gel C",95,142,0,116,218
+"712",119,36,"white",0,2,"period2","Gel B","Gel C",95,142,4,21,76
+"713",119,36,"white",0,2,"period3","Pill A","Gel B",120,182,0,120,182
+"714",119,36,"white",0,2,"period3","Pill A","Gel B",120,182,4,0,0
+"715",120,41,"white",1,1,"period1","Gel C","0",105,154,0,105,179
+"716",120,41,"white",1,1,"period1","Gel C","0",105,154,4,0,25
+"717",120,41,"white",1,1,"period2","Pill A","Gel C",112,193,0,112,193
+"718",120,41,"white",1,1,"period2","Pill A","Gel C",112,193,4,0,0
+"719",120,41,"white",1,1,"period3","Gel B","Pill A",109,198,0,109,198
+"720",120,41,"white",1,1,"period3","Gel B","Pill A",109,198,4,0,0
+"721",121,26,"black",1,2,"period1","Gel B","0",134,230,0,134,230
+"722",121,26,"black",1,2,"period1","Gel B","0",134,230,4,0,0
+"723",121,26,"black",1,2,"period2","Gel C","Gel B",128,220,0,130,241
+"724",121,26,"black",1,2,"period2","Gel C","Gel B",128,220,4,2,21
+"725",121,26,"black",1,2,"period3","Pill A","Gel C",121,199,0,121,201
+"726",121,26,"black",1,2,"period3","Pill A","Gel C",121,199,4,0,2
+"727",122,40,"white",1,2,"period1","Gel C","0",117,184,0,119,201
+"728",122,40,"white",1,2,"period1","Gel C","0",117,184,4,2,17
+"729",122,40,"white",1,2,"period2","Gel B","Gel C",116,189,0,116,194
+"730",122,40,"white",1,2,"period2","Gel B","Gel C",116,189,4,0,5
+"731",122,40,"white",1,2,"period3","Pill A","Gel B",129,215,0,129,215
+"732",122,40,"white",1,2,"period3","Pill A","Gel B",129,215,4,0,0
+"733",123,38,"others",0,1,"period1","Pill A","0",86,187,0,86,187
+"734",123,38,"others",0,1,"period1","Pill A","0",86,187,4,0,0
+"735",123,38,"others",0,1,"period2","Gel C","Pill A",142,144,0,142,159
+"736",123,38,"others",0,1,"period2","Gel C","Pill A",142,144,4,0,15
+"737",123,38,"others",0,1,"period3","Gel B","Gel C",41,84,0,139,195
+"738",123,38,"others",0,1,"period3","Gel B","Gel C",41,84,4,98,111
+"739",124,40,"others",0,1,"period1","Gel C","0",118,198,0,118,198
+"740",124,40,"others",0,1,"period1","Gel C","0",118,198,4,0,0
+"741",124,40,"others",0,1,"period2","Pill A","Gel C",120,180,0,120,180
+"742",124,40,"others",0,1,"period2","Pill A","Gel C",120,180,4,0,0
+"743",124,40,"others",0,1,"period3","Gel B","Pill A",101,163,0,101,165
+"744",124,40,"others",0,1,"period3","Gel B","Pill A",101,163,4,0,2
+"745",125,22,"black",1,0,"period1","Gel B","0",144,154,0,159,154
+"746",125,22,"black",1,0,"period1","Gel B","0",144,154,4,15,0
+"747",125,22,"black",1,0,"period2","Pill A","Gel B",137,184,0,137,184
+"748",125,22,"black",1,0,"period2","Pill A","Gel B",137,184,4,0,0
+"749",125,22,"black",1,0,"period3","Gel C","Pill A",135,94,0,135,204
+"750",125,22,"black",1,0,"period3","Gel C","Pill A",135,94,4,0,110
+"751",126,44,"others",0,0,"period1","Pill A","0",110,186,0,110,186
+"752",126,44,"others",0,0,"period1","Pill A","0",110,186,4,0,0
+"753",126,44,"others",0,0,"period2","Gel B","Pill A",97,157,0,97,157
+"754",126,44,"others",0,0,"period2","Gel B","Pill A",97,157,4,0,0
+"755",126,44,"others",0,0,"period3","Gel C","Gel B",117,168,0,117,172
+"756",126,44,"others",0,0,"period3","Gel C","Gel B",117,168,4,0,4
+"757",127,42,"black",1,0,"period1","Pill A","0",102,199,0,102,199
+"758",127,42,"black",1,0,"period1","Pill A","0",102,199,4,0,0
+"759",127,42,"black",1,0,"period2","Gel B","Pill A",109,199,0,109,212
+"760",127,42,"black",1,0,"period2","Gel B","Pill A",109,199,4,0,13
+"761",127,42,"black",1,0,"period3","Gel C","Gel B",105,168,0,105,181
+"762",127,42,"black",1,0,"period3","Gel C","Gel B",105,168,4,0,13
+"763",128,43,"black",1,2,"period1","Gel B","0",110,172,0,110,183
+"764",128,43,"black",1,2,"period1","Gel B","0",110,172,4,0,11
+"765",128,43,"black",1,2,"period2","Gel C","Gel B",98,177,0,98,181
+"766",128,43,"black",1,2,"period2","Gel C","Gel B",98,177,4,0,4
+"767",128,43,"black",1,2,"period3","Pill A","Gel C",130,206,0,130,206
+"768",128,43,"black",1,2,"period3","Pill A","Gel C",130,206,4,0,0
+"769",129,27,"white",0,2,"period1","Gel B","0",86,187,0,124,228
+"770",129,27,"white",0,2,"period1","Gel B","0",86,187,4,38,41
+"771",129,27,"white",0,2,"period2","Gel C","Gel B",127,156,0,132,204
+"772",129,27,"white",0,2,"period2","Gel C","Gel B",127,156,4,5,48
+"773",129,27,"white",0,2,"period3","Pill A","Gel C",117,216,0,117,216
+"774",129,27,"white",0,2,"period3","Pill A","Gel C",117,216,4,0,0
+"775",130,25,"others",0,1,"period1","Gel C","0",100,153,0,121,221
+"776",130,25,"others",0,1,"period1","Gel C","0",100,153,4,21,68
+"777",130,25,"others",0,1,"period2","Pill A","Gel C",96,192,0,96,192
+"778",130,25,"others",0,1,"period2","Pill A","Gel C",96,192,4,0,0
+"779",130,25,"others",0,1,"period3","Gel B","Pill A",121,48,0,145,169
+"780",130,25,"others",0,1,"period3","Gel B","Pill A",121,48,4,24,121
+"781",131,37,"white",0,0,"period1","Gel B","0",109,191,0,109,191
+"782",131,37,"white",0,0,"period1","Gel B","0",109,191,4,0,0
+"783",131,37,"white",0,0,"period2","Pill A","Gel B",90,196,0,90,196
+"784",131,37,"white",0,0,"period2","Pill A","Gel B",90,196,4,0,0
+"785",131,37,"white",0,0,"period3","Gel C","Pill A",140,211,0,150,241
+"786",131,37,"white",0,0,"period3","Gel C","Pill A",140,211,4,10,30
+"787",132,42,"others",0,2,"period1","Gel C","0",116,177,0,116,177
+"788",132,42,"others",0,2,"period1","Gel C","0",116,177,4,0,0
+"789",132,42,"others",0,2,"period2","Gel B","Gel C",93,184,0,93,184
+"790",132,42,"others",0,2,"period2","Gel B","Gel C",93,184,4,0,0
+"791",132,42,"others",0,2,"period3","Pill A","Gel B",91,200,0,91,200
+"792",132,42,"others",0,2,"period3","Pill A","Gel B",91,200,4,0,0
+"793",133,30,"white",1,1,"period1","Pill A","0",119,207,0,119,207
+"794",133,30,"white",1,1,"period1","Pill A","0",119,207,4,0,0
+"795",133,30,"white",1,1,"period2","Gel C","Pill A",91,202,0,123,248
+"796",133,30,"white",1,1,"period2","Gel C","Pill A",91,202,4,32,46
+"797",133,30,"white",1,1,"period3","Gel B","Gel C",121,134,0,129,217
+"798",133,30,"white",1,1,"period3","Gel B","Gel C",121,134,4,8,83
+"799",134,25,"black",0,1,"period1","Gel C","0",128,115,0,128,234
+"800",134,25,"black",0,1,"period1","Gel C","0",128,115,4,0,119
+"801",134,25,"black",0,1,"period2","Pill A","Gel C",138,209,0,138,249
+"802",134,25,"black",0,1,"period2","Pill A","Gel C",138,209,4,0,40
+"803",134,25,"black",0,1,"period3","Gel B","Pill A",89,176,0,94,253
+"804",134,25,"black",0,1,"period3","Gel B","Pill A",89,176,4,5,77
+"805",135,35,"black",1,0,"period1","Pill A","0",141,203,0,141,203
+"806",135,35,"black",1,0,"period1","Pill A","0",141,203,4,0,0
+"807",135,35,"black",1,0,"period2","Gel B","Pill A",97,177,0,97,199
+"808",135,35,"black",1,0,"period2","Gel B","Pill A",97,177,4,0,22
+"809",135,35,"black",1,0,"period3","Gel C","Gel B",123,152,0,123,188
+"810",135,35,"black",1,0,"period3","Gel C","Gel B",123,152,4,0,36
+"811",136,44,"white",1,2,"period1","Gel C","0",99,119,0,129,198
+"812",136,44,"white",1,2,"period1","Gel C","0",99,119,4,30,79
+"813",136,44,"white",1,2,"period2","Gel B","Gel C",109,217,0,109,220
+"814",136,44,"white",1,2,"period2","Gel B","Gel C",109,217,4,0,3
+"815",136,44,"white",1,2,"period3","Pill A","Gel B",129,186,0,129,186
+"816",136,44,"white",1,2,"period3","Pill A","Gel B",129,186,4,0,0
+"817",137,32,"white",0,2,"period1","Gel B","0",112,159,0,118,209
+"818",137,32,"white",0,2,"period1","Gel B","0",112,159,4,6,50
+"819",137,32,"white",0,2,"period2","Gel C","Gel B",95,194,0,95,215
+"820",137,32,"white",0,2,"period2","Gel C","Gel B",95,194,4,0,21
+"821",137,32,"white",0,2,"period3","Pill A","Gel C",112,212,0,112,212
+"822",137,32,"white",0,2,"period3","Pill A","Gel C",112,212,4,0,0
+"823",138,22,"white",1,0,"period1","Gel B","0",21,163,0,114,266
+"824",138,22,"white",1,0,"period1","Gel B","0",21,163,4,93,103
+"825",138,22,"white",1,0,"period2","Pill A","Gel B",110,187,0,118,187
+"826",138,22,"white",1,0,"period2","Pill A","Gel B",110,187,4,8,0
+"827",138,22,"white",1,0,"period3","Gel C","Pill A",112,203,0,156,245
+"828",138,22,"white",1,0,"period3","Gel C","Pill A",112,203,4,44,42
+"829",139,21,"others",0,1,"period1","Pill A","0",92,192,0,101,192
+"830",139,21,"others",0,1,"period1","Pill A","0",92,192,4,9,0
+"831",139,21,"others",0,1,"period2","Gel C","Pill A",97,130,0,150,183
+"832",139,21,"others",0,1,"period2","Gel C","Pill A",97,130,4,53,53
+"833",139,21,"others",0,1,"period3","Gel B","Gel C",99,255,0,136,255
+"834",139,21,"others",0,1,"period3","Gel B","Gel C",99,255,4,37,0
+"835",140,31,"white",0,0,"period1","Gel B","0",109,243,0,124,243
+"836",140,31,"white",0,0,"period1","Gel B","0",109,243,4,15,0
+"837",140,31,"white",0,0,"period2","Pill A","Gel B",99,220,0,99,220
+"838",140,31,"white",0,0,"period2","Pill A","Gel B",99,220,4,0,0
+"839",140,31,"white",0,0,"period3","Gel C","Pill A",137,131,0,149,164
+"840",140,31,"white",0,0,"period3","Gel C","Pill A",137,131,4,12,33
+"841",141,23,"others",0,1,"period1","Pill A","0",73,282,0,73,282
+"842",141,23,"others",0,1,"period1","Pill A","0",73,282,4,0,0
+"843",141,23,"others",0,1,"period2","Gel C","Pill A",62,105,0,124,183
+"844",141,23,"others",0,1,"period2","Gel C","Pill A",62,105,4,62,78
+"845",141,23,"others",0,1,"period3","Gel B","Gel C",55,160,0,122,184
+"846",141,23,"others",0,1,"period3","Gel B","Gel C",55,160,4,67,24
+"847",142,41,"black",0,0,"period1","Pill A","0",117,188,0,117,188
+"848",142,41,"black",0,0,"period1","Pill A","0",117,188,4,0,0
+"849",142,41,"black",0,0,"period2","Gel B","Pill A",112,192,0,112,192
+"850",142,41,"black",0,0,"period2","Gel B","Pill A",112,192,4,0,0
+"851",142,41,"black",0,0,"period3","Gel C","Gel B",116,182,0,116,182
+"852",142,41,"black",0,0,"period3","Gel C","Gel B",116,182,4,0,0
+"853",143,21,"white",0,1,"period1","Gel C","0",151,113,0,155,196
+"854",143,21,"white",0,1,"period1","Gel C","0",151,113,4,4,83
+"855",143,21,"white",0,1,"period2","Pill A","Gel C",139,227,0,139,227
+"856",143,21,"white",0,1,"period2","Pill A","Gel C",139,227,4,0,0
+"857",143,21,"white",0,1,"period3","Gel B","Pill A",142,141,0,142,231
+"858",143,21,"white",0,1,"period3","Gel B","Pill A",142,141,4,0,90
+"859",144,39,"others",1,2,"period1","Gel B","0",78,118,0,117,201
+"860",144,39,"others",1,2,"period1","Gel B","0",78,118,4,39,83
+"861",144,39,"others",1,2,"period2","Gel C","Gel B",101,99,0,148,226
+"862",144,39,"others",1,2,"period2","Gel C","Gel B",101,99,4,47,127
+"863",144,39,"others",1,2,"period3","Pill A","Gel C",121,233,0,121,233
+"864",144,39,"others",1,2,"period3","Pill A","Gel C",121,233,4,0,0
+"865",145,41,"white",1,2,"period1","Gel C","0",111,213,0,115,213
+"866",145,41,"white",1,2,"period1","Gel C","0",111,213,4,4,0
+"867",145,41,"white",1,2,"period2","Gel B","Gel C",120,173,0,120,181
+"868",145,41,"white",1,2,"period2","Gel B","Gel C",120,173,4,0,8
+"869",145,41,"white",1,2,"period3","Pill A","Gel B",127,187,0,127,187
+"870",145,41,"white",1,2,"period3","Pill A","Gel B",127,187,4,0,0
+"871",146,35,"others",1,2,"period1","Gel B","0",120,193,0,120,193
+"872",146,35,"others",1,2,"period1","Gel B","0",120,193,4,0,0
+"873",146,35,"others",1,2,"period2","Gel C","Gel B",122,108,0,122,163
+"874",146,35,"others",1,2,"period2","Gel C","Gel B",122,108,4,0,55
+"875",146,35,"others",1,2,"period3","Pill A","Gel C",97,105,0,123,172
+"876",146,35,"others",1,2,"period3","Pill A","Gel C",97,105,4,26,67
+"877",147,36,"others",0,0,"period1","Pill A","0",113,188,0,113,188
+"878",147,36,"others",0,0,"period1","Pill A","0",113,188,4,0,0
+"879",147,36,"others",0,0,"period2","Gel B","Pill A",141,171,0,141,189
+"880",147,36,"others",0,0,"period2","Gel B","Pill A",141,171,4,0,18
+"881",147,36,"others",0,0,"period3","Gel C","Gel B",109,218,0,109,238
+"882",147,36,"others",0,0,"period3","Gel C","Gel B",109,218,4,0,20
+"883",148,38,"white",0,0,"period1","Gel B","0",83,127,0,114,183
+"884",148,38,"white",0,0,"period1","Gel B","0",83,127,4,31,56
+"885",148,38,"white",0,0,"period2","Pill A","Gel B",126,198,0,126,198
+"886",148,38,"white",0,0,"period2","Pill A","Gel B",126,198,4,0,0
+"887",148,38,"white",0,0,"period3","Gel C","Pill A",89,109,0,129,200
+"888",148,38,"white",0,0,"period3","Gel C","Pill A",89,109,4,40,91
+"889",149,34,"white",0,1,"period1","Gel C","0",116,135,0,116,160
+"890",149,34,"white",0,1,"period1","Gel C","0",116,135,4,0,25
+"891",149,34,"white",0,1,"period2","Pill A","Gel C",129,199,0,129,199
+"892",149,34,"white",0,1,"period2","Pill A","Gel C",129,199,4,0,0
+"893",149,34,"white",0,1,"period3","Gel B","Pill A",100,215,0,100,222
+"894",149,34,"white",0,1,"period3","Gel B","Pill A",100,215,4,0,7
+"895",150,29,"white",1,1,"period1","Pill A","0",154,225,0,154,225
+"896",150,29,"white",1,1,"period1","Pill A","0",154,225,4,0,0
+"897",150,29,"white",1,1,"period2","Gel C","Pill A",140,190,0,140,225
+"898",150,29,"white",1,1,"period2","Gel C","Pill A",140,190,4,0,35
+"899",150,29,"white",1,1,"period3","Gel B","Gel C",105,73,0,138,193
+"900",150,29,"white",1,1,"period3","Gel B","Gel C",105,73,4,33,120
+"901",151,23,"black",1,2,"period1","Gel C","0",158,183,0,172,239
+"902",151,23,"black",1,2,"period1","Gel C","0",158,183,4,14,56
+"903",151,23,"black",1,2,"period2","Gel B","Gel C",164,151,0,171,225
+"904",151,23,"black",1,2,"period2","Gel B","Gel C",164,151,4,7,74
+"905",151,23,"black",1,2,"period3","Pill A","Gel B",107,192,0,107,213
+"906",151,23,"black",1,2,"period3","Pill A","Gel B",107,192,4,0,21
+"907",152,40,"others",1,2,"period1","Gel C","0",117,148,0,117,192
+"908",152,40,"others",1,2,"period1","Gel C","0",117,148,4,0,44
+"909",152,40,"others",1,2,"period2","Gel B","Gel C",112,172,0,112,186
+"910",152,40,"others",1,2,"period2","Gel B","Gel C",112,172,4,0,14
+"911",152,40,"others",1,2,"period3","Pill A","Gel B",114,209,0,114,209
+"912",152,40,"others",1,2,"period3","Pill A","Gel B",114,209,4,0,0
+"913",153,33,"others",1,1,"period1","Pill A","0",150,194,0,150,194
+"914",153,33,"others",1,1,"period1","Pill A","0",150,194,4,0,0
+"915",153,33,"others",1,1,"period2","Gel C","Pill A",106,187,0,106,198
+"916",153,33,"others",1,1,"period2","Gel C","Pill A",106,187,4,0,11
+"917",153,33,"others",1,1,"period3","Gel B","Gel C",142,208,0,142,224
+"918",153,33,"others",1,1,"period3","Gel B","Gel C",142,208,4,0,16
+"919",154,43,"others",1,0,"period1","Pill A","0",135,150,0,135,181
+"920",154,43,"others",1,0,"period1","Pill A","0",135,150,4,0,31
+"921",154,43,"others",1,0,"period2","Gel B","Pill A",46,83,0,126,221
+"922",154,43,"others",1,0,"period2","Gel B","Pill A",46,83,4,80,138
+"923",154,43,"others",1,0,"period3","Gel C","Gel B",113,197,0,113,197
+"924",154,43,"others",1,0,"period3","Gel C","Gel B",113,197,4,0,0
+"925",155,32,"others",0,2,"period1","Gel B","0",121,221,0,127,221
+"926",155,32,"others",0,2,"period1","Gel B","0",121,221,4,6,0
+"927",155,32,"others",0,2,"period2","Gel C","Gel B",115,171,0,117,191
+"928",155,32,"others",0,2,"period2","Gel C","Gel B",115,171,4,2,20
+"929",155,32,"others",0,2,"period3","Pill A","Gel C",94,196,0,112,220
+"930",155,32,"others",0,2,"period3","Pill A","Gel C",94,196,4,18,24
+"931",156,21,"black",0,0,"period1","Gel B","0",97,180,0,110,243
+"932",156,21,"black",0,0,"period1","Gel B","0",97,180,4,13,63
+"933",156,21,"black",0,0,"period2","Pill A","Gel B",155,191,0,182,191
+"934",156,21,"black",0,0,"period2","Pill A","Gel B",155,191,4,27,0
+"935",156,21,"black",0,0,"period3","Gel C","Pill A",52,87,0,126,215
+"936",156,21,"black",0,0,"period3","Gel C","Pill A",52,87,4,74,128
+"937",157,29,"others",0,0,"period1","Pill A","0",91,181,0,91,181
+"938",157,29,"others",0,0,"period1","Pill A","0",91,181,4,0,0
+"939",157,29,"others",0,0,"period2","Gel B","Pill A",98,127,0,110,191
+"940",157,29,"others",0,0,"period2","Gel B","Pill A",98,127,4,12,64
+"941",157,29,"others",0,0,"period3","Gel C","Gel B",124,186,0,124,194
+"942",157,29,"others",0,0,"period3","Gel C","Gel B",124,186,4,0,8
+"943",158,26,"black",0,1,"period1","Gel C","0",125,177,0,125,198
+"944",158,26,"black",0,1,"period1","Gel C","0",125,177,4,0,21
+"945",158,26,"black",0,1,"period2","Pill A","Gel C",60,260,0,60,260
+"946",158,26,"black",0,1,"period2","Pill A","Gel C",60,260,4,0,0
+"947",158,26,"black",0,1,"period3","Gel B","Pill A",109,138,0,113,193
+"948",158,26,"black",0,1,"period3","Gel B","Pill A",109,138,4,4,55
+"949",159,35,"black",1,1,"period1","Pill A","0",114,195,0,114,195
+"950",159,35,"black",1,1,"period1","Pill A","0",114,195,4,0,0
+"951",159,35,"black",1,1,"period2","Gel C","Pill A",135,216,0,135,216
+"952",159,35,"black",1,1,"period2","Gel C","Pill A",135,216,4,0,0
+"953",159,35,"black",1,1,"period3","Gel B","Gel C",107,165,0,109,201
+"954",159,35,"black",1,1,"period3","Gel B","Gel C",107,165,4,2,36
+"955",160,34,"others",1,1,"period1","Gel C","0",113,181,0,142,212
+"956",160,34,"others",1,1,"period1","Gel C","0",113,181,4,29,31
+"957",160,34,"others",1,1,"period2","Pill A","Gel C",108,226,0,108,226
+"958",160,34,"others",1,1,"period2","Pill A","Gel C",108,226,4,0,0
+"959",160,34,"others",1,1,"period3","Gel B","Pill A",119,188,0,119,201
+"960",160,34,"others",1,1,"period3","Gel B","Pill A",119,188,4,0,13
+"961",161,31,"others",1,2,"period1","Gel C","0",118,159,0,131,193
+"962",161,31,"others",1,2,"period1","Gel C","0",118,159,4,13,34
+"963",161,31,"others",1,2,"period2","Gel B","Gel C",112,219,0,112,237
+"964",161,31,"others",1,2,"period2","Gel B","Gel C",112,219,4,0,18
+"965",161,31,"others",1,2,"period3","Pill A","Gel B",127,198,0,127,198
+"966",161,31,"others",1,2,"period3","Pill A","Gel B",127,198,4,0,0
+"967",162,40,"black",1,0,"period1","Gel B","0",122,202,0,122,205
+"968",162,40,"black",1,0,"period1","Gel B","0",122,202,4,0,3
+"969",162,40,"black",1,0,"period2","Pill A","Gel B",134,188,0,134,188
+"970",162,40,"black",1,0,"period2","Pill A","Gel B",134,188,4,0,0
+"971",162,40,"black",1,0,"period3","Gel C","Pill A",87,183,0,111,216
+"972",162,40,"black",1,0,"period3","Gel C","Pill A",87,183,4,24,33
+"973",163,35,"black",0,2,"period1","Gel B","0",132,209,0,132,209
+"974",163,35,"black",0,2,"period1","Gel B","0",132,209,4,0,0
+"975",163,35,"black",0,2,"period2","Gel C","Gel B",84,192,0,91,192
+"976",163,35,"black",0,2,"period2","Gel C","Gel B",84,192,4,7,0
+"977",163,35,"black",0,2,"period3","Pill A","Gel C",106,181,0,106,181
+"978",163,35,"black",0,2,"period3","Pill A","Gel C",106,181,4,0,0
+"979",164,36,"others",0,1,"period1","Gel C","0",120,194,0,120,223
+"980",164,36,"others",0,1,"period1","Gel C","0",120,194,4,0,29
+"981",164,36,"others",0,1,"period2","Pill A","Gel C",122,166,0,122,166
+"982",164,36,"others",0,1,"period2","Pill A","Gel C",122,166,4,0,0
+"983",164,36,"others",0,1,"period3","Gel B","Pill A",124,191,0,129,191
+"984",164,36,"others",0,1,"period3","Gel B","Pill A",124,191,4,5,0
+"985",165,45,"black",0,2,"period1","Gel B","0",99,157,0,105,200
+"986",165,45,"black",0,2,"period1","Gel B","0",99,157,4,6,43
+"987",165,45,"black",0,2,"period2","Gel C","Gel B",104,190,0,104,190
+"988",165,45,"black",0,2,"period2","Gel C","Gel B",104,190,4,0,0
+"989",165,45,"black",0,2,"period3","Pill A","Gel C",105,165,0,105,165
+"990",165,45,"black",0,2,"period3","Pill A","Gel C",105,165,4,0,0
+"991",166,19,"others",1,0,"period1","Pill A","0",136,272,0,136,272
+"992",166,19,"others",1,0,"period1","Pill A","0",136,272,4,0,0
+"993",166,19,"others",1,0,"period2","Gel B","Pill A",74,120,0,138,220
+"994",166,19,"others",1,0,"period2","Gel B","Pill A",74,120,4,64,100
+"995",166,19,"others",1,0,"period3","Gel C","Gel B",75,115,0,141,270
+"996",166,19,"others",1,0,"period3","Gel C","Gel B",75,115,4,66,155
+"997",167,22,"others",1,0,"period1","Gel B","0",132,170,0,132,240
+"998",167,22,"others",1,0,"period1","Gel B","0",132,170,4,0,70
+"999",167,22,"others",1,0,"period2","Pill A","Gel B",160,273,0,160,273
+"1000",167,22,"others",1,0,"period2","Pill A","Gel B",160,273,4,0,0
+"1001",167,22,"others",1,0,"period3","Gel C","Pill A",145,166,0,171,172
+"1002",167,22,"others",1,0,"period3","Gel C","Pill A",145,166,4,26,6
+"1003",168,29,"black",0,1,"period1","Pill A","0",121,189,0,121,189
+"1004",168,29,"black",0,1,"period1","Pill A","0",121,189,4,0,0
+"1005",168,29,"black",0,1,"period2","Gel C","Pill A",140,146,0,140,182
+"1006",168,29,"black",0,1,"period2","Gel C","Pill A",140,146,4,0,36
+"1007",168,29,"black",0,1,"period3","Gel B","Gel C",93,69,0,115,202
+"1008",168,29,"black",0,1,"period3","Gel B","Gel C",93,69,4,22,133
+"1009",169,24,"black",0,0,"period1","Gel B","0",158,210,0,158,252
+"1010",169,24,"black",0,0,"period1","Gel B","0",158,210,4,0,42
+"1011",169,24,"black",0,0,"period2","Pill A","Gel B",140,307,0,140,307
+"1012",169,24,"black",0,0,"period2","Pill A","Gel B",140,307,4,0,0
+"1013",169,24,"black",0,0,"period3","Gel C","Pill A",57,109,0,112,225
+"1014",169,24,"black",0,0,"period3","Gel C","Pill A",57,109,4,55,116
+"1015",170,39,"black",0,1,"period1","Pill A","0",96,202,0,96,202
+"1016",170,39,"black",0,1,"period1","Pill A","0",96,202,4,0,0
+"1017",170,39,"black",0,1,"period2","Gel C","Pill A",125,181,0,125,181
+"1018",170,39,"black",0,1,"period2","Gel C","Pill A",125,181,4,0,0
+"1019",170,39,"black",0,1,"period3","Gel B","Gel C",123,185,0,123,186
+"1020",170,39,"black",0,1,"period3","Gel B","Gel C",123,185,4,0,1
+"1021",171,22,"others",0,2,"period1","Gel C","0",77,100,0,118,208
+"1022",171,22,"others",0,2,"period1","Gel C","0",77,100,4,41,108
+"1023",171,22,"others",0,2,"period2","Gel B","Gel C",134,215,0,161,239
+"1024",171,22,"others",0,2,"period2","Gel B","Gel C",134,215,4,27,24
+"1025",171,22,"others",0,2,"period3","Pill A","Gel B",149,202,0,149,202
+"1026",171,22,"others",0,2,"period3","Pill A","Gel B",149,202,4,0,0
+"1027",172,33,"others",0,1,"period1","Gel C","0",117,185,0,119,204
+"1028",172,33,"others",0,1,"period1","Gel C","0",117,185,4,2,19
+"1029",172,33,"others",0,1,"period2","Pill A","Gel C",118,204,0,118,204
+"1030",172,33,"others",0,1,"period2","Pill A","Gel C",118,204,4,0,0
+"1031",172,33,"others",0,1,"period3","Gel B","Pill A",122,191,0,130,203
+"1032",172,33,"others",0,1,"period3","Gel B","Pill A",122,191,4,8,12
+"1033",173,43,"others",1,2,"period1","Gel B","0",115,193,0,115,193
+"1034",173,43,"others",1,2,"period1","Gel B","0",115,193,4,0,0
+"1035",173,43,"others",1,2,"period2","Gel C","Gel B",125,171,0,125,199
+"1036",173,43,"others",1,2,"period2","Gel C","Gel B",125,171,4,0,28
+"1037",173,43,"others",1,2,"period3","Pill A","Gel C",125,205,0,125,205
+"1038",173,43,"others",1,2,"period3","Pill A","Gel C",125,205,4,0,0
+"1039",174,40,"others",1,0,"period1","Pill A","0",116,210,0,116,210
+"1040",174,40,"others",1,0,"period1","Pill A","0",116,210,4,0,0
+"1041",174,40,"others",1,0,"period2","Gel B","Pill A",129,214,0,129,214
+"1042",174,40,"others",1,0,"period2","Gel B","Pill A",129,214,4,0,0
+"1043",174,40,"others",1,0,"period3","Gel C","Gel B",92,176,0,104,189
+"1044",174,40,"others",1,0,"period3","Gel C","Gel B",92,176,4,12,13
+"1045",175,24,"white",0,2,"period1","Gel B","0",68,176,0,79,225
+"1046",175,24,"white",0,2,"period1","Gel B","0",68,176,4,11,49
+"1047",175,24,"white",0,2,"period2","Gel C","Gel B",70,150,0,149,182
+"1048",175,24,"white",0,2,"period2","Gel C","Gel B",70,150,4,79,32
+"1049",175,24,"white",0,2,"period3","Pill A","Gel C",114,230,0,146,230
+"1050",175,24,"white",0,2,"period3","Pill A","Gel C",114,230,4,32,0
+"1051",176,36,"others",1,0,"period1","Gel B","0",109,211,0,123,230
+"1052",176,36,"others",1,0,"period1","Gel B","0",109,211,4,14,19
+"1053",176,36,"others",1,0,"period2","Pill A","Gel B",147,238,0,147,238
+"1054",176,36,"others",1,0,"period2","Pill A","Gel B",147,238,4,0,0
+"1055",176,36,"others",1,0,"period3","Gel C","Pill A",138,157,0,139,218
+"1056",176,36,"others",1,0,"period3","Gel C","Pill A",138,157,4,1,61
+"1057",177,26,"black",0,2,"period1","Gel C","0",86,116,0,124,188
+"1058",177,26,"black",0,2,"period1","Gel C","0",86,116,4,38,72
+"1059",177,26,"black",0,2,"period2","Gel B","Gel C",103,112,0,138,205
+"1060",177,26,"black",0,2,"period2","Gel B","Gel C",103,112,4,35,93
+"1061",177,26,"black",0,2,"period3","Pill A","Gel B",103,221,0,103,221
+"1062",177,26,"black",0,2,"period3","Pill A","Gel B",103,221,4,0,0
+"1063",178,19,"white",1,0,"period1","Pill A","0",107,224,0,129,282
+"1064",178,19,"white",1,0,"period1","Pill A","0",107,224,4,22,58
+"1065",178,19,"white",1,0,"period2","Gel B","Pill A",86,119,0,146,303
+"1066",178,19,"white",1,0,"period2","Gel B","Pill A",86,119,4,60,184
+"1067",178,19,"white",1,0,"period3","Gel C","Gel B",72,202,0,116,300
+"1068",178,19,"white",1,0,"period3","Gel C","Gel B",72,202,4,44,98
+"1069",179,22,"black",0,2,"period1","Gel C","0",127,190,0,137,204
+"1070",179,22,"black",0,2,"period1","Gel C","0",127,190,4,10,14
+"1071",179,22,"black",0,2,"period2","Gel B","Gel C",72,134,0,91,188
+"1072",179,22,"black",0,2,"period2","Gel B","Gel C",72,134,4,19,54
+"1073",179,22,"black",0,2,"period3","Pill A","Gel B",141,294,0,141,294
+"1074",179,22,"black",0,2,"period3","Pill A","Gel B",141,294,4,0,0
+"1075",180,26,"black",0,1,"period1","Pill A","0",139,223,0,139,223
+"1076",180,26,"black",0,1,"period1","Pill A","0",139,223,4,0,0
+"1077",180,26,"black",0,1,"period2","Gel C","Pill A",68,97,0,68,200
+"1078",180,26,"black",0,1,"period2","Gel C","Pill A",68,97,4,0,103
+"1079",180,26,"black",0,1,"period3","Gel B","Gel C",151,222,0,164,236
+"1080",180,26,"black",0,1,"period3","Gel B","Gel C",151,222,4,13,14

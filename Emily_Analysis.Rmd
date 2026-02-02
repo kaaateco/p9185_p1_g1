@@ -31,31 +31,22 @@ scale_fill_discrete = scale_fill_viridis_d
 options(scipen = 999)
 ```
 
-TO DO:
+GOAL: 
+The secondary objective of the trial is to have preliminary assessment and comparison of systemic and local Pharmacokinetics (PK) of Pill A, Gel B, and Gel C. 
 
-EDA:
-- outcome variables: 
+Additionally, the investigators are interested to: 1) assess the correlation of PK with adherence measures and the occurrence of adverse events
 
-	whether the medications are safe for patients
-	
-	whether patients could easily adhere to medication schedules so that long term use is feasible.
-	
-	assess the correlation of PK with adherence measures and the occurrence of adverse events 
-	
-	demographic factors associated with product adherence and whether they differ by product used (Pill or gel) or regimen (three times a day or once a day)
-	
-- spaghetti plot of weeks —> linear or non-linear
-
-Mixed Model(s):
-- sequence/carry-over??
-
-Contrasts
 
 ```{r}
 baseline <- read.csv("baseline.csv") %>%
   dplyr::select(-X) %>%
   mutate(carryover_period2 = period1,
-         carryover_period3 = period2)
+         carryover_period3 = period2,
+         sequence_ind = case_when(
+           period1 %in% c("Pill A", "Gel B") & period2 %in% c("Pill A", "Gel B") ~ 0,
+           period1 %in% c("Pill A", "Gel C") & period2 %in% c("Pill A", "Gel C") ~ 1,
+           .default = 2
+         ))
 
 
 baseline_long <- baseline %>%
@@ -83,20 +74,14 @@ baseline_long <- baseline %>%
             period == "period2" ~ carryover_period2,
             period == "period3" ~ carryover_period3)) %>%
   dplyr::select(-c(bviral0:carryover_period3)) %>%
+  mutate(bloodVL_change = bloodVL_before - bloodVL_after,
+         skinVL_change = skinVL_before - skinVL_after) %>%
   pivot_longer(cols = c(bloodVL_before:skinVL_after),
                           names_to = c(".value", "timepoint"),
                           names_sep = "_") %>%
   mutate(timepoint = ifelse(timepoint == "before", 0, 4))
 
 write.csv(baseline_long, "baseline_longformat.csv")
-```
-
-```{r}
-ggplot(baseline_long) +
-  geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = period)) +
-  facet_wrap(~ treatment) +
-  theme_bw()
-
 
 baseline %>%
   dplyr::select(age:gender) %>%
@@ -106,18 +91,40 @@ baseline %>%
       gender ~ "Female"))
 ```
 
+### preliminary assessment and comparison of systemic and local Pharmacokinetics (PK) of Pill A, Gel B, and Gel C
+
+Blood PK ~ Random Intercept (Subject) + Treatment*Timepoint + Carryover + Period
 
 Preliminary Mixed Model - Issues with Period & Carryover (how to rewrite?)
 
-PK ~ Random Intercept (Subject) + Treatment*Timepoint + Carryover + Period
+```{r}
+ggplot(baseline_long) +
+  geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = period)) +
+  facet_wrap(~ treatment) +
+  theme_bw()
+```
 
 ```{r}
 library(nlme)
-
-fit2 <- lme(bloodVL ~ treatment * timepoint + carryover, method="ML",
+fit2 <- lme(bloodVL ~ treatment * timepoint + sequence_ind + period, method="ML",
            data = baseline_long,
           random=reStruct(~ 1 | ptid))
+summary(fit2)
+```
 
+Skin PK ~ Random Intercept (Subject) + Treatment*Timepoint + Carryover + Period
+
+```{r}
+ggplot(baseline_long) +
+  geom_line(aes(x = timepoint, y = skinVL, group = ptid, color = period)) +
+  facet_wrap(~ treatment) +
+  theme_bw()
+```
+
+```{r}
+fit2 <- lme(skinVL ~ treatment * timepoint + sequence_ind + period, method="ML",
+           data = baseline_long,
+          random=reStruct(~ 1 | ptid))
 summary(fit2)
 ```
 
@@ -135,10 +142,17 @@ endpoints_long <- endpoints %>%
     AE_pillA_total = rowSums(select(., starts_with("AE_pillA")), na.rm = TRUE),
     AE_gelB_total = rowSums(select(., starts_with("AE_gelB")), na.rm = TRUE),
     AE_gelC_total = rowSums(select(., starts_with("AE_gelC")), na.rm = TRUE),
+    Adhere_pillA_total = rowSums(select(., starts_with("Adhere_pillA")), na.rm = TRUE),
+    Adhere_gelB_total = rowSums(select(., starts_with("Adhere_gelB")), na.rm = TRUE),
+    Adhere_gelC_total = rowSums(select(., starts_with("Adhere_gelC")), na.rm = TRUE),
     overall_safety = case_when(
       treatment == "Pill A" ~ factor(ifelse(AE_pillA_total > 0, 1, 0)),
       treatment == "Gel B" ~ factor(ifelse(AE_gelB_total > 0, 1, 0)),
       treatment == "Gel C" ~ factor(ifelse(AE_gelC_total > 0, 1, 0))),
+    overall_adhere = case_when(
+      treatment == "Pill A" ~ Adhere_pillA_total,
+      treatment == "Gel B" ~ Adhere_gelB_total,
+      treatment == "Gel C" ~ Adhere_gelC_total),
     adhere_week1 = case_when(
       treatment == "Pill A" ~ Adhere_pillA_week1,
       treatment == "Gel B" ~ Adhere_gelB_week1,
@@ -159,8 +173,8 @@ endpoints_long <- endpoints %>%
       period == "period1" ~ "0",
       period == "period2" ~ carryover_period2,
       period == "period3" ~ carryover_period3))) %>%
-  dplyr::select(-c(AE_pillA_week1:carryover_period3), -c(AE_pillA_total:AE_gelC_total)) %>%
-  pivot_longer(cols = starts_with("adhere"),
+  dplyr::select(-c(AE_pillA_week1:carryover_period3), -c(AE_pillA_total:AE_gelC_total), -c(Adhere_pillA_total:Adhere_gelC_total)) %>%
+  pivot_longer(cols = starts_with("adhere_week"),
                names_to = "timepoint",
                values_to = "adherence") %>%
   mutate(timepoint = as.numeric(str_extract(timepoint, "\\d+")))
@@ -168,4 +182,73 @@ endpoints_long <- endpoints %>%
 
 write.csv(endpoints_long, "endpoints_longformat.csv")
 
+overall_endpoints <- endpoints_long %>%
+  filter(timepoint == 1) %>%
+  dplyr::select(-timepoint, -adherence)
+
 ```
+
+### assess the correlation of PK with adherence measures and the occurrence of adverse events
+
+
+#### Adherence
+
+```{r}
+merged <- baseline_long %>%
+  filter(timepoint == 0) %>%
+  dplyr::select(-timepoint, -bloodVL, -skinVL) %>% 
+  left_join(overall_endpoints %>% dplyr::select(-treatment, -carryover), by = c("ptid", "period"))
+
+ggplot(merged) +
+  geom_point(aes(x = bloodVL_change, y = overall_adhere, color = period)) +
+  facet_wrap(~ treatment) +
+  theme_bw()
+
+ggplot(merged) +
+  geom_point(aes(x = bloodVL_change, y = overall_adhere, color = treatment)) +
+  theme_bw()
+
+ggplot(merged) +
+  geom_point(aes(x = skinVL_change, y = overall_adhere, color = period)) +
+  facet_wrap(~ treatment) +
+  theme_bw()
+
+ggplot(merged) +
+  geom_point(aes(x = skinVL_change, y = overall_adhere, color = treatment)) +
+  theme_bw()
+
+
+```
+
+
+Skin/Blood PK ~ Random Intercept (Subject) + Treatment + Adherence + Carryover + Period
+
+```{r}
+fit2 <- lme(skinVL_change ~ treatment + overall_adhere + sequence_ind + period, method="ML",
+           data = merged,
+          random=reStruct(~ 1 | ptid))
+summary(fit2)
+
+
+fit2 <- lme(bloodVL_change ~ treatment + overall_adhere + sequence_ind + period, method="ML",
+           data = merged,
+          random=reStruct(~ 1 | ptid))
+summary(fit2)
+```
+
+
+#### Adverse Events
+
+```{r}
+ggplot(merged, aes(x=bloodVL_change, y=overall_safety, color=treatment)) +
+  geom_jitter(height=0.05, alpha=0.3) +
+  geom_smooth(method='glm', method.args=list(family='binomial')) +
+  theme_bw()
+
+ggplot(merged, aes(x=skinVL_change, y=overall_safety, color=treatment)) +
+  geom_jitter(height=0.05, alpha=0.3) +
+  geom_smooth(method='glm', method.args=list(family='binomial')) +
+  theme_bw()
+```
+
+

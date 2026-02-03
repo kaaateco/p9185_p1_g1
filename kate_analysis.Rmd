@@ -7,17 +7,198 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(lme4)
+library(lmerTest)
+library(ggplot2)
+
 ```
 
-## Data Cleaning
+## Data
 
 ```{r}
 
-baseline <- read_csv("baseline.csv")
+baseline <- read_csv("baseline.csv") %>% 
+  janitor::clean_names()
 baseline
 
-endpoints <- read_csv("endpoints.csv")
+endpoints <- read_csv("endpoints.csv") %>% 
+  janitor::clean_names()
 endpoints
+
+```
+
+
+
+## Primary Objective #2 
+
+Whether patients could easily adhere to medication schedules so that long term use is feasible
+
+```{r}
+
+# Organizing data for this problem (selecting out variables, long format)
+
+ad <- endpoints %>%
+  mutate(seq = paste0(
+    case_when(period1 == "Pill A" ~ "A",
+              period1 == "Gel B"  ~ "B",
+              period1 == "Gel C"  ~ "C"),
+    case_when(period2 == "Pill A" ~ "A",
+              period2 == "Gel B"  ~ "B",
+              period2 == "Gel C"  ~ "C"),
+    case_when(period3 == "Pill A" ~ "A",
+              period3 == "Gel B"  ~ "B",
+              period3 == "Gel C"  ~ "C")),
+    sequence = case_when(
+      seq %in% c("ABC", "BAC") ~ 0,
+      seq %in% c("CAB", "ACB") ~ 1,
+      seq %in% c("BCA", "CBA") ~ 2)) %>%
+  pivot_longer(
+    cols = starts_with("adhere_"),
+    names_to = c("treatment", "week"),
+    names_pattern = "adhere_(.*)_week(\\d)",
+    values_to = "adherence") %>%
+  mutate(week = as.integer(week),
+         treatment_norm = case_when(
+           treatment == "pill_a" ~ "Pill A",
+           treatment == "gel_b" ~ "Gel B",
+           treatment == "gel_c" ~ "Gel C"),
+         period = case_when(
+           treatment_norm == period1 ~ 1,
+           treatment_norm == period2 ~ 2,
+           treatment_norm == period3 ~ 3,
+           TRUE ~ NA), 
+         period = as.integer(period)) %>%
+  filter(!is.na(period)) %>%
+  mutate(
+    ptid = factor(ptid),
+    treatment = factor(treatment_norm, levels = c("Pill A", "Gel B", "Gel C")),
+    period = factor(period),
+    week = factor(week), 
+    sequence = factor(sequence), 
+    treatment = treatment_norm) %>% 
+  select(ptid, sequence, period, week, treatment, adherence)
+
+
+# Adding demographic factors (age, race, gender)
+demo <- baseline %>% 
+  select("ptid", "age", "race", "gender") %>% 
+  mutate(ptid = factor(ptid), 
+         race = factor(race), 
+         gender = factor(gender))
+ad <- ad %>% left_join(demo, by = "ptid")
+ad
+
+```
+
+
+Notes: Period and Sequence do not seem to be statistically significant contributers
+
+```{r}
+
+lmm_ad <- lmer(adherence ~ treatment + period + week + sequence + (1 | ptid), 
+               data = ad)
+summary(lmm_ad)
+
+```
+
+
+
+## Secondary Objective #2
+
+Identify demographic factors associated with product adherence and whether they differ by product used (Pill or gel) or regimen (three times a day or once a day)
+
+```{r}
+
+# Adding product used and regimen to new df
+
+ad_next <- ad %>%
+  mutate(
+    regimen = case_when(
+      treatment == "Pill A" ~ "once",
+      treatment == "Gel B"  ~ "three",
+      treatment == "Gel C"  ~ "once"),
+    regimen = factor(regimen), 
+    product = case_when(
+      treatment == "Pill A" ~ "Pill",
+      treatment == "Gel B"  ~ "Gel",
+      treatment == "Gel C"  ~ "Gel"), 
+    product = factor(product))
+ad_next
+
+```
+
+
+```{r}
+
+lmm_demo <- lmer(adherence ~ age*product + gender*product + race*product + 
+                   age*regimen + gender*regimen + race*regimen +  
+                   period + week + sequence + (1 | ptid), 
+                 data = ad_next)
+summary(lmm_demo)
+
+```
+
+
+## Visualizations
+
+```{r}
+
+ggplot(ad, aes(x = treatment, y = adherence, color = treatment)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Weekly Adherence by Treatment",
+       x = "Treatment",
+       y = "Adherence (days per week)")
+
+```
+
+```{r}
+
+ggplot(ad_next, aes(x = treatment, y = adherence, color = treatment)) +
+  geom_boxplot() +
+  facet_wrap(race ~ gender) + 
+  theme_minimal() +
+  labs(
+    title = "Adherence by Treatment, Race, and Gender",
+    x = "Treatment",
+    y = "Adherence (days per week)",
+    fill = "Treatment")
+
+ggplot(ad_next, aes(x = product, y = adherence, color = regimen)) +
+  geom_boxplot() +
+  theme_minimal() +
+  labs(title = "Adherence by Product and Regimen",
+       x = "Product",
+       y = "Adherence (days)")
+
+```
+
+
+```{r}
+
+ggplot(ad_next, aes(x = age, y = adherence, color = treatment)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(title = "Adherence vs Age by Treatment",
+       x = "Age",
+       y = "Adherence (days)")
+
+ggplot(ad_next, aes(x = age, y = adherence, color = product)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(title = "Adherence vs Age by Product",
+       x = "Age",
+       y = "Adherence (days)")
+
+ggplot(ad_next, aes(x = age, y = adherence, color = regimen)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(title = "Adherence vs Age by Regimen",
+       x = "Age",
+       y = "Adherence (days)")
 
 ```
 

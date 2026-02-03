@@ -1,0 +1,187 @@
+---
+title: "Chhiring_Analysis.Rmd"
+author: "Chhiring Lama"
+date: "2026-02-03"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(readxl)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(janitor)
+library(vcd)
+library(tidymodels)
+library(caret)
+library(glmnet)
+library(pROC)
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
+options(scipen = 999)
+```
+
+Objective: The primary goal of this trial is to compare the safety profiles of Pill A, GelB and GelC, i.e. whether the medications are sage for patients
+
+###import and clean data
+```{r}
+endpoint_long_dat <- read.csv("endpoints.csv")
+endpoint_clean_dat <- endpoint_long_dat |> 
+  mutate(
+    study_sequence = paste(period1, paste(period2, period3, sep = "_"), sep = "_"), 
+    AE_pillA_total = rowSums(across(starts_with("AE_pillA")), na.rm = TRUE),
+    AE_gelB_total = rowSums(across(starts_with("AE_gelB")), na.rm = TRUE),
+    AE_gelC_total = rowSums(across(starts_with("AE_gelC")), na.rm = TRUE), 
+    ) |> 
+  dplyr::select(c(ptid:period3, study_sequence, `AE_pillA_total`:`AE_gelC_total`)) |> 
+  pivot_longer(cols = period1:period3,
+               names_to = "period",
+               values_to = "treatment") |> 
+  mutate(carryover = factor(case_when(
+      period == "period1" ~ "0",
+      period == "period2" ~ "carryover_period1",
+      period == "period3" ~ "carryover_period2")), 
+      overall_safety = case_when(
+        treatment == "Pill A" ~ factor(ifelse(AE_pillA_total > 0, "Yes", "No")),
+        treatment == "Gel B" ~ factor(ifelse(AE_gelB_total > 0, "Yes", "No")),
+        treatment == "Gel C" ~ factor(ifelse(AE_gelC_total > 0, "Yes", "No")))) |> 
+  dplyr::select(-c(`AE_pillA_total`:`AE_gelC_total`)) |> 
+  arrange(study_sequence)
+```
+
+```{r}
+lst <- split(endpoint_clean_dat, endpoint_clean_dat$study_sequence)
+```
+
+```{r}
+pdf("EDA_figures/adverse_counts_perseq.pdf", height = "10", width = "9")
+par(mfrow=c(3, 2), mar = c(2, 4, 2, 1)) 
+for (i in 1:length(lst)){
+  mosaicplot(~ period + overall_safety, data = lst[[i]], color = TRUE, main = names(lst)[i], xlab = "", cex.axis = 0) 
+  abline(h = 0.5, col = "black", lwd = 1, lty = 2)
+}
+par(mfrow=c(1,1))
+dev.off()
+```
+Patient Distribution: 30 people in per treatment sequence
+Initial Observation: Most patients do not face adverse events over the course of 4 weeks in each of the consecutive periods.
+
+## add demographic data
+```{r}
+demo_data <- read_csv("baseline.csv") |> 
+  dplyr::select(c(ptid, age, gender, race)) |> 
+  mutate(gender = case_when(gender == 0 ~ "Male", 
+                            gender == 1 ~ "Female"))
+endpoint_clean_dat <- endpoint_clean_dat |> 
+  full_join(demo_data, by = "ptid") |> 
+  relocate(ptid, overall_safety, study_sequence) |> 
+  janitor::clean_names()
+```
+
+```{r}
+# set random seed, and split dataset into 75% training and 25% testing
+set.seed(1)
+data_split <- initial_split(endpoint_clean_dat, prop = 0.75)
+# extract the training and test data
+training_data <- training(data_split)
+testing_data <- testing(data_split)
+```
+
+### Logistic Regression
+```{r}
+# fit model with CV
+# set up cross validation control
+ctrl <- trainControl(method = "cv", number = 10,
+                     summaryFunction = twoClassSummary,
+                     classProbs = TRUE)
+
+# train logistic regression model with CV
+set.seed(1)
+model.glm <- train(x = training_data[4:9],
+                  y = training_data$overall_safety,
+                   method = "glm",
+                   metric = "ROC",
+                   trControl = ctrl)
+```
+
+##Penalized Logistic Regression
+```{r}
+# define tuning grid for penalized logistic regression
+glmnGrid <- expand.grid(.alpha = seq(0, 1, length = 21),
+                        .lambda = exp(seq(-8, -1, length = 50)))
+
+
+set.seed(1)
+model.glmn <- train(x = training_data[4:9],
+                    y = training_data$overall_safety,
+                    method = "glmnet",
+                    tuneGrid = glmnGrid,
+                    metric = "ROC",
+                    trControl = ctrl)
+
+# display best tuning parameters
+model.glmn$bestTune ### alpha=0, lambda=0.3678794 (ridge)
+
+# plot the results
+myCol <- rainbow(25)
+myPar <- list(superpose.symbol = list(col = myCol),
+              superpose.line = list(col = myCol))
+
+plot(model.glmn, par.settings = myPar, xTrans = function(x) log(x))
+```
+
+```{r}
+lambda_best <- model.glmn$bestTune$lambda
+coef(model.glmn$finalModel, s = lambda_best)
+```
+
+
+##Performance
+```{r}
+# compare models using resampling
+res <- resamples(list(GLM = model.glm, 
+                      GLMNET = model.glmn))
+summary(res)
+
+# boxplot of ROC performance for all models
+pdf("adverse_events_mods_performance.pdf", height = "5", width = "8")
+bwplot(res, metric = "ROC")
+dev.off()
+```
+
+```{r, warning=FALSE}
+# predictions on test data for each model
+glm.pred <- predict(model.glm, newdata = testing_data, type = "prob")[,2]
+glmn.pred <- predict(model.glmn, newdata = testing_data, type = "prob")[,2]
+
+# compute ROC for each model
+roc.glm <- roc(testing_data$overall_safety, glm.pred)
+roc.glmn <- roc(testing_data$overall_safety, glmn.pred)
+
+# calculate AUC values for each model
+auc <- c(roc.glm$auc[1], roc.glmn$auc[1])
+
+# plot ROC curves for all models
+modelNames <- c("glm","glmn")
+
+pdf("adverse_events_mods_performance.pdf", height = "5", width = "6")
+ggroc(list(roc.glm, roc.glmn), legacy.axes = TRUE) + 
+  scale_color_discrete(labels = paste0(modelNames, " (", round(auc,3),")"),
+                       name = "Models (AUC)") +
+  geom_abline(intercept = 0, slope = 1, color = "grey")
+dev.off()
+```
+
+
+
+
+

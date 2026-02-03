@@ -1,6 +1,5 @@
 ---
 title: "p9185_project_1"
-author: "Kate Colvin, Chhiring Lama, Emily Carter"
 output: html_document
 ---
 

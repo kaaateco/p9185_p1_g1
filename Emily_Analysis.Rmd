@@ -224,6 +224,36 @@ model_comparison <- anova(model, model_large)
 print(model_comparison)
 
 summary(model)
+tbl_regression(
+  model,
+  estimate_fun = function(x) style_number(x, digits = 1)
+) %>%
+  # Remove reference rows
+  add_global_p() %>%
+  # Custom labels
+  modify_table_body(
+    ~.x %>% 
+      mutate(
+        label = case_when(
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          TRUE ~ label
+        )
+      ) %>%
+      filter(!is.na(label))  # Remove rows with NA labels
+  ) %>%
+  modify_header(
+    label ~ "**Comparison**",
+    estimate ~ "**Beta**"
+  ) %>%
+  bold_p(t = 0.05)
+
 tbl_regression(model)
 # 
 # tbl_regression(
@@ -721,7 +751,8 @@ model_large <- lme(bloodVL_change ~ treatment + overall_adhere + overall_safety 
            data = merged,
           random=reStruct(~ 1 | ptid))
 
-model_large2 <- lme(bloodVL_change ~ treatment*overall_adhere + treatment*overall_safety, method="ML",
+model_large2 <- lme(bloodVL_change ~ treatment*overall_adhere + 
+                      treatment*overall_safety, method="ML",
            data = merged,
           random=reStruct(~ 1 | ptid))
 
@@ -734,6 +765,65 @@ print(model_comparison)
 
 summary(model)
 summary(model_large2)
+
+
+model <- model_large2
+```
+
+
+```{r}
+
+# Get the range of adherence values
+adhere_range <- range(merged$overall_adhere, na.rm = TRUE)
+adhere_seq <- seq(adhere_range[1], adhere_range[2], length.out = 50)
+
+# Get unique safety levels
+safety_levels <- unique(merged$overall_safety)
+pred_data <- expand.grid(treatment = c("Pill A", "Gel B", "Gel C"),
+                         overall_adhere = adhere_seq,
+                         overall_safety = safety_levels)
+pred_data$predicted <- predict(model, newdata = pred_data, level = 0)
+emm_grid <- emmeans(model, ~ treatment * overall_adhere * overall_safety,
+                    at = list(overall_adhere = adhere_seq))
+pred_df <- as.data.frame(emm_grid)
+
+pred_df_labeled <- pred_df %>%
+  rename(predicted = emmean, se = SE) %>%
+  mutate(safety_label = ifelse(overall_safety == 0, 
+                                "No Safety Issues (safety = 0)", 
+                                "Safety Issues (safety = 1)"))
+
+p3 <- ggplot(pred_df_labeled, aes(x = overall_adhere, y = predicted, 
+                                   color = treatment, fill = treatment)) +
+  geom_line(linewidth = 1.2) +
+  geom_ribbon(aes(ymin = predicted - 1.96 * se, 
+                  ymax = predicted + 1.96 * se),
+              alpha = 0.2, color = NA) +
+  facet_wrap(~ safety_label, ncol = 2) +
+  labs(title = "Treatment Effects: Adherence × Safety Interaction",
+       x = "Overall Adherence",
+       y = "Predicted Viral Load Reduction",
+       color = "Treatment",
+       fill = "Treatment") +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        plot.title = element_text(face = "bold", hjust = 0.5),
+        strip.text = element_text(face = "bold", size = 11)) +
+  scale_color_manual(values = c("Pill A" = "#E41A1C", 
+                                 "Gel B" = "#377EB8", 
+                                 "Gel C" = "#4DAF4A")) +
+  scale_fill_manual(values = c("Pill A" = "#E41A1C", 
+                                "Gel B" = "#377EB8", 
+                                "Gel C" = "#4DAF4A"))
+
+
+
+print(p3)
+# 
+# # Save plots
+ggsave("interaction_by_safety.png", p3, width = 12, height = 6, dpi = 300)
+
+
 ```
 
 ```{r}

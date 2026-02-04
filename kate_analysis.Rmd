@@ -31,7 +31,7 @@ endpoints
 
 ## Primary Objective #2 
 
-Whether patients could easily adhere to medication schedules so that long term use is feasible
+Comparing adherence profiles of Pill A, Gel B, and Gel C, assessing whether patients could easily adhere to medication schedules so that long term use is feasible 
 
 ```{r}
 
@@ -73,9 +73,8 @@ ad <- endpoints %>%
     ptid = factor(ptid),
     treatment = factor(treatment_norm, levels = c("Pill A", "Gel B", "Gel C")),
     period = factor(period),
-    week = factor(week), 
-    sequence = factor(sequence), 
-    treatment = treatment_norm) %>% 
+    week = as.integer(week), 
+    sequence = factor(sequence)) %>% 
   select(ptid, sequence, period, week, treatment, adherence)
 
 
@@ -91,11 +90,85 @@ ad
 ```
 
 
-Notes: Period and Sequence do not seem to be statistically significant contributers
+Notes: 
+
+- Week as an integer, since adherence goes down as week # increases
+  - This is seen most clearly in Pill A, which has the greatest adherence to start with (seen in other plots I had made). 
+  
+- Excluding treatment*week as an interaction term, based on the plot below. 
+  - Slopes seem to be very similar, and I double checked in the model that the interaction terms do not turn out to be statistically significant regardless. 
 
 ```{r}
 
-lmm_ad <- lmer(adherence ~ treatment + period + week + sequence + (1 | ptid), 
+ggplot(ad, aes(x = week, y = adherence, group = ptid)) +
+  geom_line(alpha = 0.5) +
+  geom_point(alpha = 0.5) + 
+  labs(x = "Week", y = "Adherence (days/week)", 
+       title = "Individual Patient Adherence Over Time") +
+  theme_minimal()
+
+ggplot(ad, aes(x = week, y = adherence, group = ptid, color = treatment)) +
+  geom_line(alpha = 0.5) +
+  geom_point(alpha = 0.5) + 
+  stat_summary(aes(group = treatment), 
+               fun = mean, geom = "line", size = 1, color = "black") +
+  facet_wrap(~treatment) +
+  labs(x = "Week", y = "Adherence (days/week)", 
+       title = "Individual Patient Adherence Over Time, by Treatment") +
+  theme_minimal()
+
+```
+
+```{r}
+
+# Week as numeric
+mod_num <- glmer(
+  cbind(adherent, nonadherent) ~ treatment + week + period + sequence + (1 | ptid),
+  family = binomial,
+  data = ad,
+  control = glmerControl(optimizer = "bobyqa")
+)
+
+# Week as categorical
+mod_cat <- glmer(
+  cbind(adherent, nonadherent) ~ treatment + factor(week) + period + sequence + (1 | ptid),
+  family = binomial,
+  data = ad,
+  control = glmerControl(optimizer = "bobyqa")
+)
+
+summary(mod_num)
+summary(mod_cat)
+
+```
+
+
+- Using Binomial Mixed Model because of model assumptions: adherence is count of successes (each day), is bounded value. 
+  - The change in log-odds of daily adherence when using Gel B (or Gel C) compared to Pill A, for the same patient, holding *insert variables* constant. 
+  - Initially had trouble converging, switched to using optimizer = "bobyqa", better at handling sparse or extreme binomial data (0/7 or 7/7 adherence, which is common)
+  - (Never mind it seems fine now lol)
+
+
+```{r}
+
+# Reformatting for Binomial Mixed Model
+ad <- ad %>%
+  mutate(adherent = adherence,
+         nonadherent = 7 - adherence)
+
+# Binomial Mixed Model 
+glmm_ad <- glmer(
+  cbind(adherent, nonadherent) ~ treatment + week + period + sequence + (1 | ptid), 
+  family = binomial(link = "logit"),
+ # control = glmerControl(optimizer = "bobyqa"), 
+  data = ad)
+summary(glmm_ad)
+
+```
+
+```{r, eval = FALSE}
+
+lmm_ad <- lmer(adherence ~ treatment*week + period + sequence + (1 | ptid), 
                data = ad)
 summary(lmm_ad)
 
@@ -127,8 +200,22 @@ ad_next
 
 ```
 
+*PLOTS*
 
 ```{r}
+
+glmm_demos <- glmer(
+  cbind(adherent, nonadherent) ~ age*product + gender*product + race*product + 
+                   age*regimen + gender*regimen + race*regimen +  
+                   period + week + sequence + (1 | ptid),
+  family = binomial(link = "logit"),
+  control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5)), 
+  data = ad_next)
+summary(glmm_demos)
+
+```
+
+```{r, eval = FALSE}
 
 lmm_demo <- lmer(adherence ~ age*product + gender*product + race*product + 
                    age*regimen + gender*regimen + race*regimen +  
@@ -137,6 +224,9 @@ lmm_demo <- lmer(adherence ~ age*product + gender*product + race*product +
 summary(lmm_demo)
 
 ```
+
+
+
 
 
 ## Visualizations
@@ -199,6 +289,18 @@ ggplot(ad_next, aes(x = age, y = adherence, color = regimen)) +
   labs(title = "Adherence vs Age by Regimen",
        x = "Age",
        y = "Adherence (days)")
+
+ggplot(ad_next, aes(x = week, y = adherence, color = week)) +
+  geom_line() +
+  theme_minimal() 
+#  labs(title = "Adherence vs Age by Regimen",
+#       x = "Age",
+#       y = "Adherence (days)")
+
+ggplot(ad_next) +
+  geom_line(aes(x = week, y = adherence, group = ptid, color = period)) +
+  facet_wrap(~ treatment) +
+  theme_bw()
 
 ```
 

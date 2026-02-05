@@ -5,17 +5,6 @@ output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-# I. Introduction
-
-# II. 
-
-
-# Secondary Objectives
-
-```{r setup, include=FALSE}
 library(readxl)
 library(tidyverse)
 library(knitr)
@@ -41,6 +30,15 @@ scale_fill_discrete = scale_fill_viridis_d
 
 options(scipen = 999)
 ```
+
+# I. Introduction
+
+# II. 
+
+
+# Secondary Objectives
+
+
 
 
 ```{r}
@@ -107,7 +105,7 @@ endpoints <- read.csv("endpoints.csv") %>%
   mutate(carryover_period2 = period1,
          carryover_period3 = period2) 
 
-endpoints_long <- endpoints %>%
+overall_endpoints <- endpoints %>%
   pivot_longer(cols = period1:period3,
                names_to = "period",
                values_to = "treatment") %>%
@@ -126,35 +124,11 @@ endpoints_long <- endpoints %>%
       treatment == "Pill A" ~ Adhere_pillA_total,
       treatment == "Gel B" ~ Adhere_gelB_total,
       treatment == "Gel C" ~ Adhere_gelC_total),
-    adhere_week1 = case_when(
-      treatment == "Pill A" ~ Adhere_pillA_week1,
-      treatment == "Gel B" ~ Adhere_gelB_week1,
-      treatment == "Gel C" ~ Adhere_gelC_week1),
-    adhere_week2 = case_when(
-      treatment == "Pill A" ~ Adhere_pillA_week2,
-      treatment == "Gel B" ~ Adhere_gelB_week2,
-      treatment == "Gel C" ~ Adhere_gelC_week2),
-    adhere_week3 = case_when(
-      treatment == "Pill A" ~ Adhere_pillA_week3,
-      treatment == "Gel B" ~ Adhere_gelB_week3,
-      treatment == "Gel C" ~ Adhere_gelC_week3),
-    adhere_week4 = case_when(
-      treatment == "Pill A" ~ Adhere_pillA_week4,
-      treatment == "Gel B" ~ Adhere_gelB_week4,
-      treatment == "Gel C" ~ Adhere_gelC_week4),
     carryover = factor(case_when(
       period == "period1" ~ "0",
       period == "period2" ~ carryover_period2,
       period == "period3" ~ carryover_period3))) %>%
-  dplyr::select(-c(AE_pillA_week1:carryover_period3), -c(AE_pillA_total:AE_gelC_total), -c(Adhere_pillA_total:Adhere_gelC_total)) %>%
-  pivot_longer(cols = starts_with("adhere_week"),
-               names_to = "timepoint",
-               values_to = "adherence") %>%
-  mutate(timepoint = as.numeric(str_extract(timepoint, "\\d+")))
-
-overall_endpoints <- endpoints_long %>%
-  filter(timepoint == 1) %>%
-  dplyr::select(-timepoint, -adherence)
+  dplyr::select(-c(AE_pillA_week1:carryover_period3), -c(AE_pillA_total:AE_gelC_total), -c(Adhere_pillA_total:Adhere_gelC_total))
 
 merged <- baseline_long %>%
   filter(timepoint == 0) %>%
@@ -188,12 +162,13 @@ baseline %>%
   modify_caption("**Table 1. Baseline Characteristics**")
 ```
 
-preliminary assessment and comparison of systemic and local Pharmacokinetics (PK) of Pill A, Gel B, and Gel C
+preliminary assessment and comparison of systemic and local Pharmacokinetics (PK) of Pill A, Gel B, and Gel C and the correlation of PK with adherence measures and the occurrence of adverse events
 
-Blood PK Change by Treatment
+Blood PK
+
 
 $$
-Y_{ik} = \mu + b_{ik} + \pi_i + \tau_{i}  + \lambda_i+\varepsilon_{ik}, \quad b_{ik} \sim N(0, \sigma_b^2), \quad \varepsilon_{ik} \sim N(0, \sigma^2)
+Y_{ik} = \mu + b_{k} + \pi_i + \tau_{i}  + \lambda_{i} + \alpha_{ik} + \beta_{ik} + \varepsilon_{ik}, \quad b_{k} \sim N(0, \sigma_b^2), \quad \varepsilon_{ik} \sim N(0, \sigma^2)
 $$
 
 ```{r}
@@ -202,11 +177,31 @@ ggplot(baseline_long) +
   facet_wrap(~ treatment) +
   theme_bw() +
   labs(x = "Week in Study", y = "Blood Viral Load", color = "Sequence")
+
+ggplot(merged) +
+  geom_point(aes(y = bloodVL_change, x = overall_adhere, color = seq)) +
+  facet_wrap(~ overall_safety + treatment) +
+  theme_bw() +
+  labs(x = "Overall Adherence", y = "Change in Blood PK", color = "Sequence")
+# 
+# ggplot(baseline_long) +
+#   geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = overall_safety), alpha = 0.5) +
+#   facet_wrap(~ treatment) +
+#   theme_bw()
 ```
 
-```{r}
 
-model <- lmer(bloodVL_change ~ treatment + period + sequence_ind + (1|ptid), data = merged)
+```{r}
+model_large <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + 
+                      period + (1 | ptid),
+              data = merged)
+
+model <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + period + (1 | ptid),
+              data = merged)
+
+anova(model, model_large)
+
+summary(model)
 
 tbl_regression(
   model,
@@ -215,7 +210,7 @@ tbl_regression(
   add_global_p() %>%
   modify_table_body(~.x %>% 
       mutate(label = case_when(
-          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0)",
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
           label == "Gel B" ~ "Gel B vs Pill A",
           label == "Gel C" ~ "Gel C vs Pill A",
           label == "period2" ~ "Period 2 vs Period 1",
@@ -225,14 +220,45 @@ tbl_regression(
           label == "Pill A" ~ NA_character_,
           label == "period1" ~ NA_character_,
           label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
           label == "0" ~ NA_character_,
-          label == "1" ~ "Sequence 1 vs Sequence 0",
-          label == "2" ~ "Sequence 2 vs Sequence 0",
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
           TRUE ~ label)) %>%
       filter(!is.na(label))) %>%
   modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
   bold_p(t = 0.05)
 ```
+
+
+```{r}
+library(emmeans)
+emm_treatment <- emmeans(model, ~ treatment)
+summary(emm_treatment)
+
+# Pairwise comparisons for treatment
+pairs(emm_treatment)
+
+# Marginal means for overall_adhere
+emm_adhere <- emmeans(model, ~ overall_adhere)
+summary(emm_adhere)
+
+# Marginal means for overall_safety
+emm_safety <- emmeans(model, ~ overall_safety)
+summary(emm_safety)
+
+# Marginal means for period
+emm_period <- emmeans(model, ~ period)
+summary(emm_period)
+pairs(emm_period)
+
+```
+
+
+
+
 
 ```{r}
 resid_scaled <- residuals(model, scaled = TRUE)
@@ -322,10 +348,12 @@ grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
 ```
 
 
-Skin PK Change by Treatment
+
+Skin PK
+
 
 $$
-Y_{i} = \mu + \pi_i + \tau_{i}  + \lambda_{i} + \varepsilon_{i}, \quad \varepsilon_{i} \sim N(0, \sigma^2)
+Y_{i} = \mu + \pi_i + \tau_{i}  + \lambda_{i} + \alpha_{i} + \beta_{i} +\varepsilon_{i}, \quad \varepsilon_{i} \sim N(0, \sigma^2)
 $$
 
 ```{r}
@@ -334,12 +362,24 @@ ggplot(baseline_long) +
   facet_wrap(~ treatment) +
   theme_bw() +
   labs(x = "Week in Study", y = "Skin Viral Load", color = "Sequence")
+
+ggplot(merged) +
+  geom_point(aes(y = skinVL_change, x = overall_adhere, color = seq)) +
+  facet_wrap(~ overall_safety + treatment) +
+  theme_bw() +
+  labs(x = "Overall Adherence", y = "Change in Skin PK", color = "Sequence")
 ```
 
-```{r}
-model <- lm(skinVL_change ~ treatment + period + sequence_ind, data = merged)
 
-# summary(model)
+```{r}
+model_large <- lm(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind
+                  + period, data = merged)
+model <- lm(skinVL_change ~ treatment + overall_adhere  + overall_safety + period,
+            data = merged)
+anova(model, model_large)
+
+summary(model)
+
 tbl_regression(
   model,
   intercept = TRUE,
@@ -347,7 +387,7 @@ tbl_regression(
   add_global_p() %>%
   modify_table_body(~.x %>% 
       mutate(label = case_when(
-          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0)",
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
           label == "Gel B" ~ "Gel B vs Pill A",
           label == "Gel C" ~ "Gel C vs Pill A",
           label == "period2" ~ "Period 2 vs Period 1",
@@ -357,9 +397,12 @@ tbl_regression(
           label == "Pill A" ~ NA_character_,
           label == "period1" ~ NA_character_,
           label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
           label == "0" ~ NA_character_,
-          label == "1" ~ "Sequence 1 vs Sequence 0",
-          label == "2" ~ "Sequence 2 vs Sequence 0",
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
           TRUE ~ label)) %>%
       filter(!is.na(label))) %>%
   modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
@@ -367,9 +410,35 @@ tbl_regression(
 ```
 
 ```{r}
+library(emmeans)
+emm_treatment <- emmeans(model, ~ treatment)
+summary(emm_treatment)
+
+# Pairwise comparisons for treatment
+pairs(emm_treatment)
+
+# Marginal means for overall_adhere
+emm_adhere <- emmeans(model, ~ overall_adhere)
+summary(emm_adhere)
+
+# Marginal means for overall_safety
+emm_safety <- emmeans(model, ~ overall_safety)
+summary(emm_safety)
+
+# Marginal means for period
+emm_period <- emmeans(model, ~ period)
+summary(emm_period)
+pairs(emm_period)
+
+```
+
+```{r}
 library(ggplot2)
 library(gridExtra)
 library(MASS)
+
+# Fit your model
+model <- lm(skinVL_change ~ treatment + period + sequence_ind, data = merged)
 
 # Extract residuals and fitted values
 residuals <- residuals(model)
@@ -422,112 +491,3 @@ p4 <- ggplot(data.frame(treatment = merged$treatment, residuals = standardized_r
 grid.arrange(p1, p2, p3, p4, ncol = 2)
 
 ```
-
-assess the correlation of PK with adherence measures and the occurrence of adverse events
-
-Skin PK
-
-
-$$
-Y_{i} = \mu + \pi_i + \tau_{i}  + \lambda_{i} + \alpha_{i} + \beta_{i} +\varepsilon_{i}, \quad \varepsilon_{i} \sim N(0, \sigma^2)
-$$
-
-```{r}
-ggplot(merged) +
-  geom_point(aes(y = skinVL_change, x = overall_adhere, color = seq)) +
-  facet_wrap(~ overall_safety + treatment) +
-  theme_bw() +
-  labs(x = "Overall Adherence", y = "Change in Skin PK", color = "Sequence")
-
-ggplot(baseline_long) +
-  geom_line(aes(x = timepoint, y = skinVL, group = ptid, color = overall_safety), alpha = 0.5) +
-  facet_wrap(~ treatment) +
-  theme_bw()
-```
-
-```{r}
-model <- lm(skinVL_change ~ treatment + overall_adhere  + overall_safety + sequence_ind + period, data = merged)
-
-summary(model)
-
-tbl_regression(
-  model,
-  intercept = TRUE,
-  estimate_fun = function(x) style_number(x, digits = 1)) %>%
-  add_global_p() %>%
-  modify_table_body(~.x %>% 
-      mutate(label = case_when(
-          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
-          label == "Gel B" ~ "Gel B vs Pill A",
-          label == "Gel C" ~ "Gel C vs Pill A",
-          label == "period2" ~ "Period 2 vs Period 1",
-          label == "period3" ~ "Period 3 vs Period 1",
-          label == "treatment" ~ "Treatment",  # Remove header
-          label == "period" ~ "Period",      # Remove header
-          label == "Pill A" ~ NA_character_,
-          label == "period1" ~ NA_character_,
-          label == "sequence_ind" ~ "Sequence",
-          label == "0" ~ NA_character_,
-          label == "1" ~ "1 vs 0",
-          label == "2" ~ "2 vs 0",
-          label == "overall_adhere" ~ "Additional Day of Adherence",
-          label == "overall_safety" ~ "Adverse Event",
-          TRUE ~ label)) %>%
-      filter(!is.na(label))) %>%
-  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
-  bold_p(t = 0.05)
-```
-
-Blood PK
-
-
-$$
-Y_{ik} = \mu + b_{ik} + \pi_i + \tau_{i}  + \lambda_{i} + \alpha_{ik} + \beta_{ik} + \varepsilon_{ik}, \quad b_{ik} \sim N(0, \sigma_b^2), \quad \varepsilon_{ik} \sim N(0, \sigma^2)
-$$
-
-```{r}
-ggplot(merged) +
-  geom_point(aes(y = bloodVL_change, x = overall_adhere, color = seq)) +
-  facet_wrap(~ overall_safety + treatment) +
-  theme_bw() +
-  labs(x = "Overall Adherence", y = "Change in Blood PK", color = "Sequence")
-
-ggplot(baseline_long) +
-  geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = overall_safety), alpha = 0.5) +
-  facet_wrap(~ treatment) +
-  theme_bw()
-```
-
-
-```{r}
-model <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + period + (1 | ptid),
-              data = merged)
-
-tbl_regression(
-  model,
-  intercept = TRUE,
-  estimate_fun = function(x) style_number(x, digits = 1)) %>%
-  add_global_p() %>%
-  modify_table_body(~.x %>% 
-      mutate(label = case_when(
-          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
-          label == "Gel B" ~ "Gel B vs Pill A",
-          label == "Gel C" ~ "Gel C vs Pill A",
-          label == "period2" ~ "Period 2 vs Period 1",
-          label == "period3" ~ "Period 3 vs Period 1",
-          label == "treatment" ~ "Treatment",  # Remove header
-          label == "period" ~ "Period",      # Remove header
-          label == "Pill A" ~ NA_character_,
-          label == "period1" ~ NA_character_,
-          label == "sequence_ind" ~ "Sequence",
-          label == "0" ~ NA_character_,
-          label == "1" ~ "1 vs 0",
-          label == "2" ~ "2 vs 0",
-          label == "overall_adhere" ~ "Additional Day of Adherence",
-          label == "overall_safety" ~ "Adverse Event",
-          TRUE ~ label)) %>%
-      filter(!is.na(label))) %>%
-  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
-  bold_p(t = 0.05)
-```
-

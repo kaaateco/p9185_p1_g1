@@ -43,11 +43,11 @@ baseline <- read.csv("baseline.csv") %>%
   dplyr::select(-X) %>%
   mutate(carryover_period2 = period1,
          carryover_period3 = period2,
-         sequence_ind = case_when(
+         sequence_ind = factor(case_when(
            period1 %in% c("Pill A", "Gel B") & period2 %in% c("Pill A", "Gel B") ~ 0,
            period1 %in% c("Pill A", "Gel C") & period2 %in% c("Pill A", "Gel C") ~ 1,
-           .default = 2),
-         seq = paste0(
+           .default = 2)),
+         seq = factor(paste0(
     case_when(period1 == "Pill A" ~ "A",
               period1 == "Gel B"  ~ "B",
               period1 == "Gel C"  ~ "C"),
@@ -56,7 +56,7 @@ baseline <- read.csv("baseline.csv") %>%
               period2 == "Gel C"  ~ "C"),
     case_when(period3 == "Pill A" ~ "A",
               period3 == "Gel B"  ~ "B",
-              period3 == "Gel C"  ~ "C")),
+              period3 == "Gel C"  ~ "C"))),
     race = factor(case_when(
       race == "black" ~ "Black",
       race == "others" ~ "Other",
@@ -157,7 +157,8 @@ overall_endpoints <- endpoints_long %>%
 merged <- baseline_long %>%
   filter(timepoint == 0) %>%
   dplyr::select(-timepoint, -bloodVL, -skinVL) %>% 
-  left_join(overall_endpoints %>% dplyr::select(-treatment, -carryover), by = c("ptid", "period"))
+  left_join(overall_endpoints %>% dplyr::select(-treatment, -carryover), by = c("ptid", "period")) %>%
+  mutate(overall_safety = factor(ifelse(overall_safety == 1, "Adverse Event", "No Adverse Event")))
 
 baseline_long <- baseline_long %>%
   left_join(overall_endpoints %>% dplyr::select(-treatment, -carryover), by = c("ptid", "period"))
@@ -189,19 +190,30 @@ baseline %>%
 
 No apparent difference in starting value by period or treatment, so looking at change from baseline in PK
 
-Carryover effects and period were excluded for parsimony, as the likelihood ratio test indicated that they did not significantly improve model fit
-
-Notation: $k =$ subject, $i =$ treatment, $j =$ period, 
+Notation: $k =$ subject, $i =$ sequence, $j =$ period, 
 
 $$
 \begin{align}
-Y_{ijk} &= \mu + b_{ik} + \tau_{ij}  + \varepsilon_{ijk},\\
-b_{ik} &\sim N(0, \sigma_k^2), \\
-\varepsilon_{ij} &\sim N(0, \sigma^2), 
+k:& \text{subject}, k = 1,...,180\\
+j:& \text{sequence}, j=0,1,2\\
+i:& \text{period}, i=1,2,3\\
+\pi:& \text{period effect}\\
+\tau:& \text{treatment effect}\\
+\lambda:& \text{sequence/carryover effect}\\
+b:& \text{subject-specific intercepts}\\
+\varepsilon:& \text{residual error}\\
 \end{align}
 $$
 
+
+\alpha_{ijk}:& \text{adverse event indicator}\\
+\beta_{ijk}:& \text{total days of adherence (out of 28)}\\
+
 ### Blood PK Change by Treatment
+
+$$
+Y_{ik} = \mu + b_{ik} + \pi_i + \tau_{i}  + \lambda_i+\varepsilon_{ik}, \quad b_{ik} \sim N(0, \sigma_b^2), \quad \varepsilon_{ik} \sim N(0, \sigma^2)
+$$
 
 ```{r}
 ggplot(baseline_long) +
@@ -216,25 +228,24 @@ Findings: Significantly less decrease in gels vs pill A
 
 ```{r}
 
-model_large <- lmer(bloodVL_change ~ treatment + sequence_ind + period + (1|ptid), data = merged)
+# model_large <- lmer(bloodVL_change ~ treatment + sequence_ind + period + (1|ptid), data = merged)
+# 
+# model <- lmer(bloodVL_change ~ treatment + period + (1|ptid), data = merged)
+# 
+# model_comparison <- anova(model, model_large)
+# print(model_comparison)
 
-model <- lmer(bloodVL_change ~ treatment + period + (1|ptid), data = merged)
+model <- lmer(bloodVL_change ~ treatment + period + sequence_ind + (1|ptid), data = merged)
 
-model_comparison <- anova(model, model_large)
-print(model_comparison)
-
-summary(model)
+# summary(model)
 tbl_regression(
   model,
-  estimate_fun = function(x) style_number(x, digits = 1)
-) %>%
-  # Remove reference rows
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
   add_global_p() %>%
-  # Custom labels
-  modify_table_body(
-    ~.x %>% 
-      mutate(
-        label = case_when(
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0)",
           label == "Gel B" ~ "Gel B vs Pill A",
           label == "Gel C" ~ "Gel C vs Pill A",
           label == "period2" ~ "Period 2 vs Period 1",
@@ -243,38 +254,14 @@ tbl_regression(
           label == "period" ~ "Period",      # Remove header
           label == "Pill A" ~ NA_character_,
           label == "period1" ~ NA_character_,
-          TRUE ~ label
-        )
-      ) %>%
-      filter(!is.na(label))  # Remove rows with NA labels
-  ) %>%
-  modify_header(
-    label ~ "**Comparison**",
-    estimate ~ "**Beta**"
-  ) %>%
+          label == "sequence_ind" ~ "Sequence",
+          label == "0" ~ NA_character_,
+          label == "1" ~ "Sequence 1 vs Sequence 0",
+          label == "2" ~ "Sequence 2 vs Sequence 0",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
   bold_p(t = 0.05)
-
-tbl_regression(model)
-# 
-# tbl_regression(
-#     model,
-#     tidy_fun = broom.mixed::tidy,
-#     include = c(`(Intercept)`, `treatmentGel B`, `treatmentGel C`),
-#       label = list(
-#         `(Intercept)` ~ "Intercept",
-#         `treatmentGel B` ~ "Gel B (vs Pill A)",
-#         `treatmentGel C` ~ "Gel C (vs Pill A)")
-#     ) %>%
-#       modify_column_unhide(std.error)
-# vc <- VarCorr(model)
-# vc_table <- data.frame(
-#   Component = c("Intercept (id)", "Residual"),
-#   Variance  = c(as.numeric(vc[1, "Variance"]),
-#                 as.numeric(vc[2, "Variance"])),
-#   SD        = c(as.numeric(vc[1, "StdDev"]),
-#                 as.numeric(vc[2, "StdDev"])))
-# kable(vc_table, digits = 3,
-#       caption = "Variance Components")
 ```
 
 ```{r}
@@ -367,6 +354,10 @@ grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
 
 ### Skin PK Change by Treatment
 
+$$
+Y_{i} = \mu + \pi_i + \tau_{i}  + \lambda_{i} + \varepsilon_{i}, \quad \varepsilon_{i} \sim N(0, \sigma^2)
+$$
+
 ```{r}
 ggplot(baseline_long) +
   geom_line(aes(x = timepoint, y = skinVL, group = ptid, color = seq), alpha = 0.5) +
@@ -391,131 +382,144 @@ Findings: Significantly less decrease in gels vs pill A
 # 
 # summary(model)
 
-model_large <- lmer(skinVL_change ~ treatment + sequence_ind + period + (1|ptid), data = merged)
-summary(model_large)
-
-model <- lmer(skinVL_change ~ treatment + period + (1|ptid), data = merged)
-
-model_comparison <- anova(model, model_large)
-print(model_comparison)
-
-summary(model)
-tbl_regression(model)
-
-
-model <- lm(skinVL_change ~ treatment + period, data = merged)
-tbl_regression(model) %>%
-       modify_column_unhide(std.error)
+# model_large <- lmer(skinVL_change ~ treatment + sequence_ind + period + (1|ptid), data = merged)
+# summary(model_large)
 # 
-# tbl_regression(
-#     model,
-#     tidy_fun = broom.mixed::tidy,
-#     include = c(`(Intercept)`, `treatmentGel B`, `treatmentGel C`),
-#       label = list(
-#         `(Intercept)` ~ "Intercept",
-#         `treatmentGel B` ~ "Gel B (vs Pill A)",
-#         `treatmentGel C` ~ "Gel C (vs Pill A)")
-#     ) %>%
-#       modify_column_unhide(std.error)
-# vc <- VarCorr(model)
-# vc_table <- data.frame(
-#   Component = c("Intercept (id)", "Residual"),
-#   Variance  = c(as.numeric(vc[1, "Variance"]),
-#                 as.numeric(vc[2, "Variance"])),
-#   SD        = c(as.numeric(vc[1, "StdDev"]),
-#                 as.numeric(vc[2, "StdDev"])))
-# kable(vc_table, digits = 3,
-#       caption = "Variance Components")
+# model <- lmer(skinVL_change ~ treatment + period + (1|ptid), data = merged)
+# 
+# model_comparison <- anova(model, model_large)
+# print(model_comparison)
+# 
+# summary(model)
+# tbl_regression(model)
+# 
+# 
+# model <- lm(skinVL_change ~ treatment + period, data = merged)
+# tbl_regression(model) %>%
+#        modify_column_unhide(std.error)
+
+#model <- lmer(skinVL_change ~ treatment + period + sequence_ind + (1|ptid), data = merged)
+# singular
+#summary(model)
+
+model <- lm(skinVL_change ~ treatment + period + sequence_ind, data = merged)
+
+# summary(model)
+tbl_regression(
+  model,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  add_global_p() %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "0" ~ NA_character_,
+          label == "1" ~ "Sequence 1 vs Sequence 0",
+          label == "2" ~ "Sequence 2 vs Sequence 0",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)
 ```
 
 
-<!-- ```{r} -->
-<!-- resid_scaled <- residuals(model, scaled = TRUE) -->
-<!-- fitted_vals <- fitted(model) -->
-<!-- # random_intercepts <- ranef(model)$ptid[, 1] -->
-<!-- #model_data <- model@frame -->
+```{r}
+resid_scaled <- residuals(model, scaled = TRUE)
+fitted_vals <- fitted(model)
+# random_intercepts <- ranef(model)$ptid[, 1]
+#model_data <- model@frame
 
-<!-- # Plot 1: Q-Q Plot for Scaled Residuals with confidence bands -->
-<!-- p1 <- ggplot(data.frame(resid = resid_scaled), aes(sample = resid)) + -->
-<!--   stat_qq(alpha = 0.5) + -->
-<!--   stat_qq_line(color = "red", linewidth = 1) + -->
-<!--   labs(title = "Q-Q Plot: Scaled Residuals", -->
-<!--        x = "Theoretical Quantiles", -->
-<!--        y = "Sample Quantiles") + -->
-<!--   theme_bw() + -->
-<!--   theme(plot.title = element_text(hjust = 0.5, face = "bold")) -->
+# Plot 1: Q-Q Plot for Scaled Residuals with confidence bands
+p1 <- ggplot(data.frame(resid = resid_scaled), aes(sample = resid)) +
+  stat_qq(alpha = 0.5) +
+  stat_qq_line(color = "red", linewidth = 1) +
+  labs(title = "Q-Q Plot: Scaled Residuals",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-<!-- # Plot 2: Histogram of Scaled Residuals with rug -->
-<!-- p2 <- ggplot(data.frame(resid = resid_scaled), aes(x = resid)) + -->
-<!--   geom_histogram(aes(y = after_stat(density)), bins = 30,  -->
-<!--                  fill = "skyblue", color = "black", alpha = 0.7) + -->
-<!--   geom_density(color = "blue", linewidth = 1) + -->
-<!--   stat_function(fun = dnorm, args = list(mean = 0, sd = 1),  -->
-<!--                 color = "red", linewidth = 1, linetype = "dashed") + -->
-<!--   geom_rug(alpha = 0.3) + -->
-<!--   labs(title = "Histogram: Scaled Residuals", -->
-<!--        x = "Scaled Residuals", -->
-<!--        y = "Density", -->
-<!--        caption = "Red line = Normal(0,1), Blue line = Kernel density") + -->
-<!--   theme_bw() + -->
-<!--   theme(plot.title = element_text(hjust = 0.5, face = "bold")) -->
+# Plot 2: Histogram of Scaled Residuals with rug
+p2 <- ggplot(data.frame(resid = resid_scaled), aes(x = resid)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30,
+                 fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_density(color = "blue", linewidth = 1) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1),
+                color = "red", linewidth = 1, linetype = "dashed") +
+  geom_rug(alpha = 0.3) +
+  labs(title = "Histogram: Scaled Residuals",
+       x = "Scaled Residuals",
+       y = "Density",
+       caption = "Red line = Normal(0,1), Blue line = Kernel density") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-<!-- # # Plot 3: Q-Q Plot for Random Intercepts -->
-<!-- # p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) + -->
-<!-- #   stat_qq(alpha = 0.5) + -->
-<!-- #   stat_qq_line(color = "red", linewidth = 1) + -->
-<!-- #   labs(title = "Q-Q Plot: Random Intercepts", -->
-<!-- #        x = "Theoretical Quantiles", -->
-<!-- #        y = "Sample Quantiles") + -->
-<!-- #   theme_bw() + -->
-<!-- #   theme(plot.title = element_text(hjust = 0.5, face = "bold")) -->
-<!-- #  -->
-<!-- # # Plot 4: Histogram of Random Intercepts with rug -->
-<!-- # p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) + -->
-<!-- #   geom_histogram(aes(y = after_stat(density)), bins = 20,  -->
-<!-- #                  fill = "lightgreen", color = "black", alpha = 0.7) + -->
-<!-- #   geom_density(color = "darkgreen", linewidth = 1) + -->
-<!-- #   stat_function(fun = dnorm,  -->
-<!-- #                 args = list(mean = 0, sd = sd(random_intercepts)),  -->
-<!-- #                 color = "red", linewidth = 1, linetype = "dashed") + -->
-<!-- #   geom_rug(alpha = 0.3) + -->
-<!-- #   labs(title = "Histogram: Random Intercepts", -->
-<!-- #        x = "Random Intercepts (ptid)", -->
-<!-- #        y = "Density", -->
-<!-- #        caption = "Red line = Normal fit, Green line = Kernel density") + -->
-<!-- #   theme_bw() + -->
-<!-- #   theme(plot.title = element_text(hjust = 0.5, face = "bold")) -->
+# # Plot 3: Q-Q Plot for Random Intercepts
+# p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) +
+#   stat_qq(alpha = 0.5) +
+#   stat_qq_line(color = "red", linewidth = 1) +
+#   labs(title = "Q-Q Plot: Random Intercepts",
+#        x = "Theoretical Quantiles",
+#        y = "Sample Quantiles") +
+#   theme_bw() +
+#   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+#
+# # Plot 4: Histogram of Random Intercepts with rug
+# p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) +
+#   geom_histogram(aes(y = after_stat(density)), bins = 20,
+#                  fill = "lightgreen", color = "black", alpha = 0.7) +
+#   geom_density(color = "darkgreen", linewidth = 1) +
+#   stat_function(fun = dnorm,
+#                 args = list(mean = 0, sd = sd(random_intercepts)),
+#                 color = "red", linewidth = 1, linetype = "dashed") +
+#   geom_rug(alpha = 0.3) +
+#   labs(title = "Histogram: Random Intercepts",
+#        x = "Random Intercepts (ptid)",
+#        y = "Density",
+#        caption = "Red line = Normal fit, Green line = Kernel density") +
+#   theme_bw() +
+#   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-<!-- # Plot 5: Residuals vs. Fitted Values with jitter -->
-<!-- p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_scaled),  -->
-<!--              aes(x = fitted, y = resid)) + -->
-<!--   geom_point(alpha = 0.5, position = position_jitter(width = 0.5, height = 0)) + -->
-<!--   geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) + -->
-<!--   #geom_smooth(se = TRUE, color = "blue", method = "loess", linewidth = 1) + -->
-<!--   labs(title = "Residuals vs. Fitted Values", -->
-<!--        x = "Fitted Values", -->
-<!--        y = "Scaled Residuals") + -->
-<!--   theme_bw() + -->
-<!--   theme(plot.title = element_text(hjust = 0.5, face = "bold")) -->
+# Plot 5: Residuals vs. Fitted Values with jitter
+p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_scaled),
+             aes(x = fitted, y = resid)) +
+  geom_point(alpha = 0.5, position = position_jitter(width = 0.5, height = 0)) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  #geom_smooth(se = TRUE, color = "blue", method = "loess", linewidth = 1) +
+  labs(title = "Residuals vs. Fitted Values",
+       x = "Fitted Values",
+       y = "Scaled Residuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-<!-- # Plot 6: Residuals by Treatment with individual points -->
-<!-- p6 <- ggplot(data.frame(treatment = model_data$treatment,  -->
-<!--                         resid = resid_scaled), -->
-<!--              aes(x = treatment, y = resid)) + -->
-<!--   geom_boxplot(fill = "lightblue", alpha = 0.7, outlier.shape = NA) + -->
-<!--   #geom_jitter(width = 0.2, alpha = 0.3, color = "darkblue") + -->
-<!--   geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) + -->
-<!--   labs(title = "Residuals by Treatment", -->
-<!--        x = "Treatment", -->
-<!--        y = "Scaled Residuals") + -->
-<!--   theme_bw() + -->
-<!--   theme(plot.title = element_text(hjust = 0.5, face = "bold")) -->
+# Plot 6: Residuals by Treatment with individual points
+# p6 <- ggplot(data.frame(treatment = model_data$treatment,
+#                         resid = resid_scaled),
+#              aes(x = treatment, y = resid)) +
+#   geom_boxplot(fill = "lightblue", alpha = 0.7, outlier.shape = NA) +
+#   #geom_jitter(width = 0.2, alpha = 0.3, color = "darkblue") +
+#   geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+#   labs(title = "Residuals by Treatment",
+#        x = "Treatment",
+#        y = "Scaled Residuals") +
+#   theme_bw() +
+#   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
-<!-- # Display all plots -->
-<!-- grid.arrange(p1, p2, #p3, p4,  -->
-<!--              p5, p6, ncol = 2) -->
+# Display all plots
+grid.arrange(p1, p2, #p3, p4,
+             p5, #p6,
+             ncol = 2)
 
-<!-- ``` -->
+```
 
 
 
@@ -609,17 +613,19 @@ tbl_regression(model) %>%
 ## assess the correlation of PK with adherence measures and the occurrence of adverse events {.tabset}
 
 
-Carryover effects and period were excluded for parsimony, as the likelihood ratio test indicated that they did not significantly improve model fit
-
-Q: include treatment X adherence and treatment X AE interaction terms???
-
 ### Skin PK
+
+
+$$
+Y_{i} = \mu + \pi_i + \tau_{i}  + \lambda_{i} + \alpha_{i} + \beta_{i} +\varepsilon_{i}, \quad \varepsilon_{i} \sim N(0, \sigma^2)
+$$
 
 ```{r}
 ggplot(merged) +
-  geom_point(aes(y = skinVL_change, x = overall_adhere, color = period)) +
+  geom_point(aes(y = skinVL_change, x = overall_adhere, color = seq)) +
   facet_wrap(~ overall_safety + treatment) +
-  theme_bw()
+  theme_bw() +
+  labs(x = "Overall Adherence", y = "Change in Skin PK", color = "Sequence")
 
 ggplot(baseline_long) +
   geom_line(aes(x = timepoint, y = skinVL, group = ptid, color = overall_safety), alpha = 0.5) +
@@ -630,113 +636,150 @@ ggplot(baseline_long) +
 Skin/Blood PK ~ Random Intercept (Subject) + Treatment + Adherence + Carryover + Period
 
 ```{r}
-model_large <- lme(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + period, method="ML",
-           data = merged,
-          random=reStruct(~ 1 | ptid))
+# model_large <- lme(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + period, method="ML",
+#            data = merged,
+#           random=reStruct(~ 1 | ptid))
+# 
+# model <- lme(skinVL_change ~ treatment + overall_adhere  + overall_safety, method="ML",
+#            data = merged,
+#           random=reStruct(~ 1 | ptid))
+# 
+# model_comparison <- anova(model, model_large)
+# print(model_comparison)
+# 
+# summary(model)
 
-model <- lme(skinVL_change ~ treatment + overall_adhere  + overall_safety, method="ML",
-           data = merged,
-          random=reStruct(~ 1 | ptid))
-
-model_comparison <- anova(model, model_large)
-print(model_comparison)
+model <- lm(skinVL_change ~ treatment + overall_adhere  + overall_safety + sequence_ind + period, data = merged)
 
 summary(model)
+
+tbl_regression(
+  model,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  add_global_p() %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)
 ```
 
 
-```{r}
+<!-- ```{r} -->
 
-# Get residuals (various types available in nlme)
-resid_response <- residuals(model, type = "response")      # Raw residuals
-resid_pearson <- residuals(model, type = "pearson")        # Standardized (Pearson)
-resid_normalized <- residuals(model, type = "normalized")  # Normalized residuals
+<!-- # Get residuals (various types available in nlme) -->
+<!-- resid_response <- residuals(model, type = "response")      # Raw residuals -->
+<!-- resid_pearson <- residuals(model, type = "pearson")        # Standardized (Pearson) -->
+<!-- resid_normalized <- residuals(model, type = "normalized")  # Normalized residuals -->
 
-# Get fitted values
-fitted_vals <- fitted(model)
+<!-- # Get fitted values -->
+<!-- fitted_vals <- fitted(model) -->
 
-# Extract random effects (BLUPs for patient intercepts)
-random_effects <- ranef(model)
-random_intercepts <- random_effects[, "(Intercept)"]
+<!-- # Extract random effects (BLUPs for patient intercepts) -->
+<!-- random_effects <- ranef(model) -->
+<!-- random_intercepts <- random_effects[, "(Intercept)"] -->
 
-# Q-Q plot for normalized residuals (ggplot version)
-p1 <- ggplot(data.frame(resid = resid_normalized), aes(sample = resid)) +
-  stat_qq() +
-  stat_qq_line(color = "red") +
-  labs(title = "Q-Q Plot: Normalized Residuals",
-       x = "Theoretical Quantiles",
-       y = "Sample Quantiles") +
-  theme_bw()
+<!-- # Q-Q plot for normalized residuals (ggplot version) -->
+<!-- p1 <- ggplot(data.frame(resid = resid_normalized), aes(sample = resid)) + -->
+<!--   stat_qq() + -->
+<!--   stat_qq_line(color = "red") + -->
+<!--   labs(title = "Q-Q Plot: Normalized Residuals", -->
+<!--        x = "Theoretical Quantiles", -->
+<!--        y = "Sample Quantiles") + -->
+<!--   theme_bw() -->
 
-# Histogram of normalized residuals
-p2 <- ggplot(data.frame(resid = resid_normalized), aes(x = resid)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 30, 
-                 fill = "skyblue", color = "black") +
-  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), 
-                color = "red", linewidth = 1) +
-  labs(title = "Histogram: Normalized Residuals",
-       x = "Normalized Residuals",
-       y = "Density") +
-  theme_bw()
+<!-- # Histogram of normalized residuals -->
+<!-- p2 <- ggplot(data.frame(resid = resid_normalized), aes(x = resid)) + -->
+<!--   geom_histogram(aes(y = after_stat(density)), bins = 30,  -->
+<!--                  fill = "skyblue", color = "black") + -->
+<!--   stat_function(fun = dnorm, args = list(mean = 0, sd = 1),  -->
+<!--                 color = "red", linewidth = 1) + -->
+<!--   labs(title = "Histogram: Normalized Residuals", -->
+<!--        x = "Normalized Residuals", -->
+<!--        y = "Density") + -->
+<!--   theme_bw() -->
 
-# Q-Q plot for random intercepts (ggplot version)
-p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) +
-  stat_qq() +
-  stat_qq_line(color = "red") +
-  labs(title = "Q-Q Plot: Random Intercepts",
-       x = "Theoretical Quantiles",
-       y = "Sample Quantiles") +
-  theme_bw()
+<!-- # Q-Q plot for random intercepts (ggplot version) -->
+<!-- p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) + -->
+<!--   stat_qq() + -->
+<!--   stat_qq_line(color = "red") + -->
+<!--   labs(title = "Q-Q Plot: Random Intercepts", -->
+<!--        x = "Theoretical Quantiles", -->
+<!--        y = "Sample Quantiles") + -->
+<!--   theme_bw() -->
 
-# Histogram of random intercepts
-p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 20, 
-                 fill = "lightgreen", color = "black") +
-  stat_function(fun = dnorm, 
-                args = list(mean = 0, sd = sd(random_intercepts)), 
-                color = "red", linewidth = 1) +
-  labs(title = "Histogram: Random Intercepts",
-       x = "Random Intercepts (ptid)",
-       y = "Density") +
-  theme_bw()
+<!-- # Histogram of random intercepts -->
+<!-- p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) + -->
+<!--   geom_histogram(aes(y = after_stat(density)), bins = 20,  -->
+<!--                  fill = "lightgreen", color = "black") + -->
+<!--   stat_function(fun = dnorm,  -->
+<!--                 args = list(mean = 0, sd = sd(random_intercepts)),  -->
+<!--                 color = "red", linewidth = 1) + -->
+<!--   labs(title = "Histogram: Random Intercepts", -->
+<!--        x = "Random Intercepts (ptid)", -->
+<!--        y = "Density") + -->
+<!--   theme_bw() -->
 
-# Residuals vs. Fitted values
-p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_normalized), 
-             aes(x = fitted, y = resid)) +
-  geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  geom_smooth(se = TRUE, color = "blue", method = "loess") +
-  labs(title = "Residuals vs. Fitted Values",
-       x = "Fitted Values",
-       y = "Normalized Residuals") +
-  theme_bw()
+<!-- # Residuals vs. Fitted values -->
+<!-- p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_normalized),  -->
+<!--              aes(x = fitted, y = resid)) + -->
+<!--   geom_point(alpha = 0.5) + -->
+<!--   geom_hline(yintercept = 0, color = "red", linetype = "dashed") + -->
+<!--   geom_smooth(se = TRUE, color = "blue", method = "loess") + -->
+<!--   labs(title = "Residuals vs. Fitted Values", -->
+<!--        x = "Fitted Values", -->
+<!--        y = "Normalized Residuals") + -->
+<!--   theme_bw() -->
 
-# Extract model data
-model_data <- model$data
+<!-- # Extract model data -->
+<!-- model_data <- model$data -->
 
-# Residuals by treatment
-p6 <- ggplot(data.frame(treatment = model_data$treatment, 
-                        resid = resid_normalized),
-             aes(x = treatment, y = resid)) +
-  geom_boxplot(fill = "lightblue") +
-  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  labs(title = "Residuals by Treatment",
-       x = "Treatment",
-       y = "Normalized Residuals") +
-  theme_bw()
+<!-- # Residuals by treatment -->
+<!-- p6 <- ggplot(data.frame(treatment = model_data$treatment,  -->
+<!--                         resid = resid_normalized), -->
+<!--              aes(x = treatment, y = resid)) + -->
+<!--   geom_boxplot(fill = "lightblue") + -->
+<!--   geom_hline(yintercept = 0, color = "red", linetype = "dashed") + -->
+<!--   labs(title = "Residuals by Treatment", -->
+<!--        x = "Treatment", -->
+<!--        y = "Normalized Residuals") + -->
+<!--   theme_bw() -->
 
 
-# Display ggplot diagnostics
-grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
-```
+<!-- # Display ggplot diagnostics -->
+<!-- grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2) -->
+<!-- ``` -->
 
 ### Blood PK
+
+
+$$
+Y_{ik} = \mu + b_{ik} + \pi_i + \tau_{i}  + \lambda_{i} + \alpha_{ik} + \beta_{ik} + \varepsilon_{ik}, \quad b_{ik} \sim N(0, \sigma_b^2), \quad \varepsilon_{ik} \sim N(0, \sigma^2)
+$$
 
 ```{r}
 ggplot(merged) +
   geom_point(aes(y = bloodVL_change, x = overall_adhere, color = seq)) +
   facet_wrap(~ overall_safety + treatment) +
-  theme_bw()
+  theme_bw() +
+  labs(x = "Overall Adherence", y = "Change in Blood PK", color = "Sequence")
 
 ggplot(baseline_long) +
   geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = overall_safety), alpha = 0.5) +
@@ -747,166 +790,198 @@ ggplot(baseline_long) +
 
 ```{r}
 
-model_large <- lme(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + period, method="ML",
-           data = merged,
-          random=reStruct(~ 1 | ptid))
-
-model_large2 <- lme(bloodVL_change ~ treatment*overall_adhere + 
-                      treatment*overall_safety, method="ML",
-           data = merged,
-          random=reStruct(~ 1 | ptid))
-
-model <- lme(bloodVL_change ~ treatment + overall_adhere  + overall_safety, method="ML",
-           data = merged,
-          random=reStruct(~ 1 | ptid))
-
-model_comparison <- anova(model, model_large2)
-print(model_comparison)
-
-summary(model)
-summary(model_large2)
-
-
-model <- model_large2
-```
-
-
-```{r}
-
-# Get the range of adherence values
-adhere_range <- range(merged$overall_adhere, na.rm = TRUE)
-adhere_seq <- seq(adhere_range[1], adhere_range[2], length.out = 50)
-
-# Get unique safety levels
-safety_levels <- unique(merged$overall_safety)
-pred_data <- expand.grid(treatment = c("Pill A", "Gel B", "Gel C"),
-                         overall_adhere = adhere_seq,
-                         overall_safety = safety_levels)
-pred_data$predicted <- predict(model, newdata = pred_data, level = 0)
-emm_grid <- emmeans(model, ~ treatment * overall_adhere * overall_safety,
-                    at = list(overall_adhere = adhere_seq))
-pred_df <- as.data.frame(emm_grid)
-
-pred_df_labeled <- pred_df %>%
-  rename(predicted = emmean, se = SE) %>%
-  mutate(safety_label = ifelse(overall_safety == 0, 
-                                "No Safety Issues (safety = 0)", 
-                                "Safety Issues (safety = 1)"))
-
-p3 <- ggplot(pred_df_labeled, aes(x = overall_adhere, y = predicted, 
-                                   color = treatment, fill = treatment)) +
-  geom_line(linewidth = 1.2) +
-  geom_ribbon(aes(ymin = predicted - 1.96 * se, 
-                  ymax = predicted + 1.96 * se),
-              alpha = 0.2, color = NA) +
-  facet_wrap(~ safety_label, ncol = 2) +
-  labs(title = "Treatment Effects: Adherence × Safety Interaction",
-       x = "Overall Adherence",
-       y = "Predicted Viral Load Reduction",
-       color = "Treatment",
-       fill = "Treatment") +
-  theme_bw() +
-  theme(legend.position = "bottom",
-        plot.title = element_text(face = "bold", hjust = 0.5),
-        strip.text = element_text(face = "bold", size = 11)) +
-  scale_color_manual(values = c("Pill A" = "#E41A1C", 
-                                 "Gel B" = "#377EB8", 
-                                 "Gel C" = "#4DAF4A")) +
-  scale_fill_manual(values = c("Pill A" = "#E41A1C", 
-                                "Gel B" = "#377EB8", 
-                                "Gel C" = "#4DAF4A"))
-
-
-
-print(p3)
+# model_large <- lme(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + period, method="ML",
+#            data = merged,
+#           random=reStruct(~ 1 | ptid))
 # 
-# # Save plots
-ggsave("interaction_by_safety.png", p3, width = 12, height = 6, dpi = 300)
+# model_large2 <- lme(bloodVL_change ~ treatment*overall_adhere + 
+#                       treatment*overall_safety, method="ML",
+#            data = merged,
+#           random=reStruct(~ 1 | ptid))
+# 
+# model <- lme(bloodVL_change ~ treatment + overall_adhere  + overall_safety, method="ML",
+#            data = merged,
+#           random=reStruct(~ 1 | ptid))
+# 
+# model_comparison <- anova(model, model_large2)
+# print(model_comparison)
+# 
+# summary(model)
+# summary(model_large2)
+# 
+# 
+# model <- model_large2
 
+model <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + period + (1 | ptid),
+              data = merged)
 
+#summary(model)
+
+tbl_regression(
+  model,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  add_global_p() %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)
 ```
 
-```{r}
 
-# Get residuals (various types available in nlme)
-resid_response <- residuals(model, type = "response")      # Raw residuals
-resid_pearson <- residuals(model, type = "pearson")        # Standardized (Pearson)
-resid_normalized <- residuals(model, type = "normalized")  # Normalized residuals
+<!-- ```{r} -->
 
-# Get fitted values
-fitted_vals <- fitted(model)
+<!-- # Get the range of adherence values -->
+<!-- adhere_range <- range(merged$overall_adhere, na.rm = TRUE) -->
+<!-- adhere_seq <- seq(adhere_range[1], adhere_range[2], length.out = 50) -->
 
-# Extract random effects (BLUPs for patient intercepts)
-random_effects <- ranef(model)
-random_intercepts <- random_effects[, "(Intercept)"]
+<!-- # Get unique safety levels -->
+<!-- safety_levels <- unique(merged$overall_safety) -->
+<!-- pred_data <- expand.grid(treatment = c("Pill A", "Gel B", "Gel C"), -->
+<!--                          overall_adhere = adhere_seq, -->
+<!--                          overall_safety = safety_levels) -->
+<!-- pred_data$predicted <- predict(model, newdata = pred_data, level = 0) -->
+<!-- emm_grid <- emmeans(model, ~ treatment * overall_adhere * overall_safety, -->
+<!--                     at = list(overall_adhere = adhere_seq)) -->
+<!-- pred_df <- as.data.frame(emm_grid) -->
 
-# Q-Q plot for normalized residuals (ggplot version)
-p1 <- ggplot(data.frame(resid = resid_normalized), aes(sample = resid)) +
-  stat_qq() +
-  stat_qq_line(color = "red") +
-  labs(title = "Q-Q Plot: Normalized Residuals",
-       x = "Theoretical Quantiles",
-       y = "Sample Quantiles") +
-  theme_bw()
+<!-- pred_df_labeled <- pred_df %>% -->
+<!--   rename(predicted = emmean, se = SE) %>% -->
+<!--   mutate(safety_label = ifelse(overall_safety == 0,  -->
+<!--                                 "No Safety Issues (safety = 0)",  -->
+<!--                                 "Safety Issues (safety = 1)")) -->
 
-# Histogram of normalized residuals
-p2 <- ggplot(data.frame(resid = resid_normalized), aes(x = resid)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 30, 
-                 fill = "skyblue", color = "black") +
-  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), 
-                color = "red", linewidth = 1) +
-  labs(title = "Histogram: Normalized Residuals",
-       x = "Normalized Residuals",
-       y = "Density") +
-  theme_bw()
-
-# Q-Q plot for random intercepts (ggplot version)
-p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) +
-  stat_qq() +
-  stat_qq_line(color = "red") +
-  labs(title = "Q-Q Plot: Random Intercepts",
-       x = "Theoretical Quantiles",
-       y = "Sample Quantiles") +
-  theme_bw()
-
-# Histogram of random intercepts
-p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) +
-  geom_histogram(aes(y = after_stat(density)), bins = 20, 
-                 fill = "lightgreen", color = "black") +
-  stat_function(fun = dnorm, 
-                args = list(mean = 0, sd = sd(random_intercepts)), 
-                color = "red", linewidth = 1) +
-  labs(title = "Histogram: Random Intercepts",
-       x = "Random Intercepts (ptid)",
-       y = "Density") +
-  theme_bw()
-
-# Residuals vs. Fitted values
-p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_normalized), 
-             aes(x = fitted, y = resid)) +
-  geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  geom_smooth(se = TRUE, color = "blue", method = "loess") +
-  labs(title = "Residuals vs. Fitted Values",
-       x = "Fitted Values",
-       y = "Normalized Residuals") +
-  theme_bw()
-
-# Extract model data
-model_data <- model$data
-
-# Residuals by treatment
-p6 <- ggplot(data.frame(treatment = model_data$treatment, 
-                        resid = resid_normalized),
-             aes(x = treatment, y = resid)) +
-  geom_boxplot(fill = "lightblue") +
-  geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
-  labs(title = "Residuals by Treatment",
-       x = "Treatment",
-       y = "Normalized Residuals") +
-  theme_bw()
+<!-- p3 <- ggplot(pred_df_labeled, aes(x = overall_adhere, y = predicted,  -->
+<!--                                    color = treatment, fill = treatment)) + -->
+<!--   geom_line(linewidth = 1.2) + -->
+<!--   geom_ribbon(aes(ymin = predicted - 1.96 * se,  -->
+<!--                   ymax = predicted + 1.96 * se), -->
+<!--               alpha = 0.2, color = NA) + -->
+<!--   facet_wrap(~ safety_label, ncol = 2) + -->
+<!--   labs(title = "Treatment Effects: Adherence × Safety Interaction", -->
+<!--        x = "Overall Adherence", -->
+<!--        y = "Predicted Viral Load Reduction", -->
+<!--        color = "Treatment", -->
+<!--        fill = "Treatment") + -->
+<!--   theme_bw() + -->
+<!--   theme(legend.position = "bottom", -->
+<!--         plot.title = element_text(face = "bold", hjust = 0.5), -->
+<!--         strip.text = element_text(face = "bold", size = 11)) + -->
+<!--   scale_color_manual(values = c("Pill A" = "#E41A1C",  -->
+<!--                                  "Gel B" = "#377EB8",  -->
+<!--                                  "Gel C" = "#4DAF4A")) + -->
+<!--   scale_fill_manual(values = c("Pill A" = "#E41A1C",  -->
+<!--                                 "Gel B" = "#377EB8",  -->
+<!--                                 "Gel C" = "#4DAF4A")) -->
 
 
-# Display ggplot diagnostics
-grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
-```
+
+<!-- print(p3) -->
+<!-- #  -->
+<!-- # # Save plots -->
+<!-- ggsave("interaction_by_safety.png", p3, width = 12, height = 6, dpi = 300) -->
+
+
+<!-- ``` -->
+
+<!-- ```{r} -->
+
+<!-- # Get residuals (various types available in nlme) -->
+<!-- resid_response <- residuals(model, type = "response")      # Raw residuals -->
+<!-- resid_pearson <- residuals(model, type = "pearson")        # Standardized (Pearson) -->
+<!-- resid_normalized <- residuals(model, type = "normalized")  # Normalized residuals -->
+
+<!-- # Get fitted values -->
+<!-- fitted_vals <- fitted(model) -->
+
+<!-- # Extract random effects (BLUPs for patient intercepts) -->
+<!-- random_effects <- ranef(model) -->
+<!-- random_intercepts <- random_effects[, "(Intercept)"] -->
+
+<!-- # Q-Q plot for normalized residuals (ggplot version) -->
+<!-- p1 <- ggplot(data.frame(resid = resid_normalized), aes(sample = resid)) + -->
+<!--   stat_qq() + -->
+<!--   stat_qq_line(color = "red") + -->
+<!--   labs(title = "Q-Q Plot: Normalized Residuals", -->
+<!--        x = "Theoretical Quantiles", -->
+<!--        y = "Sample Quantiles") + -->
+<!--   theme_bw() -->
+
+<!-- # Histogram of normalized residuals -->
+<!-- p2 <- ggplot(data.frame(resid = resid_normalized), aes(x = resid)) + -->
+<!--   geom_histogram(aes(y = after_stat(density)), bins = 30,  -->
+<!--                  fill = "skyblue", color = "black") + -->
+<!--   stat_function(fun = dnorm, args = list(mean = 0, sd = 1),  -->
+<!--                 color = "red", linewidth = 1) + -->
+<!--   labs(title = "Histogram: Normalized Residuals", -->
+<!--        x = "Normalized Residuals", -->
+<!--        y = "Density") + -->
+<!--   theme_bw() -->
+
+<!-- # Q-Q plot for random intercepts (ggplot version) -->
+<!-- p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) + -->
+<!--   stat_qq() + -->
+<!--   stat_qq_line(color = "red") + -->
+<!--   labs(title = "Q-Q Plot: Random Intercepts", -->
+<!--        x = "Theoretical Quantiles", -->
+<!--        y = "Sample Quantiles") + -->
+<!--   theme_bw() -->
+
+<!-- # Histogram of random intercepts -->
+<!-- p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) + -->
+<!--   geom_histogram(aes(y = after_stat(density)), bins = 20,  -->
+<!--                  fill = "lightgreen", color = "black") + -->
+<!--   stat_function(fun = dnorm,  -->
+<!--                 args = list(mean = 0, sd = sd(random_intercepts)),  -->
+<!--                 color = "red", linewidth = 1) + -->
+<!--   labs(title = "Histogram: Random Intercepts", -->
+<!--        x = "Random Intercepts (ptid)", -->
+<!--        y = "Density") + -->
+<!--   theme_bw() -->
+
+<!-- # Residuals vs. Fitted values -->
+<!-- p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_normalized),  -->
+<!--              aes(x = fitted, y = resid)) + -->
+<!--   geom_point(alpha = 0.5) + -->
+<!--   geom_hline(yintercept = 0, color = "red", linetype = "dashed") + -->
+<!--   geom_smooth(se = TRUE, color = "blue", method = "loess") + -->
+<!--   labs(title = "Residuals vs. Fitted Values", -->
+<!--        x = "Fitted Values", -->
+<!--        y = "Normalized Residuals") + -->
+<!--   theme_bw() -->
+
+<!-- # Extract model data -->
+<!-- model_data <- model$data -->
+
+<!-- # Residuals by treatment -->
+<!-- p6 <- ggplot(data.frame(treatment = model_data$treatment,  -->
+<!--                         resid = resid_normalized), -->
+<!--              aes(x = treatment, y = resid)) + -->
+<!--   geom_boxplot(fill = "lightblue") + -->
+<!--   geom_hline(yintercept = 0, color = "red", linetype = "dashed") + -->
+<!--   labs(title = "Residuals by Treatment", -->
+<!--        x = "Treatment", -->
+<!--        y = "Normalized Residuals") + -->
+<!--   theme_bw() -->
+
+
+<!-- # Display ggplot diagnostics -->
+<!-- grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2) -->
+<!-- ``` -->

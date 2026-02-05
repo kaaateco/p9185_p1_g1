@@ -10,6 +10,10 @@ library(tidyverse)
 library(lme4)
 library(lmerTest)
 library(ggplot2)
+library(DHARMa)
+library(gridExtra)
+library(gtsummary)
+library(gt)
 
 ```
 
@@ -82,7 +86,8 @@ ad <- endpoints %>%
 demo <- baseline %>% 
   select("ptid", "age", "race", "gender") %>% 
   mutate(ptid = factor(ptid), 
-         race = factor(race), 
+         race = factor(race, levels = c("white", "black", "others")), 
+        # race = factor(race), 
          gender = factor(gender))
 ad <- ad %>% left_join(demo, by = "ptid")
 ad
@@ -100,22 +105,26 @@ Notes:
 
 ```{r}
 
-ggplot(ad, aes(x = week, y = adherence, group = ptid)) +
-  geom_line(alpha = 0.5) +
-  geom_point(alpha = 0.5) + 
-  labs(x = "Week", y = "Adherence (days/week)", 
-       title = "Individual Patient Adherence Over Time") +
-  theme_minimal()
+# ggplot(ad, aes(x = week, y = adherence, group = ptid)) +
+#  geom_line(alpha = 0.3) +
+#  geom_point(alpha = 0.3) + 
+#  labs(x = "Week", y = "Adherence (days/week)", 
+#       title = "Individual Patient Adherence Over Time") +
+#  theme_minimal()
 
-ggplot(ad, aes(x = week, y = adherence, group = ptid, color = treatment)) +
-  geom_line(alpha = 0.5) +
-  geom_point(alpha = 0.5) + 
+ad_plot <- ggplot(ad, aes(x = week, y = adherence, group = ptid, color = treatment)) +
+  geom_line(alpha = 0.25) +
+  geom_point(alpha = 0.25) + 
   stat_summary(aes(group = treatment), 
                fun = mean, geom = "line", size = 1, color = "black") +
   facet_wrap(~treatment) +
   labs(x = "Week", y = "Adherence (days/week)", 
        title = "Individual Patient Adherence Over Time, by Treatment") +
   theme_minimal()
+ad_plot
+
+ggsave(filename = "results/ad_plot.png", plot = ad_plot, 
+       width = 8, height = 5, dpi = 300)
 
 ```
 
@@ -148,6 +157,31 @@ summary(mod_cat)
   - Initially had trouble converging, switched to using optimizer = "bobyqa", better at handling sparse or extreme binomial data (0/7 or 7/7 adherence, which is common)
   - (Never mind it seems fine now lol)
 
+$$
+\begin{align}
+k:& \text{subject}, k = 1,...,180\\
+j:& \text{sequence}, j=0,1,2\\
+i:& \text{period}, i=1,2,3\\
+h:& \text{week}, h=1,2,3,4\\
+\pi:& \text{period effect}\\
+\tau:& \text{treatment effect}\\
+\lambda:& \text{sequence/carryover effect}\\
+\gamma:& \text{week effect}\\
+b:& \text{subject-specific intercepts}\\
+\varepsilon:& \text{residual error}\\
+\end{align}
+$$
+
+$$
+
+\begin{align}
+& Y_{hik} \sim \text{Binomial}\big(n=7, p_{hik}\big), \\[1em]
+& \text{logit}(p_{hik}) = \mu + b_k + \pi_i + \tau_i + \lambda_{j} + \gamma*h, \\[0.5em]
+& b_k \sim \mathcal{N}(0, \sigma_b^2)
+\end{align}
+
+$$
+
 
 ```{r}
 
@@ -166,19 +200,88 @@ summary(glmm_ad)
 
 ```
 
-```{r, eval = FALSE}
 
-lmm_ad <- lmer(adherence ~ treatment*week + period + sequence + (1 | ptid), 
-               data = ad)
-summary(lmm_ad)
+```{r}
+
+glmm_ad_table <- tbl_regression(
+  glmm_ad,
+  exponentiate = TRUE, 
+  label = list(
+    treatment ~ "Treatment",
+    week ~ "Week",
+    period ~ "Period",
+    sequence ~ "Treatment Sequence")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_table_body(
+    ~ .x %>%
+      mutate(
+        label = case_when(
+          variable == "sequence" & label == "0" ~ "ABC or BAC",
+          variable == "sequence" & label == "1" ~ "CAB or ACB",
+          variable == "sequence" & label == "2" ~ "BCA or CBA",
+          TRUE ~ label)))
+glmm_ad_table
+
+gt_ad_table <- glmm_ad_table %>% as_gt()
+gtsave(gt_ad_table, "results/glmm_ad_results.png")
 
 ```
+
+```{r}
+
+patient_adherence <- ad %>%
+  group_by(ptid, treatment) %>%
+  summarize(
+    high_weeks = sum(adherence >= 6),
+    prop_high = mean(adherence >= 6))
+
+patient_adherence %>% filter(high_weeks >= 9)
+
+ad_bar <- ggplot(patient_adherence, aes(x = high_weeks, fill = treatment)) +
+  geom_bar() +
+  scale_x_continuous(breaks = 0:12) +
+  labs(
+    x = "# of High-Adherence Weeks (>5 days/week)",
+    y = "# of Patients",
+    title = "Distribution of High Medication Adherence Weeks Across Patients, by Treatment") +
+  theme_minimal()
+
+ggsave(filename = "results/ad_bar_strat.png", plot = ad_bar, 
+       width = 8, height = 5, dpi = 300)
+
+```
+
+
+```{r}
+
+# Model Diagnostics
+sim_ad <- simulateResiduals(fittedModel = glmm_ad)
+plot(sim_ad)
+
+png("results/DHARMa_residuals_glmm_ad.png", width = 1200, height = 900, res = 150)
+plot(sim_ad)
+dev.off()
+
+```
+
+
+Model diagnostics were conducted using the DHARMa package in R, which provides simulation-based residuals for generalized linear mixed models. To produce model diagnostics that are appropriate for GLMMs and their assumptions, DHARMa simulates responses from the fitted model, compares the observed responses to the simulated distributions, and transforms the resulting residuals to follow a Uniform(0,1) distribution under correct model specification. 
+
+The first plot is a Uniform quantile–quantile (QQ) plot of DHARMa residuals, which looks really good. Several tests are also included on this plot -- the Kolmogorov–Smirnov (KS) test showed that these residuals have no significant deviation from a Uniform(0,1) distribution (p = 0.104). DHARMa also performed two additional tests for dispersion and outliers, and found no evidence of over or under dispersion, or the presence of outlier residuals. 
+
+The second plot shows DHARMa residuals plotted against model predictions. As you can see, residuals are evenly scattered around 0.5, as desired. No obvious systematic bias or heteroskedasticity. 
+
+Overall, these simulation-based DHARMa diagnostics indicated no worrying deviation from model assumptions: residuals were uniformly distributed, dispersion was appropriate, no outliers were detected, and residuals were evenly distributed across predicted values. 
+
+
+
 
 
 
 ## Secondary Objective #2
 
-Identify demographic factors associated with product adherence and whether they differ by product used (Pill or gel) or regimen (three times a day or once a day)
+Identify demographic factors associated with product adherence and whether they differ by product used (Pill or gel) or regimen (three times a day or once a day). 
 
 ```{r}
 
@@ -200,38 +303,244 @@ ad_next
 
 ```
 
-*PLOTS*
+These are nice plots, but I don't think they are useful for anything specific lol
+```{r, eval = FALSE}
+
+# Gender 
+
+p1 <- ggplot(ad_next, aes(x = week, y = adherence, group = ptid, color = gender)) +
+  geom_line(alpha = 0.25) +
+  geom_point(alpha = 0.25) +
+  stat_summary(aes(group = gender), fun = mean, geom = "line", size = 1, color = "black") +
+  facet_grid(regimen ~ gender) +
+  labs(y = "Adherence (days/week)", x = "Week") +
+  theme_minimal()
+
+p2 <- ggplot(ad_next, aes(x = week, y = adherence, group = ptid, color = gender)) +
+  geom_line(alpha = 0.25) +
+  geom_point(alpha = 0.25) +
+  stat_summary(aes(group = gender), fun = mean, geom = "line", size = 1, color = "black") +
+  facet_grid(product ~ gender) +
+  labs(y = "Adherence (days/week)", x = "Week") +
+  theme_minimal()
+
+grid.arrange(p1, p2, ncol = 2)
+
+
+# Race
+
+p3 <- ggplot(ad_next, aes(x = week, y = adherence, group = ptid, color = race)) +
+  geom_line(alpha = 0.25) +
+  geom_point(alpha = 0.25) +
+  stat_summary(aes(group = race), fun = mean, geom = "line", size = 1, color = "black") +
+  facet_grid(regimen ~ race) +
+  labs(y = "Adherence (days/week)", x = "Week") +
+  theme_minimal()
+
+p4 <- ggplot(ad_next, aes(x = week, y = adherence, group = ptid, color = race)) +
+  geom_line(alpha = 0.25) +
+  geom_point(alpha = 0.25) +
+  stat_summary(aes(group = race), fun = mean, geom = "line", size = 1, color = "black") +
+  facet_grid(product ~ race) +
+  labs(y = "Adherence (days/week)", x = "Week") +
+  theme_minimal()
+
+grid.arrange(p3, p4, ncol = 2)
+
+```
+
 
 ```{r}
 
+# Plots to examine interaction terms
+
+# Gender
+agg <- ad_next %>%
+  group_by(ptid, gender, age, race, product, regimen) %>%
+  summarise(mean_adherence = mean(adherence), .groups = "drop") %>% 
+  mutate(gender = factor(gender, levels = c(0, 1),
+                    labels = c("Male", "Female")))
+
+p1 <- ggplot(agg, aes(x = product, y = mean_adherence, color = gender)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Gender and Product", 
+       y = "Average adherence", x = "Product") +
+  theme_minimal()
+
+p2 <- ggplot(agg, aes(x = regimen, y = mean_adherence, color = gender)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Gender and Regimen", 
+       y = "Average adherence", x = "Regimen") +
+  theme_minimal()
+
+gender_plots <- grid.arrange(p1, p2, ncol = 2)
+
+
+# Age
+
+p3 <- ggplot(agg, aes(x = product, y = mean_adherence, color = race)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Race and Product", 
+       y = "Average adherence", x = "Product") +
+  theme_minimal()
+
+p4 <- ggplot(agg, aes(x = regimen, y = mean_adherence, color = race)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Race and Regimen", 
+       y = "Average adherence", x = "Regimen") +
+  theme_minimal()
+
+race_plots <- grid.arrange(p3, p4, ncol = 2)
+
+ggsave(filename = "results/gender_plots.png", plot = gender_plots, 
+       width = 8, height = 5, dpi = 300)
+ggsave(filename = "results/race_plots.png", plot = race_plots, 
+       width = 8, height = 5, dpi = 300)
+
+```
+
+$$
+
+\begin{align}
+& Y_{hik} \sim \text{Binomial}\big(n=7, p_{hik}\big), \\[1em]
+& \text{logit}(p_{hik}) = \mu + b_k + \pi_i + \lambda_{j} + \gamma*h + \beta_d *d_k + \beta_r * regimen + \beta_p *product\\
+& + \beta_{dr} *d_k * regimen + \beta_{dp} *d_k * product \\[0.5em] 
+& b_k \sim \mathcal{N}(0, \sigma_b^2)
+\end{align}
+
+$$
+
+```{r}
+
+# Centering age to help models converge
+ad_next <- ad_next %>%
+  mutate(age_c = age - mean(age, na.rm = TRUE))
+
+# Including interaction terms
 glmm_demos <- glmer(
-  cbind(adherent, nonadherent) ~ age*product + gender*product + race*product + 
-                   age*regimen + gender*regimen + race*regimen +  
+  cbind(adherent, nonadherent) ~ age_c*product + gender*product + race*product + 
+                   age_c*regimen + gender*regimen + race*regimen +  
                    period + week + sequence + (1 | ptid),
   family = binomial(link = "logit"),
   control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5)), 
   data = ad_next)
 summary(glmm_demos)
 
+# Without interaction terms
+glmm_demos_reduced <- glmer(
+  cbind(adherent, nonadherent) ~ age_c + gender + race + regimen + product +  
+                   period + week + sequence + (1 | ptid),
+  family = binomial(link = "logit"),
+  control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5)), 
+  data = ad_next)
+summary(glmm_demos_reduced)
+
 ```
+
+
+```{r}
+
+glmm_demo_table <- tbl_regression(
+  glmm_demos,
+  exponentiate = TRUE,
+  label = list(
+    week ~ "Week",
+    period ~ "Period",
+    sequence ~ "Treatment Sequence", 
+    age_c ~ "Age", 
+    gender ~ "Gender", 
+    race ~ "Race")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_table_body(
+    ~ .x %>%
+      mutate(
+        label = case_when(
+          variable == "sequence" & label == "0" ~ "ABC or BAC",
+          variable == "sequence" & label == "1" ~ "CAB or ACB",
+          variable == "sequence" & label == "2" ~ "BCA or CBA",
+          variable == "gender" & label == "1" ~ "Female", 
+          variable == "gender" & label == "0" ~ "Male",
+          TRUE ~ label)))
+glmm_demo_table
+
+gt_demo_table <- glmm_demo_table %>% as_gt()
+gtsave(gt_demo_table, "results/glmm_demo_results.png")
+
+```
+
+
+```{r}
+
+glmm_demo_reduced_table <- tbl_regression(
+  glmm_demos_reduced,
+  exponentiate = TRUE,
+  label = list(
+    week ~ "Week",
+    period ~ "Period",
+    sequence ~ "Treatment Sequence", 
+    age_c ~ "Age", 
+    gender ~ "Gender", 
+    race ~ "Race", 
+    regimen ~ "Regimen", 
+    product ~ "Product")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_table_body(
+    ~ .x %>%
+      mutate(
+        label = case_when(
+          variable == "sequence" & label == "0" ~ "ABC or BAC",
+          variable == "sequence" & label == "1" ~ "CAB or ACB",
+          variable == "sequence" & label == "2" ~ "BCA or CBA",
+          variable == "gender" & label == "1" ~ "Female", 
+          variable == "gender" & label == "0" ~ "Male",
+          TRUE ~ label)))
+glmm_demo_reduced_table
+
+gt_demo_reduced_table <- glmm_demo_reduced_table %>% as_gt()
+gtsave(gt_demo_reduced_table, "results/glmm_demo_reduced_results.png")
+
+```
+
 
 ```{r, eval = FALSE}
 
-lmm_demo <- lmer(adherence ~ age*product + gender*product + race*product + 
-                   age*regimen + gender*regimen + race*regimen +  
-                   period + week + sequence + (1 | ptid), 
-                 data = ad_next)
-summary(lmm_demo)
+# LRT model including interaction terms vs. not
+
+lrt <- anova(glmm_demos_reduced, glmm_demos, test = "Chisq")
+
+tidy_anova <- broom::tidy(lrt)
+tidy_anova %>%
+  select(model = term, df, chisq = statistic, p.value) %>%  # rename for clarity
+  tbl_summary(
+    type = all_categorical() ~ "categorical") %>%
+  as_gt() %>% 
+  tab_header(
+    title = "Likelihood Ratio Test: Reduced vs Full Model")
 
 ```
 
 
-
-
-
-## Visualizations
-
 ```{r}
+
+# Model Diagnostics
+sim_demos <- simulateResiduals(fittedModel = glmm_demos_reduced)
+plot(sim_demos)
+
+png("results/DHARMa_residuals_glmm_demos.png", width = 1200, height = 900, res = 150)
+plot(sim_demos)
+dev.off()
+
+```
+
+Looks good! (Already fully explained in primary objective lol)
+
+
+
+## Misc. Visualizations (Not included)
+
+```{r, eval = FALSE}
 
 ggplot(ad, aes(x = treatment, y = adherence, color = treatment)) +
   geom_boxplot() +
@@ -242,39 +551,10 @@ ggplot(ad, aes(x = treatment, y = adherence, color = treatment)) +
 
 ```
 
-```{r}
 
-ggplot(ad_next, aes(x = treatment, y = adherence, color = treatment)) +
-  geom_boxplot() +
-  facet_wrap(race ~ gender) + 
-  theme_minimal() +
-  labs(
-    title = "Adherence by Treatment, Race, and Gender",
-    x = "Treatment",
-    y = "Adherence (days per week)",
-    fill = "Treatment")
+```{r, eval = FALSE}
 
-ggplot(ad_next, aes(x = product, y = adherence, color = regimen)) +
-  geom_boxplot() +
-  theme_minimal() +
-  labs(title = "Adherence by Product and Regimen",
-       x = "Product",
-       y = "Adherence (days)")
-
-```
-
-
-```{r}
-
-ggplot(ad_next, aes(x = age, y = adherence, color = treatment)) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm") +
-  theme_minimal() +
-  labs(title = "Adherence vs Age by Treatment",
-       x = "Age",
-       y = "Adherence (days)")
-
-ggplot(ad_next, aes(x = age, y = adherence, color = product)) +
+age_prod <- ggplot(ad_next, aes(x = age, y = adherence, color = product, fill = product)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm") +
   theme_minimal() +
@@ -282,25 +562,18 @@ ggplot(ad_next, aes(x = age, y = adherence, color = product)) +
        x = "Age",
        y = "Adherence (days)")
 
-ggplot(ad_next, aes(x = age, y = adherence, color = regimen)) +
+age_reg <- ggplot(ad_next, aes(x = age, y = adherence, color = regimen, fill = regimen)) +
   geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm") +
+  geom_smooth(method = "lm",) +
   theme_minimal() +
   labs(title = "Adherence vs Age by Regimen",
        x = "Age",
        y = "Adherence (days)")
 
-ggplot(ad_next, aes(x = week, y = adherence, color = week)) +
-  geom_line() +
-  theme_minimal() 
-#  labs(title = "Adherence vs Age by Regimen",
-#       x = "Age",
-#       y = "Adherence (days)")
+age_plots <- grid.arrange(age_prod, age_reg, ncol = 2)
 
-ggplot(ad_next) +
-  geom_line(aes(x = week, y = adherence, group = ptid, color = period)) +
-  facet_wrap(~ treatment) +
-  theme_bw()
+ggsave(filename = "results/age_plots.png", plot = age_plots, 
+       width = 8, height = 5, dpi = 300)
 
 ```
 

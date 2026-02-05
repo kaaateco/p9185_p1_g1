@@ -431,6 +431,66 @@ tbl_regression(
   bold_p(t = 0.05)
 ```
 
+```{r}
+library(ggplot2)
+library(gridExtra)
+library(MASS)
+
+# Fit your model
+model <- lm(skinVL_change ~ treatment + period + sequence_ind, data = merged)
+
+# Extract residuals and fitted values
+residuals <- residuals(model)
+fitted_values <- fitted(model)
+standardized_residuals <- rstandard(model)
+
+# 1. Q-Q Plot: Scaled Residuals
+p1 <- ggplot(data.frame(residuals = standardized_residuals), aes(sample = residuals)) +
+  stat_qq(color = "gray50", size = 2) +
+  stat_qq_line(color = "red", linewidth = 1) +
+  labs(title = "Q-Q Plot: Scaled Residuals",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_minimal()
+
+# 2. Histogram: Scaled Residuals
+p2 <- ggplot(data.frame(residuals = standardized_residuals), aes(x = residuals)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "lightblue", color = "black") +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), 
+                color = "red", linewidth = 1) +
+  geom_density(color = "blue", linewidth = 1) +
+  labs(title = "Histogram: Scaled Residuals",
+       x = "Scaled Residuals",
+       y = "Density",
+       subtitle = "Red line = Normal(0,1), Blue line = Kernel density") +
+  theme_minimal()
+
+# 3. Residuals vs. Fitted Values
+p3 <- ggplot(data.frame(fitted = fitted_values, residuals = standardized_residuals), 
+             aes(x = fitted, y = residuals)) +
+  geom_point(color = "gray50", size = 2, alpha = 0.6) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 1) +
+  labs(title = "Residuals vs. Fitted Values",
+       x = "Fitted Values",
+       y = "Scaled Residuals") +
+  theme_minimal()
+
+# 4. Residuals by Treatment
+p4 <- ggplot(data.frame(treatment = merged$treatment, residuals = standardized_residuals), 
+             aes(x = treatment, y = residuals)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  labs(title = "Residuals by Treatment",
+       x = "Treatment",
+       y = "Scaled Residuals") +
+  theme_minimal()
+
+# Combine all plots
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+
+```
+
 
 ```{r}
 resid_scaled <- residuals(model, scaled = TRUE)
@@ -453,13 +513,13 @@ p2 <- ggplot(data.frame(resid = resid_scaled), aes(x = resid)) +
   geom_histogram(aes(y = after_stat(density)), bins = 30,
                  fill = "skyblue", color = "black", alpha = 0.7) +
   geom_density(color = "blue", linewidth = 1) +
-  stat_function(fun = dnorm, args = list(mean = 0, sd = 1),
-                color = "red", linewidth = 1, linetype = "dashed") +
+  # stat_function(fun = dnorm, args = list(mean = 0, sd = 1),
+  #               color = "red", linewidth = 1, linetype = "dashed") +
   geom_rug(alpha = 0.3) +
   labs(title = "Histogram: Scaled Residuals",
        x = "Scaled Residuals",
        y = "Density",
-       caption = "Red line = Normal(0,1), Blue line = Kernel density") +
+       caption = "Blue line = Kernel density") +
   theme_bw() +
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
@@ -502,17 +562,17 @@ p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_scaled),
   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
 # Plot 6: Residuals by Treatment with individual points
-# p6 <- ggplot(data.frame(treatment = model_data$treatment,
-#                         resid = resid_scaled),
-#              aes(x = treatment, y = resid)) +
-#   geom_boxplot(fill = "lightblue", alpha = 0.7, outlier.shape = NA) +
-#   #geom_jitter(width = 0.2, alpha = 0.3, color = "darkblue") +
-#   geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
-#   labs(title = "Residuals by Treatment",
-#        x = "Treatment",
-#        y = "Scaled Residuals") +
-#   theme_bw() +
-#   theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+p6 <- ggplot(data.frame(treatment = model_data$treatment,
+                        resid = resid_scaled),
+             aes(x = treatment, y = resid)) +
+  geom_boxplot(fill = "lightblue", alpha = 0.7, outlier.shape = NA) +
+  #geom_jitter(width = 0.2, alpha = 0.3, color = "darkblue") +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  labs(title = "Residuals by Treatment",
+       x = "Treatment",
+       y = "Scaled Residuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
 
 # Display all plots
 grid.arrange(p1, p2, #p3, p4,

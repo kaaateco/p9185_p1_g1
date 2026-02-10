@@ -5,10 +5,10 @@ output:
   pdf_document:
     toc: yes
     toc_depth: 2
-  html_document:
-    df_print: paged
-    toc: yes
-    toc_depth: '2'
+  #html_document:
+  #  df_print: paged
+  #  toc: yes
+   # toc_depth: '2'
 header-includes:
 - \usepackage{fancyhdr}
 - \usepackage{lipsum}

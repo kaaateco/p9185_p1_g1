@@ -231,6 +231,24 @@ gtsave(gt_ad_table, "results/glmm_ad_results.png")
 ```{r}
 
 patient_adherence <- ad %>%
+  group_by(ptid) %>%
+  summarize(
+    high_weeks = sum(adherence >= 6),
+    prop_high = mean(adherence >= 6))
+
+patient_adherence %>% filter(high_weeks >= 9)
+
+ad_bar <- ggplot(patient_adherence, aes(x = high_weeks)) +
+  geom_bar(fill = "navy") +
+  scale_x_continuous(breaks = 0:12) +
+  labs(
+    x = "# of High-Adherence Weeks (>5 days/week)",
+    y = "# of Patients",
+    title = "Distribution of High Medication Adherence Weeks Across Patients") +
+  theme_minimal()
+ad_bar
+
+patient_adherence <- ad %>%
   group_by(ptid, treatment) %>%
   summarize(
     high_weeks = sum(adherence >= 6),
@@ -238,7 +256,7 @@ patient_adherence <- ad %>%
 
 patient_adherence %>% filter(high_weeks >= 9)
 
-ad_bar <- ggplot(patient_adherence, aes(x = high_weeks, fill = treatment)) +
+ad_bar_strat <- ggplot(patient_adherence, aes(x = high_weeks, fill = treatment)) +
   geom_bar() +
   scale_x_continuous(breaks = 0:12) +
   labs(
@@ -246,9 +264,13 @@ ad_bar <- ggplot(patient_adherence, aes(x = high_weeks, fill = treatment)) +
     y = "# of Patients",
     title = "Distribution of High Medication Adherence Weeks Across Patients, by Treatment") +
   theme_minimal()
+ad_bar_strat
 
-ggsave(filename = "results/ad_bar_strat.png", plot = ad_bar, 
-       width = 8, height = 5, dpi = 300)
+# ggsave(filename = "results/ad_bar_strat.png", plot = ad_bar, 
+#        width = 8, height = 5, dpi = 300)
+
+ad_plots <- grid.arrange(ad_bar, ad_bar_strat, nrow = 2)
+ad_plots
 
 ```
 

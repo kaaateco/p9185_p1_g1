@@ -1,0 +1,1354 @@
+---
+title: "P9185 Project 1: Protocol of a Phase II MATIK Trial"
+author: "Kate Colvin, Chhiring Lama, Emily Carter"
+output:
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+  html_document:
+    df_print: paged
+    toc: yes
+    toc_depth: '2'
+header-includes:
+- \usepackage{fancyhdr}
+- \usepackage{lipsum}
+- \pagestyle{fancy}
+- \fancyhead[R]{\thepage}
+- \fancypagestyle{plain}{\pagestyle{fancy}}
+- \usepackage{enumitem}
+- \usepackage{float}
+editor_options: 
+  chunk_output_type: console
+#  html_document:
+#    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+
+library(readxl)
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(table1)
+library(janitor)
+library(patchwork)
+library(gridExtra)
+library(lattice)
+library(nlme)
+library(broom.mixed)
+library(gtsummary)
+library(lme4)
+library(lmerTest)
+library(ggplot2)
+library(DHARMa)
+library(gt)
+library(glmmTMB)
+library(performance)
+library(sjPlot)
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+
+options(scipen = 999)
+```
+
+# I. Introduction
+
+# II. Methods
+### Notation:
+$$
+\begin{aligned}
+k:& \text{subject}, k = 1,...,180\\
+j:& \text{sequence}, j=0,1,2\\
+i:& \text{period}, i=1,2,3\\
+h:& \text{week}, h=1,2,3,4\\
+\pi:& \text{period effect}\\
+\tau:& \text{treatment effect}\\
+\alpha:& \text{grouped treatment effects}\\
+\beta:& \text{demographic effects}\\
+\lambda:& \text{sequence/carryover effect}\\
+\gamma:& \text{week effect}\\
+b:& \text{subject-specific intercepts}\\
+\mu:& \text{fixed-effect intercept}\\
+\varepsilon:& \text{residual error}\\
+\end{aligned}
+$$
+
+# III. Results
+
+## 3.1 Primary Objective 1
+
+```{r}
+endpoints <- read.csv("endpoints.csv") %>%
+  mutate(carryover_period2 = period1,
+         carryover_period3 = period2) 
+
+overall_endpoints <- endpoints %>%
+  mutate(study_sequence = paste(period1, paste(period2, period3, sep = "_"), sep = "_")) |> 
+  pivot_longer(cols = period1:period3,
+               names_to = "period",
+               values_to = "treatment") %>%
+  mutate(
+    AE_pillA_total = rowSums(select(., starts_with("AE_pillA")), na.rm = TRUE),
+    AE_gelB_total = rowSums(select(., starts_with("AE_gelB")), na.rm = TRUE),
+    AE_gelC_total = rowSums(select(., starts_with("AE_gelC")), na.rm = TRUE),
+    Adhere_pillA_total = rowSums(select(., starts_with("Adhere_pillA")), na.rm = TRUE),
+    Adhere_gelB_total = rowSums(select(., starts_with("Adhere_gelB")), na.rm = TRUE),
+    Adhere_gelC_total = rowSums(select(., starts_with("Adhere_gelC")), na.rm = TRUE),
+    overall_safety = case_when(
+      treatment == "Pill A" ~ factor(ifelse(AE_pillA_total > 0, 1, 0)),
+      treatment == "Gel B" ~ factor(ifelse(AE_gelB_total > 0, 1, 0)),
+      treatment == "Gel C" ~ factor(ifelse(AE_gelC_total > 0, 1, 0))),
+    overall_adhere = case_when(
+      treatment == "Pill A" ~ Adhere_pillA_total,
+      treatment == "Gel B" ~ Adhere_gelB_total,
+      treatment == "Gel C" ~ Adhere_gelC_total),
+    carryover = factor(case_when(
+      period == "period1" ~ "0",
+      period == "period2" ~ carryover_period2,
+      period == "period3" ~ carryover_period3))) %>%
+  dplyr::select(-c(AE_pillA_week1:carryover_period3), -c(AE_pillA_total:AE_gelC_total), -c(Adhere_pillA_total:Adhere_gelC_total))
+
+endpoint_clean_dat <- overall_endpoints |> 
+  mutate(carryover = factor(case_when(
+      period == "period1" ~ "0",
+      period == "period2" ~ "carryover_period1",
+      period == "period3" ~ "carryover_period2")), 
+      adverse_event = case_when(
+        overall_safety == 0 ~ "No",
+        overall_safety == 1 ~ "Yes"),
+      adverse_event = as.factor(adverse_event),
+      treatment = fct_relevel(treatment, "Pill A", "Gel B", "Gel C"), 
+      seq = case_when(study_sequence %in% c("Pill A_Gel B_Gel C", "Gel B_Pill A_Gel C") ~ "0", 
+                      study_sequence %in% c("Pill A_Gel C_Gel B", "Gel C_Pill A_Gel B") ~ "1", 
+                      study_sequence %in% c("Gel B_Gel C_Pill A", "Gel C_Gel B_Pill A") ~ "2"), 
+      seq = as.factor(seq)) |> 
+  arrange(study_sequence)
+```
+
+### Proportion of Adverse Events per period
+```{r}
+lst <- split(endpoint_clean_dat, endpoint_clean_dat$study_sequence)
+```
+
+```{r}
+#pdf("EDA_figures/adverse_counts_perseq.pdf", height = "10", width = "9")
+par(mfrow=c(3, 2), mar = c(2, 4, 2, 1)) 
+for (i in 1:length(lst)){
+  mosaicplot(~ period + adverse_event, data = lst[[i]], color = TRUE, main = names(lst)[i], xlab = "", cex.axis = 0) 
+  abline(h = 0.5, col = "black", lwd = 1, lty = 2)
+}
+par(mfrow=c(1,1))
+#dev.off()
+```
+
+Patient Distribution: 30 people in per treatment sequence
+Initial Observation: Most patients do not face adverse events over the course of 4 weeks in each of the consecutive periods.
+
+### add demographic data
+```{r}
+demo_data <- read_csv("baseline.csv") |> 
+  dplyr::select(c(ptid, age, gender, race)) |> 
+  mutate(gender = case_when(gender == 0 ~ "Male", 
+                            gender == 1 ~ "Female"))
+endpoint_clean_dat <- endpoint_clean_dat |> 
+  full_join(demo_data, by = "ptid") |> 
+  relocate(ptid, adverse_event, study_sequence) |> 
+  janitor::clean_names()
+```
+
+### demographic summary
+```{r, eval = FALSE}
+demo_data |> 
+  tbl_summary(
+    gender,
+    include = c(race, age)
+  ) |> 
+  as_kable_extra(caption = "Distributional Summary of Predictor variables in the Study", 
+                 booktabs = TRUE, longtable = TRUE, linesep = "")  |> 
+  kable_styling(latex_options = "hold_position", font_size = 12)
+```
+
+```{r}
+endpoint_clean_dat |> 
+  tbl_strata(
+    strata = c(period),
+    .tbl_fun = ~ tbl_summary(
+      adverse_event,
+      data = .x,
+      include = age
+    ) |>
+      add_p()
+  ) |> 
+  as_kable_extra(caption = "Distributional Summary of Predictor variables in the Study", 
+                 booktabs = TRUE, longtable = FALSE, linesep = "")  |> 
+  kable_minimal() |> 
+  kable_styling(latex_options = "hold_position", font_size = 8)
+```
+
+## GLMM
+
+### Model Selection
+```{r}
+glmm1 <- glmer(adverse_event ~ treatment*period + seq + age + gender + race + (1 | ptid), 
+               family = binomial, data = endpoint_clean_dat, nAGQ = 0)
+# correlation of fixed effects is related to Fisher information of estimates
+#random.effects(glmm1)
+#fixed.effects(glmm1)
+#vcov(glmm1)
+
+glmm2 <- glmer(adverse_event ~ treatment+period + seq + age + gender + race + (1 | ptid), 
+               family = binomial, data = endpoint_clean_dat, nAGQ = 0)
+anova(glmm2,glmm1) |> 
+  broom::tidy() |> 
+  kable(caption = "LRT Between Model w/ and w/o Interaction Between Tx and Period", 
+                 booktabs = TRUE, longtable = FALSE, linesep = "", digits = 2)  |> 
+  kable_styling(latex_options = "hold_position", font_size = 14)
+##not significant deviation between the model with and without interaction
+```
+
+```{r}
+glmm3 <- glmer(adverse_event ~ treatment + period + age + (1 | ptid), 
+               family = binomial, data = endpoint_clean_dat, nAGQ = 0)
+anova(glmm3,glmm2) |> 
+  broom::tidy() |> 
+  kable(caption = "LRT Between Model w/ and w/o Race, Gender and Carryover Effect",  booktabs = TRUE, longtable = FALSE, linesep = "", digits = 2)  |> 
+  kable_styling(latex_options = "hold_position", font_size = 14)
+##not significant deviation between the model with and without gender, race and period and removing carry over effect as there's none
+final_mod <- glmm3
+```
+
+### Model Result (with Carryover Effect)
+```{r}
+glmm_ad_table <- tbl_regression(
+  glmm2,
+  exponentiate = TRUE, 
+  intercept = TRUE,
+  label = list(
+    treatment ~ "Treatment",
+    period ~ "Period",
+    seq ~ "Treatment Sequence")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_table_body(
+    ~ .x %>%
+      mutate(
+        label = case_when(
+          variable == "seq" & label == "0" ~ "ABC or BAC",
+          variable == "seq" & label == "1" ~ "CAB or ACB",
+          variable == "seq" & label == "2" ~ "BCA or CBA",
+          TRUE ~ label)))
+glmm_ad_table
+```
+
+### Final Model Result (without Carryover Effect)
+
+**Notation**: 
+$$
+\begin{aligned}
+\widehat{logit}(P(AE_{ijk} = 1)) &= b_{k} + \mu +\tau_{i} +\pi_j + \beta{a_{k}},\\ 
+&\quad i = 1, 2, 3,\ j = 1, 2, 3,\ k = (1, 2, \ldots, 180),\\
+&\quad b_{k} \sim N(0, {{\sigma}^2}_b)
+\end{aligned}
+$$
+
+```{r}
+glmm_ad_table <- tbl_regression(
+  glmm3,
+  exponentiate = TRUE, 
+  intercept = TRUE,
+  label = list(
+    treatment ~ "Treatment",
+    period ~ "Period")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_table_body(
+    ~ .x )
+glmm_ad_table
+```
+
+```{r, fig.width =5, height =4}
+#pdf("fixed_effect_oddsand_ci.pdf", height = "20", width = "7")
+plot_model(final_mod, type = "est", transform = "exp") +
+  geom_hline(yintercept = 1, color = "black", linetype = 2, linewidth = 0.5) +
+  theme_classic()
+#dev.off()
+```
+
+### AE Prediction
+
+```{r, fig.width =6, fig.height =4}
+a <- as_tibble(fitted(final_mod))
+ggplot(a, aes(x = value))+
+  geom_histogram(alpha = 0.2, fill = "red", color = "darkgrey")+
+labs(x = "OR of Adverse Events", y = "Number of Patients", title = "Distribution of OR for Adverse Events")+
+  theme_classic()
+```
+
+```{r, fig.width =4, fig.height =4}
+plot_model(final_mod, type = "pred",
+           terms = "age [all]") +
+  #geom_hline(yintercept = 0, color = "black", linetype = 2, linewidth = 0.5) +
+  theme_classic()
+```
+
+### Model Diagnostics
+```{r, fig.height=10, fig.width=8}
+check_model(final_mod, residual_type = "simulated")
+```
+
+
+## 3.2 Primary Objective 2
+
+```{r, include = FALSE, message = FALSE}
+
+baseline <- read_csv("baseline.csv") %>% 
+  janitor::clean_names()
+baseline
+
+endpoints <- read_csv("endpoints.csv") %>% 
+  janitor::clean_names()
+endpoints
+
+```
+
+```{r, include = FALSE, message = FALSE}
+
+# Organizing data for this problem (selecting out variables, long format)
+
+ad <- endpoints %>%
+  mutate(seq = paste0(
+    case_when(period1 == "Pill A" ~ "A",
+              period1 == "Gel B"  ~ "B",
+              period1 == "Gel C"  ~ "C"),
+    case_when(period2 == "Pill A" ~ "A",
+              period2 == "Gel B"  ~ "B",
+              period2 == "Gel C"  ~ "C"),
+    case_when(period3 == "Pill A" ~ "A",
+              period3 == "Gel B"  ~ "B",
+              period3 == "Gel C"  ~ "C")),
+    sequence = case_when(
+      seq %in% c("ABC", "BAC") ~ 0,
+      seq %in% c("CAB", "ACB") ~ 1,
+      seq %in% c("BCA", "CBA") ~ 2)) %>%
+  pivot_longer(
+    cols = starts_with("adhere_"),
+    names_to = c("treatment", "week"),
+    names_pattern = "adhere_(.*)_week(\\d)",
+    values_to = "adherence") %>%
+  mutate(week = as.integer(week),
+         treatment_norm = case_when(
+           treatment == "pill_a" ~ "Pill A",
+           treatment == "gel_b" ~ "Gel B",
+           treatment == "gel_c" ~ "Gel C"),
+         period = case_when(
+           treatment_norm == period1 ~ 1,
+           treatment_norm == period2 ~ 2,
+           treatment_norm == period3 ~ 3,
+           TRUE ~ NA), 
+         period = as.integer(period)) %>%
+  filter(!is.na(period)) %>%
+  mutate(
+    ptid = factor(ptid),
+    treatment = factor(treatment_norm, levels = c("Pill A", "Gel B", "Gel C")),
+    period = factor(period),
+    week = as.integer(week), 
+    sequence = factor(sequence)) %>% 
+  select(ptid, sequence, period, week, treatment, adherence)
+
+
+# Adding demographic factors (age, race, gender)
+demo <- baseline %>% 
+  select("ptid", "age", "race", "gender") %>% 
+  mutate(ptid = factor(ptid), 
+         race = factor(race, levels = c("white", "black", "others")), 
+        # race = factor(race), 
+         gender = factor(gender))
+ad <- ad %>% left_join(demo, by = "ptid")
+
+```
+
+```{r, fig.align="center", message = FALSE}
+
+ad_plot <- ggplot(ad, aes(x = week, y = adherence, group = ptid, color = treatment)) +
+  geom_line(alpha = 0.25) +
+  geom_point(alpha = 0.25) + 
+  stat_summary(aes(group = treatment), 
+               fun = mean, geom = "line", size = 1, color = "black") +
+  facet_wrap(~treatment) +
+  labs(x = "Week", y = "Adherence (days/week)", 
+       title = "Individual Patient Adherence Over Time, by Treatment") +
+  theme_minimal()
+ad_plot
+
+```
+
+```{r, message = FALSE, include = FALSE}
+
+# Not stratified by treatment, over 12 weeks
+
+patient_adherence <- ad %>%
+  group_by(ptid) %>%
+  summarize(
+    high_weeks = sum(adherence >= 6),
+    prop_high = mean(adherence >= 6))
+
+patient_adherence %>% filter(high_weeks >= 9)
+
+ad_bar <- ggplot(patient_adherence, aes(x = high_weeks)) +
+  geom_bar(fill = "navy") +
+  scale_x_continuous(breaks = 0:12) +
+  labs(
+    x = "# of High-Adherence Weeks (>5 days/week)",
+    y = "# of Patients",
+    title = "Distribution of High Adherence Weeks Across Patients") +
+  theme_minimal()
+
+## Stratified by treatment
+
+patient_adherence <- ad %>%
+  group_by(ptid, treatment) %>%
+  summarize(
+    high_weeks = sum(adherence >= 6),
+    prop_high = mean(adherence >= 6))
+
+patient_adherence %>% filter(high_weeks >= 9)
+
+ad_bar_strat <- ggplot(patient_adherence, aes(x = high_weeks, fill = treatment)) +
+  geom_bar() +
+  scale_x_continuous(breaks = 0:12) +
+  labs(
+    x = "# of High-Adherence Weeks (>5 days/week)",
+    y = "# of Patients",
+    title = "Distribution of High Adherence Weeks Across Patients, by Treatment") +
+  theme_minimal()
+
+```
+
+```{r, message = FALSE}
+
+grid.arrange(ad_bar, ad_bar_strat, nrow = 2)
+
+```
+
+Model 
+
+$$
+
+\begin{align}
+& Y_{hik} \sim \text{Binomial}\big(n=7, p_{hik}\big), \\[1em]
+& \text{logit}(p_{hik}) = \mu + b_k + \pi_i + \tau_i + \lambda_{j} + \gamma*h, \\[0.5em]
+& b_k \sim \mathcal{N}(0, \sigma_b^2)
+\end{align}
+
+$$
+
+```{r, include = FALSE, message = FALSE}
+
+# Reformatting for Binomial Mixed Model
+ad <- ad %>%
+  mutate(adherent = adherence,
+         nonadherent = 7 - adherence)
+
+# Binomial Mixed Model 
+glmm_ad <- glmer(
+  cbind(adherent, nonadherent) ~ treatment + week + period + (1 | ptid), 
+  family = binomial(link = "logit"),
+ # control = glmerControl(optimizer = "bobyqa"), 
+  data = ad)
+# summary(glmm_ad)
+
+```
+
+```{r, message = FALSE}
+
+glmm_ad_table <- tbl_regression(
+  glmm_ad,
+  exponentiate = TRUE, 
+  label = list(
+    treatment ~ "Treatment",
+    week ~ "Week",
+    period ~ "Period")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_caption("**GLMM Results of Treatment on Adherence**")
+glmm_ad_table
+
+# gt_ad_table <- glmm_ad_table %>% as_gt()
+# gtsave(gt_ad_table, "results/glmm_ad_results.png")
+
+```
+
+```{r, message = FALSE, include = FALSE}
+
+# Model Diagnostics
+sim_ad <- simulateResiduals(fittedModel = glmm_ad)
+plot(sim_ad)
+
+```
+
+
+
+\newpage
+
+## 3.3 Secondary Objective 1
+
+```{r}
+baseline <- read.csv("baseline.csv") %>%
+  dplyr::select(-X) %>%
+  mutate(carryover_period2 = period1,
+         carryover_period3 = period2,
+         sequence_ind = factor(case_when(
+           period1 %in% c("Pill A", "Gel B") & period2 %in% c("Pill A", "Gel B") ~ 0,
+           period1 %in% c("Pill A", "Gel C") & period2 %in% c("Pill A", "Gel C") ~ 1,
+           .default = 2)),
+         seq = factor(paste0(
+    case_when(period1 == "Pill A" ~ "A",
+              period1 == "Gel B"  ~ "B",
+              period1 == "Gel C"  ~ "C"),
+    case_when(period2 == "Pill A" ~ "A",
+              period2 == "Gel B"  ~ "B",
+              period2 == "Gel C"  ~ "C"),
+    case_when(period3 == "Pill A" ~ "A",
+              period3 == "Gel B"  ~ "B",
+              period3 == "Gel C"  ~ "C"))),
+    race = factor(case_when(
+      race == "black" ~ "Black",
+      race == "others" ~ "Other",
+      race == "white" ~ "White"), levels = c("Black", "White", "Other")))
+
+
+baseline_long <- baseline %>%
+  pivot_longer(cols = period1:period3,
+               names_to = "period",
+               values_to = "treatment") %>%
+  mutate(bloodVL_before = case_when(
+            period == "period1" ~ bviral0,
+            period == "period2" ~ bviral2,
+            period == "period3" ~ bviral4),
+         bloodVL_after = case_when(
+            period == "period1" ~ bviral1,
+            period == "period2" ~ bviral3,
+            period == "period3" ~ bviral5),
+         skinVL_before = case_when(
+            period == "period1" ~ sviral0,
+            period == "period2" ~ sviral2,
+            period == "period3" ~ sviral4),
+         skinVL_after = case_when(
+            period == "period1" ~ sviral1,
+            period == "period2" ~ sviral3,
+            period == "period3" ~ sviral5),
+         carryover = case_when(
+            period == "period1" ~ "0",
+            period == "period2" ~ carryover_period2,
+            period == "period3" ~ carryover_period3)) %>%
+  dplyr::select(-c(bviral0:carryover_period3)) %>%
+  mutate(bloodVL_change = bloodVL_before - bloodVL_after,
+         skinVL_change = skinVL_before - skinVL_after) %>%
+  pivot_longer(cols = c(bloodVL_before:skinVL_after),
+                          names_to = c(".value", "timepoint"),
+                          names_sep = "_") %>%
+  mutate(timepoint = ifelse(timepoint == "before", 0, 4)) %>%
+  mutate(treatment = factor(treatment, levels = c("Pill A", "Gel B", "Gel C")))
+
+#write.csv(baseline_long, "baseline_longformat.csv")
+
+endpoints <- read.csv("endpoints.csv") %>%
+  mutate(carryover_period2 = period1,
+         carryover_period3 = period2) 
+
+overall_endpoints <- endpoints %>%
+  pivot_longer(cols = period1:period3,
+               names_to = "period",
+               values_to = "treatment") %>%
+  mutate(
+    AE_pillA_total = rowSums(select(., starts_with("AE_pillA")), na.rm = TRUE),
+    AE_gelB_total = rowSums(select(., starts_with("AE_gelB")), na.rm = TRUE),
+    AE_gelC_total = rowSums(select(., starts_with("AE_gelC")), na.rm = TRUE),
+    Adhere_pillA_total = rowSums(select(., starts_with("Adhere_pillA")), na.rm = TRUE),
+    Adhere_gelB_total = rowSums(select(., starts_with("Adhere_gelB")), na.rm = TRUE),
+    Adhere_gelC_total = rowSums(select(., starts_with("Adhere_gelC")), na.rm = TRUE),
+    overall_safety = case_when(
+      treatment == "Pill A" ~ factor(ifelse(AE_pillA_total > 0, 1, 0)),
+      treatment == "Gel B" ~ factor(ifelse(AE_gelB_total > 0, 1, 0)),
+      treatment == "Gel C" ~ factor(ifelse(AE_gelC_total > 0, 1, 0))),
+    overall_adhere = case_when(
+      treatment == "Pill A" ~ Adhere_pillA_total,
+      treatment == "Gel B" ~ Adhere_gelB_total,
+      treatment == "Gel C" ~ Adhere_gelC_total),
+    carryover = factor(case_when(
+      period == "period1" ~ "0",
+      period == "period2" ~ carryover_period2,
+      period == "period3" ~ carryover_period3))) %>%
+  dplyr::select(-c(AE_pillA_week1:carryover_period3), -c(AE_pillA_total:AE_gelC_total), -c(Adhere_pillA_total:Adhere_gelC_total))
+
+merged <- baseline_long %>%
+  filter(timepoint == 0) %>%
+  dplyr::select(-timepoint, -bloodVL, -skinVL) %>% 
+  left_join(overall_endpoints %>% dplyr::select(-treatment, -carryover), by = c("ptid", "period")) %>%
+  mutate(overall_safety = factor(ifelse(overall_safety == 1, "Adverse Event", "No Adverse Event")))
+
+baseline_long <- baseline_long %>%
+  left_join(overall_endpoints %>% dplyr::select(-treatment, -carryover), by = c("ptid", "period"))
+```
+
+
+```{r}
+baseline %>%
+  dplyr::select(age:gender, seq) %>%
+  tbl_summary(
+    by = seq,
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd}) \n[{min}, {max}]",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    label = list(
+      age ~ "Age (years)",
+      race ~ "Race",
+      gender ~ "Female"
+    )
+  ) %>%
+  add_p() %>%
+  add_overall() %>%
+  bold_labels() %>%
+  modify_caption("**Table 1. Baseline Characteristics**")
+```
+
+preliminary assessment and comparison of systemic and local Pharmacokinetics (PK) of Pill A, Gel B, and Gel C and the correlation of PK with adherence measures and the occurrence of adverse events
+
+Blood PK
+
+
+$$
+Y_{ik} = \mu + b_{k} + \pi_i + \tau_{i}  + \lambda_{i} + \alpha_{ik} + \beta_{ik} + \varepsilon_{ik}, \quad b_{k} \sim N(0, \sigma_b^2), \quad \varepsilon_{ik} \sim N(0, \sigma^2)
+$$
+
+```{r}
+ggplot(baseline_long) +
+  geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = seq), alpha = 0.5) +
+  facet_wrap(~ treatment) +
+  theme_bw() +
+  labs(x = "Week in Study", y = "Blood Viral Load", color = "Sequence")
+
+ggplot(merged) +
+  geom_point(aes(y = bloodVL_change, x = overall_adhere, color = seq)) +
+  facet_wrap(~ overall_safety + treatment) +
+  theme_bw() +
+  labs(x = "Overall Adherence", y = "Change in Blood PK", color = "Sequence")
+# 
+# ggplot(baseline_long) +
+#   geom_line(aes(x = timepoint, y = bloodVL, group = ptid, color = overall_safety), alpha = 0.5) +
+#   facet_wrap(~ treatment) +
+#   theme_bw()
+```
+
+
+```{r}
+model_large_blood <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + 
+                      period + (1 | ptid),
+              data = merged)
+
+model_blood <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + period + (1 | ptid),
+              data = merged)
+
+anova(model_blood, model_large_blood)
+
+summary(model_blood)
+
+tbl_regression(
+  model_blood,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)
+```
+
+
+```{r}
+library(emmeans)
+emm_treatment <- emmeans(model_blood, ~ treatment)
+summary(emm_treatment)
+
+# Pairwise comparisons for treatment
+pairs(emm_treatment)
+
+# Marginal means for overall_adhere
+emm_adhere <- emmeans(model_blood, ~ overall_adhere)
+summary(emm_adhere)
+
+# Marginal means for overall_safety
+emm_safety <- emmeans(model_blood, ~ overall_safety)
+summary(emm_safety)
+
+# Marginal means for period
+emm_period <- emmeans(model_blood, ~ period)
+summary(emm_period)
+pairs(emm_period)
+
+```
+
+
+
+
+
+```{r}
+resid_scaled <- residuals(model_blood, scaled = TRUE)
+fitted_vals <- fitted(model_blood)
+random_intercepts <- ranef(model_blood)$ptid[, 1]
+model_data <- model_blood@frame
+
+# Plot 1: Q-Q Plot for Scaled Residuals with confidence bands
+p1 <- ggplot(data.frame(resid = resid_scaled), aes(sample = resid)) +
+  stat_qq(alpha = 0.5) +
+  stat_qq_line(color = "red", linewidth = 1) +
+  labs(title = "Q-Q Plot: Scaled Residuals",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 2: Histogram of Scaled Residuals with rug
+p2 <- ggplot(data.frame(resid = resid_scaled), aes(x = resid)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, 
+                 fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_density(color = "blue", linewidth = 1) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), 
+                color = "red", linewidth = 1, linetype = "dashed") +
+  geom_rug(alpha = 0.3) +
+  labs(title = "Histogram: Scaled Residuals",
+       x = "Scaled Residuals",
+       y = "Density",
+       caption = "Red line = Normal(0,1), Blue line = Kernel density") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 3: Q-Q Plot for Random Intercepts
+p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) +
+  stat_qq(alpha = 0.5) +
+  stat_qq_line(color = "red", linewidth = 1) +
+  labs(title = "Q-Q Plot: Random Intercepts",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 4: Histogram of Random Intercepts with rug
+p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 20, 
+                 fill = "lightgreen", color = "black", alpha = 0.7) +
+  geom_density(color = "darkgreen", linewidth = 1) +
+  stat_function(fun = dnorm, 
+                args = list(mean = 0, sd = sd(random_intercepts)), 
+                color = "red", linewidth = 1, linetype = "dashed") +
+  geom_rug(alpha = 0.3) +
+  labs(title = "Histogram: Random Intercepts",
+       x = "Random Intercepts (ptid)",
+       y = "Density",
+       caption = "Red line = Normal fit, Green line = Kernel density") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 5: Residuals vs. Fitted Values with jitter
+p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_scaled), 
+             aes(x = fitted, y = resid)) +
+  geom_point(alpha = 0.5, position = position_jitter(width = 0.5, height = 0)) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  #geom_smooth(se = TRUE, color = "blue", method = "loess", linewidth = 1) +
+  labs(title = "Residuals vs. Fitted Values",
+       x = "Fitted Values",
+       y = "Scaled Residuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 6: Residuals by Treatment with individual points
+p6 <- ggplot(data.frame(treatment = model_data$treatment, 
+                        resid = resid_scaled),
+             aes(x = treatment, y = resid)) +
+  geom_boxplot(fill = "lightblue", alpha = 0.7, outlier.shape = NA) +
+  #geom_jitter(width = 0.2, alpha = 0.3, color = "darkblue") +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  labs(title = "Residuals by Treatment",
+       x = "Treatment",
+       y = "Scaled Residuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Display all plots
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
+
+```
+
+
+
+Skin PK
+
+Linear Model
+
+```{r}
+ggplot(baseline_long) +
+  geom_line(aes(x = timepoint, y = skinVL, group = ptid, color = seq), alpha = 0.5) +
+  facet_wrap(~ treatment) +
+  theme_bw() +
+  labs(x = "Week in Study", y = "Skin Viral Load", color = "Sequence")
+
+ggplot(merged) +
+  geom_point(aes(y = skinVL_change, x = overall_adhere, color = seq)) +
+  facet_wrap(~ overall_safety + treatment) +
+  theme_bw() +
+  labs(x = "Overall Adherence", y = "Change in Skin PK", color = "Sequence")
+```
+
+
+```{r}
+model_large_skin <- lm(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind
+                  + period, data = merged)
+model_skin <- lm(skinVL_change ~ treatment + overall_adhere  + overall_safety + period,
+            data = merged)
+anova(model_skin, model_large_skin)
+
+summary(model_skin)
+
+tbl_regression(
+  model_skin,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)
+```
+
+```{r}
+library(emmeans)
+emm_treatment <- emmeans(model_skin, ~ treatment)
+summary(emm_treatment)
+
+# Pairwise comparisons for treatment
+pairs(emm_treatment)
+
+# Marginal means for overall_adhere
+emm_adhere <- emmeans(model_skin, ~ overall_adhere)
+summary(emm_adhere)
+
+# Marginal means for overall_safety
+emm_safety <- emmeans(model_skin, ~ overall_safety)
+summary(emm_safety)
+
+# Marginal means for period
+emm_period <- emmeans(model_skin, ~ period)
+summary(emm_period)
+pairs(emm_period)
+
+```
+
+```{r}
+library(ggplot2)
+library(gridExtra)
+library(MASS)
+
+# Extract residuals and fitted values
+residuals <- residuals(model_skin)
+fitted_values <- fitted(model_skin)
+standardized_residuals <- rstandard(model_skin)
+
+# 1. Q-Q Plot: Scaled Residuals
+p1 <- ggplot(data.frame(residuals = standardized_residuals), aes(sample = residuals)) +
+  stat_qq(color = "gray50", size = 2) +
+  stat_qq_line(color = "red", linewidth = 1) +
+  labs(title = "Q-Q Plot: Scaled Residuals",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_minimal()
+
+# 2. Histogram: Scaled Residuals
+p2 <- ggplot(data.frame(residuals = standardized_residuals), aes(x = residuals)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, fill = "lightblue", color = "black") +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), 
+                color = "red", linewidth = 1) +
+  geom_density(color = "blue", linewidth = 1) +
+  labs(title = "Histogram: Scaled Residuals",
+       x = "Scaled Residuals",
+       y = "Density",
+       subtitle = "Red line = Normal(0,1), Blue line = Kernel density") +
+  theme_minimal()
+
+# 3. Residuals vs. Fitted Values
+p3 <- ggplot(data.frame(fitted = fitted_values, residuals = standardized_residuals), 
+             aes(x = fitted, y = residuals)) +
+  geom_point(color = "gray50", size = 2, alpha = 0.6) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  geom_smooth(method = "loess", se = FALSE, color = "red", linewidth = 1) +
+  labs(title = "Residuals vs. Fitted Values",
+       x = "Fitted Values",
+       y = "Scaled Residuals") +
+  theme_minimal()
+
+# 4. Residuals by Treatment
+p4 <- ggplot(data.frame(treatment = merged$treatment, residuals = standardized_residuals), 
+             aes(x = treatment, y = residuals)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  labs(title = "Residuals by Treatment",
+       x = "Treatment",
+       y = "Scaled Residuals") +
+  theme_minimal()
+
+# Combine all plots
+grid.arrange(p1, p2, p3, p4, ncol = 2)
+
+```
+
+Linear Mixed Model
+
+
+```{r}
+model_large_skin <- lmer(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + 
+                      period + (1 | ptid),
+              data = merged)
+
+model_skin <- lmer(skinVL_change ~ treatment + overall_adhere + overall_safety + period + (1 | ptid),
+              data = merged)
+
+anova(model_skin, model_large_skin)
+
+summary(model_skin)
+
+tbl_regression(
+  model_skin,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)
+```
+
+
+```{r}
+library(emmeans)
+emm_treatment <- emmeans(model_skin, ~ treatment)
+summary(emm_treatment)
+
+# Pairwise comparisons for treatment
+pairs(emm_treatment)
+
+# Marginal means for overall_adhere
+emm_adhere <- emmeans(model_skin, ~ overall_adhere)
+summary(emm_adhere)
+
+# Marginal means for overall_safety
+emm_safety <- emmeans(model_skin, ~ overall_safety)
+summary(emm_safety)
+
+# Marginal means for period
+emm_period <- emmeans(model_skin, ~ period)
+summary(emm_period)
+pairs(emm_period)
+
+```
+
+
+```{r}
+resid_scaled <- residuals(model_skin, scaled = TRUE)
+fitted_vals <- fitted(model_skin)
+random_intercepts <- ranef(model_skin)$ptid[, 1]
+model_data <- model_skin@frame
+
+# Plot 1: Q-Q Plot for Scaled Residuals with confidence bands
+p1 <- ggplot(data.frame(resid = resid_scaled), aes(sample = resid)) +
+  stat_qq(alpha = 0.5) +
+  stat_qq_line(color = "red", linewidth = 1) +
+  labs(title = "Q-Q Plot: Scaled Residuals",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 2: Histogram of Scaled Residuals with rug
+p2 <- ggplot(data.frame(resid = resid_scaled), aes(x = resid)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 30, 
+                 fill = "skyblue", color = "black", alpha = 0.7) +
+  geom_density(color = "blue", linewidth = 1) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1), 
+                color = "red", linewidth = 1, linetype = "dashed") +
+  geom_rug(alpha = 0.3) +
+  labs(title = "Histogram: Scaled Residuals",
+       x = "Scaled Residuals",
+       y = "Density",
+       caption = "Red line = Normal(0,1), Blue line = Kernel density") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 3: Q-Q Plot for Random Intercepts
+p3 <- ggplot(data.frame(re = random_intercepts), aes(sample = re)) +
+  stat_qq(alpha = 0.5) +
+  stat_qq_line(color = "red", linewidth = 1) +
+  labs(title = "Q-Q Plot: Random Intercepts",
+       x = "Theoretical Quantiles",
+       y = "Sample Quantiles") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 4: Histogram of Random Intercepts with rug
+p4 <- ggplot(data.frame(re = random_intercepts), aes(x = re)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 20, 
+                 fill = "lightgreen", color = "black", alpha = 0.7) +
+  geom_density(color = "darkgreen", linewidth = 1) +
+  stat_function(fun = dnorm, 
+                args = list(mean = 0, sd = sd(random_intercepts)), 
+                color = "red", linewidth = 1, linetype = "dashed") +
+  geom_rug(alpha = 0.3) +
+  labs(title = "Histogram: Random Intercepts",
+       x = "Random Intercepts (ptid)",
+       y = "Density",
+       caption = "Red line = Normal fit, Green line = Kernel density") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 5: Residuals vs. Fitted Values with jitter
+p5 <- ggplot(data.frame(fitted = fitted_vals, resid = resid_scaled), 
+             aes(x = fitted, y = resid)) +
+  geom_point(alpha = 0.5, position = position_jitter(width = 0.5, height = 0)) +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  #geom_smooth(se = TRUE, color = "blue", method = "loess", linewidth = 1) +
+  labs(title = "Residuals vs. Fitted Values",
+       x = "Fitted Values",
+       y = "Scaled Residuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Plot 6: Residuals by Treatment with individual points
+p6 <- ggplot(data.frame(treatment = model_data$treatment, 
+                        resid = resid_scaled),
+             aes(x = treatment, y = resid)) +
+  geom_boxplot(fill = "lightblue", alpha = 0.7, outlier.shape = NA) +
+  #geom_jitter(width = 0.2, alpha = 0.3, color = "darkblue") +
+  geom_hline(yintercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+  labs(title = "Residuals by Treatment",
+       x = "Treatment",
+       y = "Scaled Residuals") +
+  theme_bw() +
+  theme(plot.title = element_text(hjust = 0.5, face = "bold"))
+
+# Display all plots
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
+
+```
+
+Combined Table
+
+```{r}
+tbl_merge(
+  tbls = list(
+    tbl_regression(
+  model_blood,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05),
+  tbl_regression(
+  model_skin,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)),
+  tab_spanner = c("**Blood Viral Load**", 
+                  "**Skin Viral Load**")
+)
+
+```
+
+
+\newpage
+
+## 3.4 Secondary Objective 2
+
+```{r, message = FALSE, include = FALSE}
+
+# Adding product used and regimen to new df
+
+ad_next <- ad %>%
+  mutate(
+    regimen = case_when(
+      treatment == "Pill A" ~ "once",
+      treatment == "Gel B"  ~ "three",
+      treatment == "Gel C"  ~ "once"),
+    regimen = factor(regimen), 
+    product = case_when(
+      treatment == "Pill A" ~ "Pill",
+      treatment == "Gel B"  ~ "Gel",
+      treatment == "Gel C"  ~ "Gel"), 
+    product = factor(product))
+
+```
+
+```{r}
+
+# Plots to examine interaction terms
+
+# Gender
+agg <- ad_next %>%
+  group_by(ptid, gender, age, race, product, regimen) %>%
+  summarise(mean_adherence = mean(adherence), .groups = "drop") %>% 
+  mutate(gender = factor(gender, levels = c(0, 1),
+                    labels = c("Male", "Female")))
+
+p1 <- ggplot(agg, aes(x = product, y = mean_adherence, color = gender)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Gender and Product", 
+       y = "Average adherence", x = "Product") +
+  theme_minimal()
+
+p2 <- ggplot(agg, aes(x = regimen, y = mean_adherence, color = gender)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Gender and Regimen", 
+       y = "Average adherence", x = "Regimen") +
+  theme_minimal()
+
+grid.arrange(p1, p2, ncol = 2)
+
+
+# Age
+
+p3 <- ggplot(agg, aes(x = product, y = mean_adherence, color = race)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Race and Product", 
+       y = "Average adherence", x = "Product") +
+  theme_minimal()
+
+p4 <- ggplot(agg, aes(x = regimen, y = mean_adherence, color = race)) +
+  geom_boxplot() +
+  labs(title = "Adherence by Race and Regimen", 
+       y = "Average adherence", x = "Regimen") +
+  theme_minimal()
+
+grid.arrange(p3, p4, ncol = 2)
+
+```
+
+```{r, message = FALSE}
+
+age_prod <- ggplot(ad_next, aes(x = age, y = adherence, color = product, fill = product)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  theme_minimal() +
+  labs(title = "Adherence vs Age by Product",
+       x = "Age",
+       y = "Adherence (days)")
+
+age_reg <- ggplot(ad_next, aes(x = age, y = adherence, color = regimen, fill = regimen)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm",) +
+  theme_minimal() +
+  labs(title = "Adherence vs Age by Regimen",
+       x = "Age",
+       y = "Adherence (days)")
+
+grid.arrange(age_prod, age_reg, ncol = 2)
+
+```
+
+Model
+
+$$
+
+\begin{align}
+& Y_{hik} \sim \text{Binomial}\big(n=7, p_{hik}\big), \\[1em]
+& \text{logit}(p_{hik}) = \mu + b_k + \pi_i + \lambda_{j} + \gamma*h + \beta_d *d_k + \beta_r * regimen + \beta_p *product\\
+& + \beta_{dr} *d_k * regimen + \beta_{dp} *d_k * product \\[0.5em] 
+& b_k \sim \mathcal{N}(0, \sigma_b^2)
+\end{align}
+
+$$
+
+```{r, include = FALSE, message = FALSE}
+
+# Centering age to help models converge
+ad_next <- ad_next %>%
+  mutate(age_c = age - mean(age, na.rm = TRUE), 
+         gender = factor(gender, levels = c(0, 1),
+                    labels = c("Male", "Female")))
+
+# Including interaction terms
+glmm_demos <- glmer(
+  cbind(adherent, nonadherent) ~ age_c*product + gender*product + race*product + 
+                   age_c*regimen + gender*regimen + race*regimen +  
+                   period + week + (1 | ptid),
+  family = binomial(link = "logit"),
+  control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5)), 
+  data = ad_next)
+# summary(glmm_demos)
+
+# Without interaction terms
+glmm_demos_reduced <- glmer(
+  cbind(adherent, nonadherent) ~ age_c + gender + race + regimen + product +  
+                   period + week + (1 | ptid),
+  family = binomial(link = "logit"),
+  control = glmerControl(optimizer = "bobyqa", optCtrl = list(maxfun = 2e5)), 
+  data = ad_next)
+# summary(glmm_demos_reduced)
+
+```
+
+```{r, message = FALSE}
+
+glmm_demo_table <- tbl_regression(
+  glmm_demos,
+  exponentiate = TRUE,
+  label = list(
+    week ~ "Week",
+    period ~ "Period", 
+    age_c ~ "Age", 
+    gender ~ "Gender", 
+    race ~ "Race", 
+    regimen ~ "Regimen", 
+    product ~ "Product")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_caption("**Interaction Results of Demographic Variables on Adherence**")
+
+glmm_demo_table %>% as_gt()
+# gtsave(gt_demo_table, "results/glmm_demo_results.png")
+
+```
+
+```{r}
+
+glmm_demo_reduced_table <- tbl_regression(
+  glmm_demos_reduced,
+  exponentiate = TRUE,
+  label = list(
+    week ~ "Week",
+    period ~ "Period", 
+    age_c ~ "Age", 
+    gender ~ "Gender", 
+    race ~ "Race", 
+    regimen ~ "Regimen", 
+    product ~ "Product")) %>%
+  bold_p() %>%
+  bold_labels() %>% 
+  modify_caption("**Main Effect Results of Demographic Variables on Adherence**")
+
+glmm_demo_reduced_table %>% as_gt()
+
+```
+
+```{r}
+
+# Model Diagnostics
+sim_demos <- simulateResiduals(fittedModel = glmm_demos_reduced)
+plot(sim_demos)
+
+```
+
+# IV. Discussion
+
+# V. Conclusion
+
+
+\newpage 
+
+# VI. Appendix 
+

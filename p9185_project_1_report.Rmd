@@ -196,22 +196,21 @@ ggplot(merged) +
 
 
 ```{r}
-model_large <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + 
+model_large_blood <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + 
                       period + (1 | ptid),
               data = merged)
 
-model <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + period + (1 | ptid),
+model_blood <- lmer(bloodVL_change ~ treatment + overall_adhere + overall_safety + period + (1 | ptid),
               data = merged)
 
-anova(model, model_large)
+anova(model_blood, model_large_blood)
 
-summary(model)
+summary(model_blood)
 
 tbl_regression(
-  model,
+  model_blood,
   intercept = TRUE,
   estimate_fun = function(x) style_number(x, digits = 1)) %>%
-  add_global_p() %>%
   modify_table_body(~.x %>% 
       mutate(label = case_when(
           label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
@@ -239,22 +238,22 @@ tbl_regression(
 
 ```{r}
 library(emmeans)
-emm_treatment <- emmeans(model, ~ treatment)
+emm_treatment <- emmeans(model_blood, ~ treatment)
 summary(emm_treatment)
 
 # Pairwise comparisons for treatment
 pairs(emm_treatment)
 
 # Marginal means for overall_adhere
-emm_adhere <- emmeans(model, ~ overall_adhere)
+emm_adhere <- emmeans(model_blood, ~ overall_adhere)
 summary(emm_adhere)
 
 # Marginal means for overall_safety
-emm_safety <- emmeans(model, ~ overall_safety)
+emm_safety <- emmeans(model_blood, ~ overall_safety)
 summary(emm_safety)
 
 # Marginal means for period
-emm_period <- emmeans(model, ~ period)
+emm_period <- emmeans(model_blood, ~ period)
 summary(emm_period)
 pairs(emm_period)
 
@@ -265,10 +264,10 @@ pairs(emm_period)
 
 
 ```{r}
-resid_scaled <- residuals(model, scaled = TRUE)
-fitted_vals <- fitted(model)
-random_intercepts <- ranef(model)$ptid[, 1]
-model_data <- model@frame
+resid_scaled <- residuals(model_blood, scaled = TRUE)
+fitted_vals <- fitted(model_blood)
+random_intercepts <- ranef(model_blood)$ptid[, 1]
+model_data <- model_blood@frame
 
 # Plot 1: Q-Q Plot for Scaled Residuals with confidence bands
 p1 <- ggplot(data.frame(resid = resid_scaled), aes(sample = resid)) +
@@ -373,19 +372,18 @@ ggplot(merged) +
 
 
 ```{r}
-model_large <- lm(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind
+model_large_skin <- lm(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind
                   + period, data = merged)
-model <- lm(skinVL_change ~ treatment + overall_adhere  + overall_safety + period,
+model_skin <- lm(skinVL_change ~ treatment + overall_adhere  + overall_safety + period,
             data = merged)
-anova(model, model_large)
+anova(model_skin, model_large_skin)
 
-summary(model)
+summary(model_skin)
 
 tbl_regression(
-  model,
+  model_skin,
   intercept = TRUE,
   estimate_fun = function(x) style_number(x, digits = 1)) %>%
-  add_global_p() %>%
   modify_table_body(~.x %>% 
       mutate(label = case_when(
           label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
@@ -412,22 +410,22 @@ tbl_regression(
 
 ```{r}
 library(emmeans)
-emm_treatment <- emmeans(model, ~ treatment)
+emm_treatment <- emmeans(model_skin, ~ treatment)
 summary(emm_treatment)
 
 # Pairwise comparisons for treatment
 pairs(emm_treatment)
 
 # Marginal means for overall_adhere
-emm_adhere <- emmeans(model, ~ overall_adhere)
+emm_adhere <- emmeans(model_skin, ~ overall_adhere)
 summary(emm_adhere)
 
 # Marginal means for overall_safety
-emm_safety <- emmeans(model, ~ overall_safety)
+emm_safety <- emmeans(model_skin, ~ overall_safety)
 summary(emm_safety)
 
 # Marginal means for period
-emm_period <- emmeans(model, ~ period)
+emm_period <- emmeans(model_skin, ~ period)
 summary(emm_period)
 pairs(emm_period)
 
@@ -438,13 +436,10 @@ library(ggplot2)
 library(gridExtra)
 library(MASS)
 
-# Fit your model
-model <- lm(skinVL_change ~ treatment + period + sequence_ind, data = merged)
-
 # Extract residuals and fitted values
-residuals <- residuals(model)
-fitted_values <- fitted(model)
-standardized_residuals <- rstandard(model)
+residuals <- residuals(model_skin)
+fitted_values <- fitted(model_skin)
+standardized_residuals <- rstandard(model_skin)
 
 # 1. Q-Q Plot: Scaled Residuals
 p1 <- ggplot(data.frame(residuals = standardized_residuals), aes(sample = residuals)) +
@@ -497,22 +492,21 @@ Linear Mixed Model
 
 
 ```{r}
-model_large <- lmer(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + 
+model_large_skin <- lmer(skinVL_change ~ treatment + overall_adhere + overall_safety + sequence_ind + 
                       period + (1 | ptid),
               data = merged)
 
-model <- lmer(skinVL_change ~ treatment + overall_adhere + overall_safety + period + (1 | ptid),
+model_skin <- lmer(skinVL_change ~ treatment + overall_adhere + overall_safety + period + (1 | ptid),
               data = merged)
 
-anova(model, model_large)
+anova(model_skin, model_large_skin)
 
-summary(model)
+summary(model_skin)
 
 tbl_regression(
-  model,
+  model_skin,
   intercept = TRUE,
   estimate_fun = function(x) style_number(x, digits = 1)) %>%
-  add_global_p() %>%
   modify_table_body(~.x %>% 
       mutate(label = case_when(
           label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
@@ -540,22 +534,22 @@ tbl_regression(
 
 ```{r}
 library(emmeans)
-emm_treatment <- emmeans(model, ~ treatment)
+emm_treatment <- emmeans(model_skin, ~ treatment)
 summary(emm_treatment)
 
 # Pairwise comparisons for treatment
 pairs(emm_treatment)
 
 # Marginal means for overall_adhere
-emm_adhere <- emmeans(model, ~ overall_adhere)
+emm_adhere <- emmeans(model_skin, ~ overall_adhere)
 summary(emm_adhere)
 
 # Marginal means for overall_safety
-emm_safety <- emmeans(model, ~ overall_safety)
+emm_safety <- emmeans(model_skin, ~ overall_safety)
 summary(emm_safety)
 
 # Marginal means for period
-emm_period <- emmeans(model, ~ period)
+emm_period <- emmeans(model_skin, ~ period)
 summary(emm_period)
 pairs(emm_period)
 
@@ -563,10 +557,10 @@ pairs(emm_period)
 
 
 ```{r}
-resid_scaled <- residuals(model, scaled = TRUE)
-fitted_vals <- fitted(model)
-random_intercepts <- ranef(model)$ptid[, 1]
-model_data <- model@frame
+resid_scaled <- residuals(model_skin, scaled = TRUE)
+fitted_vals <- fitted(model_skin)
+random_intercepts <- ranef(model_skin)$ptid[, 1]
+model_data <- model_skin@frame
 
 # Plot 1: Q-Q Plot for Scaled Residuals with confidence bands
 p1 <- ggplot(data.frame(resid = resid_scaled), aes(sample = resid)) +
@@ -649,3 +643,65 @@ grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 2)
 
 ```
 
+Combined Table
+
+```{r}
+tbl_merge(
+  tbls = list(
+    tbl_regression(
+  model_blood,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05),
+  tbl_regression(
+  model_skin,
+  intercept = TRUE,
+  estimate_fun = function(x) style_number(x, digits = 1)) %>%
+  modify_table_body(~.x %>% 
+      mutate(label = case_when(
+          label == "(Intercept)" ~ "Intercept (Pill A, Period 1, Sequence 0, No Adherence or AE)",
+          label == "Gel B" ~ "Gel B vs Pill A",
+          label == "Gel C" ~ "Gel C vs Pill A",
+          label == "period2" ~ "Period 2 vs Period 1",
+          label == "period3" ~ "Period 3 vs Period 1",
+          label == "treatment" ~ "Treatment",  # Remove header
+          label == "period" ~ "Period",      # Remove header
+          label == "Pill A" ~ NA_character_,
+          label == "period1" ~ NA_character_,
+          label == "sequence_ind" ~ "Sequence",
+          label == "Adverse Event" ~ NA_character_,
+          label == "0" ~ NA_character_,
+          label == "1" ~ "1 vs 0",
+          label == "2" ~ "2 vs 0",
+          label == "overall_adhere" ~ "Additional Day of Adherence",
+          label == "overall_safety" ~ "Adverse Event",
+          TRUE ~ label)) %>%
+      filter(!is.na(label))) %>%
+  modify_header(label ~ "**Comparison**", estimate ~ "**Beta**") %>%
+  bold_p(t = 0.05)),
+  tab_spanner = c("**Blood Viral Load**", 
+                  "**Skin Viral Load**")
+)
+
+```

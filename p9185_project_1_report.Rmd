@@ -485,7 +485,7 @@ glmm_ad_table
 
 ```
 
-```{r, message = FALSE, include = FALSE}
+```{r, message = FALSE}
 
 # Model Diagnostics
 sim_ad <- simulateResiduals(fittedModel = glmm_ad)
@@ -591,7 +591,8 @@ baseline_long <- baseline_long %>%
 ```
 
 
-```{r, fig.pos='H', results='asis'}
+```{r, fig.pos='H', results='asis', eval = FALSE}
+
 baseline_by_seq <- baseline %>%
   dplyr::select(age:gender, seq) %>%
   tbl_summary(
@@ -1364,7 +1365,7 @@ glmm_demo_reduced_table %>% as_gt()
 
 ```
 
-```{r}
+```{r, message = FALSE}
 
 # Model Diagnostics
 sim_demos <- simulateResiduals(fittedModel = glmm_demos_reduced)
